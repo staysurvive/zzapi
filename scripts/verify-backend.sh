@@ -5,6 +5,25 @@ set -eu
 : "${TEST_TIMEOUT_SECONDS:=180}"
 : "${BUILD_TIMEOUT_SECONDS:=180}"
 
+web_dist_dir="web/dist"
+web_dist_placeholder="$web_dist_dir/index.html"
+created_web_dist_placeholder=0
+
+if [ ! -f "$web_dist_placeholder" ]; then
+  mkdir -p "$web_dist_dir"
+  printf '%s\n' '<!doctype html><html><body>Docker backend verification</body></html>' > "$web_dist_placeholder"
+  created_web_dist_placeholder=1
+fi
+
+cleanup_web_dist_placeholder() {
+  if [ "$created_web_dist_placeholder" -eq 1 ]; then
+    rm -f "$web_dist_placeholder"
+    rmdir "$web_dist_dir" 2>/dev/null || true
+  fi
+}
+
+trap cleanup_web_dist_placeholder EXIT INT TERM
+
 run_timed() {
   duration="$1"
   shift

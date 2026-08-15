@@ -48,6 +48,25 @@ $goBuildMount = '{0}:/root/.cache/go-build' -f $goBuildCache
 $bunInstallMount = '{0}:/root/.bun/install/cache' -f $bunInstallCache
 $bunNodeModulesMount = '{0}:/workspace/node_modules' -f $bunNodeModules
 
+if ($Scope -in @('all', 'frontend')) {
+  Ensure-DockerVolume $bunInstallCache
+  Ensure-DockerVolume $bunNodeModules
+
+  $frontendMount = '{0}:/workspace' -f (Join-Path $repoRoot 'web')
+  $frontendArguments = @(
+    'run', '--rm',
+    '-v', $frontendMount,
+    '-v', $bunInstallMount,
+    '-v', $bunNodeModulesMount,
+    '-w', '/workspace',
+    $bunImage,
+    'sh', '-lc', 'bun install --frozen-lockfile && bun run build:check'
+  )
+
+  Write-Host 'Running frontend verification in Docker...'
+  Invoke-Docker $frontendArguments
+}
+
 if ($Scope -in @('all', 'backend')) {
   Ensure-DockerVolume $goModuleCache
   Ensure-DockerVolume $goBuildCache
@@ -69,25 +88,6 @@ if ($Scope -in @('all', 'backend')) {
 
   Write-Host 'Running backend verification in Docker...'
   Invoke-Docker $backendArguments
-}
-
-if ($Scope -in @('all', 'frontend')) {
-  Ensure-DockerVolume $bunInstallCache
-  Ensure-DockerVolume $bunNodeModules
-
-  $frontendMount = '{0}:/workspace' -f (Join-Path $repoRoot 'web')
-  $frontendArguments = @(
-    'run', '--rm',
-    '-v', $frontendMount,
-    '-v', $bunInstallMount,
-    '-v', $bunNodeModulesMount,
-    '-w', '/workspace',
-    $bunImage,
-    'sh', '-lc', 'bun install --frozen-lockfile && bun run build:check'
-  )
-
-  Write-Host 'Running frontend verification in Docker...'
-  Invoke-Docker $frontendArguments
 }
 
 Write-Host "Docker verification passed for scope: $Scope"
