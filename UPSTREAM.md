@@ -37,13 +37,16 @@ No new provider channel or relay protocol is part of this product baseline.
 
 ## Release Verification
 
-Before tagging a product release, run:
+Before tagging a product release, run the Docker-only verification entry point:
 
-```text
-make test
-cd web && bun run build:check
-cd ../relaykit && GOWORK=off go build ./...
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/verify-docker.ps1
 ```
+
+Use `-Scope backend` or `-Scope frontend` to run one side independently. The
+script uses the same Go and Bun container versions as the production build,
+keeps dependency caches in Docker volumes, and reports root-module tests one
+package at a time.
 
 Also verify a database backup, an upgrade from the previous release, and the
 current-source Docker Compose deployment before publishing the release.
