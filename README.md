@@ -39,6 +39,20 @@ ZZAPI 聚合多个 AI 服务商，通过统一 API 提供模型访问、渠道�
 
 ### 使用 Docker Compose
 
+使用已发布的 ZZAPI 镜像启动完整服务：
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.zzapi.yml up -d
+```
+
+如果仓库是私有的，请先执行 `docker login`。
+
+查看服务状态：
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.zzapi.yml ps
+```
+
 从当前源码构建并启动完整服务：
 
 ```bash
@@ -55,7 +69,13 @@ docker compose -f docker-compose.yml -f docker-compose.current.yml ps
 
 启动完成后访问 [http://localhost:3000](http://localhost:3000)。
 
-停止服务但保留数据：
+停止已发布镜像服务但保留数据：
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.zzapi.yml down
+```
+
+停止源码构建服务但保留数据：
 
 ```bash
 docker compose -f docker-compose.yml -f docker-compose.current.yml down

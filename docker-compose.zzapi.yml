@@ -1,0 +1,8 @@
+# Compose override for the published ZZAPI image.
+# Usage:
+#   docker compose -f docker-compose.yml -f docker-compose.zzapi.yml up -d
+
+services:
+  new-api:
+    image: staysurvive/zzapi:v0.1.0
+    build: !reset null

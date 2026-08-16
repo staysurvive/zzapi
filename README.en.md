@@ -39,6 +39,20 @@ ZZAPI aggregates multiple AI providers behind a unified API. It provides model a
 
 ### Docker Compose
 
+Start the complete service from the published ZZAPI image:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.zzapi.yml up -d
+```
+
+If the repository is private, run `docker login` first.
+
+Check service status:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.zzapi.yml ps
+```
+
 Build and start the complete service from the current source checkout:
 
 ```bash
@@ -55,7 +69,13 @@ docker compose -f docker-compose.yml -f docker-compose.current.yml ps
 
 Open [http://localhost:3000](http://localhost:3000) after the service starts.
 
-Stop the services without removing persistent data:
+Stop the published-image service without removing persistent data:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.zzapi.yml down
+```
+
+Stop the source-built service without removing persistent data:
 
 ```bash
 docker compose -f docker-compose.yml -f docker-compose.current.yml down
