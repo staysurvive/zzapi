@@ -81,3 +81,123 @@ test('hides redundant routing metadata at mobile viewport widths', () => {
     domWindow.close()
   }
 })
+
+test('keeps opening lines hidden until the Logo has settled into the Core', () => {
+  const domWindow = new Window()
+
+  try {
+    const style = domWindow.document.createElement('style')
+    style.textContent = landingStyles
+    domWindow.document.head.append(style)
+
+    const opening = domWindow.document.createElement('div')
+    opening.className = 'zzapi-opening'
+    opening.dataset.openingPhase = 'signal'
+    const openingAxis = domWindow.document.createElement('div')
+    openingAxis.className = 'zzapi-opening-axis'
+    opening.append(openingAxis)
+
+    const infrastructure = domWindow.document.createElement('div')
+    infrastructure.className = 'home-infrastructure'
+    infrastructure.dataset.openingPhase = 'handoff'
+    const heroField = domWindow.document.createElement('div')
+    heroField.className = 'home-hero-field'
+    const heroGeometry = domWindow.document.createElement('div')
+    heroGeometry.className = 'home-hero-geometry'
+    const infrastructureDepth = domWindow.document.createElement('div')
+    infrastructureDepth.className = 'home-infrastructure-depth'
+    const coreOrbit = domWindow.document.createElement('span')
+    coreOrbit.className = 'zzapi-core-orbit zzapi-core-orbit-one'
+    const route = domWindow.document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'path'
+    )
+    route.setAttribute('class', 'zzapi-model-route')
+    infrastructure.append(route, coreOrbit)
+
+    const openingState = domWindow.document.createElement('div')
+    openingState.dataset.zzapiOpening = 'true'
+    openingState.dataset.zzapiOpeningPhase = 'handoff'
+    openingState.append(
+      opening,
+      infrastructure,
+      heroField,
+      heroGeometry,
+      infrastructureDepth
+    )
+    domWindow.document.body.append(openingState)
+
+    assert.equal(domWindow.getComputedStyle(openingAxis).opacity, '0')
+    assert.equal(domWindow.getComputedStyle(route).opacity, '0')
+    assert.equal(domWindow.getComputedStyle(heroField).opacity, '0')
+    assert.equal(domWindow.getComputedStyle(heroGeometry).opacity, '0')
+    assert.equal(domWindow.getComputedStyle(infrastructureDepth).opacity, '0')
+    assert.equal(domWindow.getComputedStyle(coreOrbit).opacity, '0')
+
+    opening.className =
+      'zzapi-opening zzapi-opening--assembled zzapi-opening--handoff'
+    opening.dataset.openingPhase = 'handoff'
+
+    assert.equal(domWindow.getComputedStyle(openingAxis).opacity, '0')
+
+    openingState.dataset.zzapiOpeningPhase = 'settle'
+    infrastructure.dataset.openingPhase = 'settle'
+
+    assert.equal(domWindow.getComputedStyle(route).opacity, '0.86')
+    assert.notEqual(
+      domWindow.getComputedStyle(route).animationName,
+      'zzapi-route-draw'
+    )
+    assert.equal(domWindow.getComputedStyle(route).transitionDelay, '48ms')
+    assert.equal(domWindow.getComputedStyle(heroField).opacity, '1')
+    assert.equal(domWindow.getComputedStyle(heroField).transitionDelay, '48ms')
+    assert.equal(domWindow.getComputedStyle(coreOrbit).opacity, '1')
+    assert.equal(domWindow.getComputedStyle(coreOrbit).transitionDelay, '48ms')
+  } finally {
+    domWindow.close()
+  }
+})
+
+test('removes settlement transitions when reduced motion is requested', () => {
+  const domWindow = new Window({
+    settings: { device: { prefersReducedMotion: 'reduce' } },
+  })
+
+  try {
+    const style = domWindow.document.createElement('style')
+    style.textContent = landingStyles
+    domWindow.document.head.append(style)
+
+    const openingState = domWindow.document.createElement('div')
+    openingState.dataset.zzapiOpening = 'true'
+    openingState.dataset.zzapiOpeningPhase = 'settle'
+
+    const heroField = domWindow.document.createElement('div')
+    heroField.className = 'home-hero-field'
+    const heroGeometry = domWindow.document.createElement('div')
+    heroGeometry.className = 'home-hero-geometry'
+    const infrastructure = domWindow.document.createElement('div')
+    infrastructure.className = 'home-infrastructure'
+    const infrastructureDepth = domWindow.document.createElement('div')
+    infrastructureDepth.className = 'home-infrastructure-depth'
+    const coreOrbit = domWindow.document.createElement('span')
+    coreOrbit.className = 'zzapi-core-orbit zzapi-core-orbit-one'
+    infrastructure.append(infrastructureDepth, coreOrbit)
+    openingState.append(heroField, heroGeometry, infrastructure)
+    domWindow.document.body.append(openingState)
+
+    assert.equal(
+      domWindow.matchMedia('(prefers-reduced-motion: reduce)').matches,
+      true
+    )
+    assert.equal(domWindow.getComputedStyle(heroField).transition, 'none')
+    assert.equal(domWindow.getComputedStyle(heroGeometry).transition, 'none')
+    assert.equal(
+      domWindow.getComputedStyle(infrastructureDepth).transition,
+      'none'
+    )
+    assert.equal(domWindow.getComputedStyle(coreOrbit).transition, 'none')
+  } finally {
+    domWindow.close()
+  }
+})

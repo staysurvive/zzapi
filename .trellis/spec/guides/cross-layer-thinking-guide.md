@@ -49,6 +49,22 @@ For each boundary:
 - What is the exact output format?
 - What errors can occur?
 
+### UI Lifecycle to CSS Motion Boundary
+
+When a component phase is mirrored into DOM attributes and CSS owns the visual
+transition, treat JavaScript state, normal-motion selectors, and reduced-motion
+selectors as one contract.
+
+- [ ] Enumerate every visual descendant that must be hidden in each phase;
+      include decorative layers such as routes, guides, depth fields, and
+      orbits, not only primary content.
+- [ ] When adding an opacity or transform transition, add the corresponding
+      `prefers-reduced-motion: reduce` override in the same change.
+- [ ] Add regression assertions for both the pre-reveal phase and the reduced
+      motion computed style.
+- [ ] Verify the phase transition in a real browser; DOM emulators can validate
+      selectors but do not replace browser animation and media-query QA.
+
 ---
 
 ## Common Cross-Layer Mistakes
