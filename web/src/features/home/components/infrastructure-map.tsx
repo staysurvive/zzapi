@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@quantumnous.com
 */
 import { Braces, KeyRound, Route } from 'lucide-react'
-import { useState, type CSSProperties } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { cn } from '@/lib/utils'
@@ -182,15 +182,6 @@ export function InfrastructureMap(props: InfrastructureMapProps) {
             src={props.logo || '/landing-brand-core.png'}
             alt=''
             className='relative size-full object-contain'
-          />
-          <span
-            aria-hidden
-            className='zzapi-core-sheen'
-            style={
-              {
-                '--zzapi-core-mask': `url(${props.logo || '/landing-brand-core.png'})`,
-              } as CSSProperties
-            }
           />
         </div>
         <div className='zzapi-core-lockup'>

@@ -135,6 +135,7 @@ describe('InfrastructureMap accessibility', () => {
     assert.ok(infrastructure)
     assert.ok(openai)
     assert.ok(claude)
+    assert.equal(container.querySelector('.zzapi-core-sheen'), null)
 
     await act(async () => openai.focus())
     assert.equal(infrastructure.getAttribute('data-active-model'), 'openai')
