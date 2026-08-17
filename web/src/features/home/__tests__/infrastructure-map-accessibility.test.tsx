@@ -158,4 +158,59 @@ describe('InfrastructureMap accessibility', () => {
     await act(async () => root.unmount())
     container.remove()
   })
+
+  test('renders the route packet only for the desktop topology', async () => {
+    const container = document.createElement('div')
+    document.body.append(container)
+    const root = createRoot(container)
+    await act(async () => root.render(<MapHarness openingPhase='ambient' />))
+
+    const trails = [
+      ...container.querySelectorAll<SVGPathElement>(
+        '.zzapi-route-packet-trail'
+      ),
+    ]
+    const heads = [
+      ...container.querySelectorAll<SVGPathElement>('.zzapi-route-packet-head'),
+    ]
+    assert.equal(trails.length, 1)
+    assert.equal(heads.length, 1)
+    assert.deepEqual(
+      trails.map((trail) => trail.getAttribute('d')),
+      heads.map((head) => head.getAttribute('d'))
+    )
+    assert.ok(
+      [...trails, ...heads].every(
+        (path) => path.getAttribute('pathLength') === '1'
+      )
+    )
+
+    assert.equal(container.querySelector('.zzapi-route-topology-mobile'), null)
+
+    await act(async () => root.unmount())
+    container.remove()
+  })
+
+  test('keeps the semantic order aligned with the mobile visual order', async () => {
+    const container = document.createElement('div')
+    document.body.append(container)
+    const root = createRoot(container)
+    await act(async () => root.render(<MapHarness openingPhase='ambient' />))
+
+    const client = container.querySelector('.zzapi-client-origin')
+    const core = container.querySelector('.zzapi-gateway-core')
+    const controls = container.querySelector('.zzapi-model-controls')
+    assert.ok(client)
+    assert.ok(core)
+    assert.ok(controls)
+    assert.ok(
+      client.compareDocumentPosition(core) & Node.DOCUMENT_POSITION_FOLLOWING
+    )
+    assert.ok(
+      core.compareDocumentPosition(controls) & Node.DOCUMENT_POSITION_FOLLOWING
+    )
+
+    await act(async () => root.unmount())
+    container.remove()
+  })
 })

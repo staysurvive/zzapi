@@ -99,7 +99,12 @@ export function InfrastructureMap(props: InfrastructureMapProps) {
             pathLength='1'
           />
           <path
-            className='zzapi-route-pulse'
+            className='zzapi-route-packet-trail'
+            d='M 96 516 C 300 484 486 404 660 310'
+            pathLength='1'
+          />
+          <path
+            className='zzapi-route-packet-head'
             d='M 96 516 C 300 484 486 404 660 310'
             pathLength='1'
           />
@@ -153,61 +158,6 @@ export function InfrastructureMap(props: InfrastructureMapProps) {
             r='4'
           />
         </g>
-
-        <g className='zzapi-route-topology zzapi-route-topology-mobile'>
-          <path
-            className='zzapi-route-axis'
-            d='M 92 560 L 908 116'
-            pathLength='1'
-          />
-          <path
-            className='zzapi-route-input zzapi-route-input-mobile'
-            d='M 500 74 C 500 122 500 166 500 218'
-            pathLength='1'
-          />
-          <path
-            className='zzapi-route-pulse'
-            d='M 500 74 C 500 122 500 166 500 218'
-            pathLength='1'
-          />
-          <path
-            className='zzapi-model-route zzapi-route-openai'
-            d='M 500 378 C 438 404 370 432 290 466'
-            pathLength='1'
-          />
-          <path
-            className='zzapi-model-route zzapi-route-claude'
-            d='M 500 378 C 562 404 630 432 710 466'
-            pathLength='1'
-          />
-          <path
-            className='zzapi-model-route zzapi-route-aggregate'
-            d='M 500 378 C 500 438 500 492 500 552'
-            pathLength='1'
-          />
-          <g className='zzapi-route-calibration'>
-            <line x1='424' y1='408' x2='430' y2='422' />
-            <line x1='570' y1='410' x2='576' y2='424' />
-          </g>
-          <circle
-            className='zzapi-route-contact zzapi-contact-openai'
-            cx='290'
-            cy='466'
-            r='4'
-          />
-          <circle
-            className='zzapi-route-contact zzapi-contact-claude'
-            cx='710'
-            cy='466'
-            r='4'
-          />
-          <circle
-            className='zzapi-route-contact zzapi-contact-aggregate'
-            cx='500'
-            cy='552'
-            r='4'
-          />
-        </g>
       </svg>
 
       <div className='zzapi-client-origin absolute z-20'>
@@ -221,6 +171,35 @@ export function InfrastructureMap(props: InfrastructureMapProps) {
             {t('One Key')}
           </small>
         </span>
+      </div>
+
+      <div className='zzapi-gateway-core absolute z-20'>
+        <span aria-hidden className='zzapi-core-orbit zzapi-core-orbit-one' />
+        <span aria-hidden className='zzapi-core-orbit zzapi-core-orbit-two' />
+        <div className='zzapi-core-mark relative' data-zzapi-core-anchor>
+          <span aria-hidden className='zzapi-core-energy' />
+          <img
+            src={props.logo || '/landing-brand-core.png'}
+            alt=''
+            className='relative size-full object-contain'
+          />
+          <span
+            aria-hidden
+            className='zzapi-core-sheen'
+            style={
+              {
+                '--zzapi-core-mask': `url(${props.logo || '/landing-brand-core.png'})`,
+              } as CSSProperties
+            }
+          />
+        </div>
+        <div className='zzapi-core-lockup'>
+          <strong data-zzapi-brand-anchor>zzapi</strong>
+          <span>
+            <Route aria-hidden />
+            {t('Gateway Core')}
+          </span>
+        </div>
       </div>
 
       <div
@@ -252,35 +231,6 @@ export function InfrastructureMap(props: InfrastructureMapProps) {
         ))}
         <div className='zzapi-model-aggregate absolute z-20'>
           {t('+{{count}} Models', { count: MODELS.length - 2 })}
-        </div>
-      </div>
-
-      <div className='zzapi-gateway-core absolute z-20'>
-        <span aria-hidden className='zzapi-core-orbit zzapi-core-orbit-one' />
-        <span aria-hidden className='zzapi-core-orbit zzapi-core-orbit-two' />
-        <div className='zzapi-core-mark relative' data-zzapi-core-anchor>
-          <span aria-hidden className='zzapi-core-energy' />
-          <img
-            src={props.logo || '/landing-brand-core.png'}
-            alt=''
-            className='relative size-full object-contain'
-          />
-          <span
-            aria-hidden
-            className='zzapi-core-sheen'
-            style={
-              {
-                '--zzapi-core-mask': `url(${props.logo || '/landing-brand-core.png'})`,
-              } as CSSProperties
-            }
-          />
-        </div>
-        <div className='zzapi-core-lockup'>
-          <strong data-zzapi-brand-anchor>zzapi</strong>
-          <span>
-            <Route aria-hidden />
-            {t('Gateway Core')}
-          </span>
         </div>
       </div>
     </div>

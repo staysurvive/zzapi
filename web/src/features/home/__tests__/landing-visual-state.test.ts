@@ -82,6 +82,139 @@ test('hides redundant routing metadata at mobile viewport widths', () => {
   }
 })
 
+test('keeps only the branded static topology on mobile', () => {
+  const domWindow = new Window({ width: 390, height: 844 })
+
+  try {
+    const style = domWindow.document.createElement('style')
+    style.textContent = landingStyles
+    domWindow.document.head.append(style)
+
+    const infrastructure = domWindow.document.createElement('div')
+    infrastructure.className = 'home-infrastructure'
+    infrastructure.dataset.openingPhase = 'handoff'
+    const routeField = domWindow.document.createElement('div')
+    routeField.className = 'zzapi-route-field'
+    const coreOrbit = domWindow.document.createElement('div')
+    coreOrbit.className = 'zzapi-core-orbit'
+
+    const client = domWindow.document.createElement('div')
+    client.className = 'zzapi-client-origin'
+    const clientLabel = domWindow.document.createElement('strong')
+    const clientMeta = domWindow.document.createElement('small')
+    client.append(clientLabel, clientMeta)
+    const coreLockup = domWindow.document.createElement('div')
+    coreLockup.className = 'zzapi-core-lockup'
+    const coreLabel = domWindow.document.createElement('strong')
+    const coreMeta = domWindow.document.createElement('span')
+    coreLockup.append(coreLabel, coreMeta)
+    const core = domWindow.document.createElement('div')
+    core.className = 'zzapi-gateway-core'
+    core.append(coreLockup)
+    const modelControls = domWindow.document.createElement('div')
+    modelControls.className = 'zzapi-model-controls'
+    const openaiNode = domWindow.document.createElement('div')
+    openaiNode.className = 'zzapi-model-node zzapi-node-openai'
+    const claudeNode = domWindow.document.createElement('div')
+    claudeNode.className = 'zzapi-model-node zzapi-node-claude'
+    const aggregate = domWindow.document.createElement('div')
+    aggregate.className = 'zzapi-model-aggregate'
+    modelControls.append(openaiNode, claudeNode, aggregate)
+    infrastructure.append(client, routeField, coreOrbit, core, modelControls)
+    domWindow.document.body.append(infrastructure)
+
+    assert.equal(domWindow.getComputedStyle(routeField).display, 'none')
+    assert.equal(domWindow.getComputedStyle(coreOrbit).display, 'none')
+    assert.equal(domWindow.getComputedStyle(clientMeta).display, 'none')
+    assert.equal(domWindow.getComputedStyle(coreMeta).display, 'none')
+    assert.notEqual(domWindow.getComputedStyle(clientLabel).display, 'none')
+    assert.notEqual(domWindow.getComputedStyle(coreLabel).display, 'none')
+    assert.notEqual(domWindow.getComputedStyle(aggregate).display, 'none')
+    assert.equal(domWindow.getComputedStyle(infrastructure).display, 'grid')
+    assert.equal(domWindow.getComputedStyle(client).position, 'relative')
+    assert.equal(domWindow.getComputedStyle(core).position, 'relative')
+    assert.equal(domWindow.getComputedStyle(modelControls).display, 'grid')
+    assert.equal(domWindow.getComputedStyle(modelControls).opacity, '0')
+    assert.equal(domWindow.getComputedStyle(openaiNode).position, 'relative')
+    assert.equal(domWindow.getComputedStyle(claudeNode).position, 'relative')
+    assert.equal(domWindow.getComputedStyle(aggregate).position, 'relative')
+
+    infrastructure.dataset.openingPhase = 'settle'
+    assert.equal(domWindow.getComputedStyle(modelControls).opacity, '1')
+  } finally {
+    domWindow.close()
+  }
+})
+
+test('keeps the Core identity inside a short mobile viewport', () => {
+  const domWindow = new Window({ width: 320, height: 568 })
+
+  try {
+    const style = domWindow.document.createElement('style')
+    style.textContent = landingStyles
+    domWindow.document.head.append(style)
+
+    const heroMap = domWindow.document.createElement('div')
+    heroMap.className = 'home-hero-map'
+    domWindow.document.body.append(heroMap)
+
+    assert.equal(domWindow.getComputedStyle(heroMap).top, '236px')
+  } finally {
+    domWindow.close()
+  }
+})
+
+test('keeps the full brand stack in a wide short mobile viewport', () => {
+  const domWindow = new Window({ width: 583, height: 709 })
+
+  try {
+    const style = domWindow.document.createElement('style')
+    style.textContent = landingStyles
+    domWindow.document.head.append(style)
+
+    const hero = domWindow.document.createElement('section')
+    hero.className = 'home-hero'
+    const stage = domWindow.document.createElement('div')
+    stage.className = 'home-hero-stage'
+    hero.append(stage)
+    domWindow.document.body.append(hero)
+
+    assert.equal(domWindow.getComputedStyle(hero).minHeight, '704px')
+    assert.equal(domWindow.getComputedStyle(stage).minHeight, '612px')
+  } finally {
+    domWindow.close()
+  }
+})
+
+test('swaps the landed wordmark proxy for the real Core label without overlap', () => {
+  const domWindow = new Window()
+
+  try {
+    const style = domWindow.document.createElement('style')
+    style.textContent = landingStyles
+    domWindow.document.head.append(style)
+
+    const opening = domWindow.document.createElement('div')
+    opening.className =
+      'zzapi-opening zzapi-opening--locked zzapi-opening--handoff'
+    opening.dataset.openingPhase = 'handoff'
+    const proxy = domWindow.document.createElement('div')
+    proxy.className = 'zzapi-opening-wordmark-proxy'
+    opening.append(proxy)
+    domWindow.document.body.append(opening)
+
+    assert.notEqual(domWindow.getComputedStyle(proxy).visibility, 'hidden')
+
+    opening.dataset.openingPhase = 'settle'
+
+    assert.equal(domWindow.getComputedStyle(proxy).visibility, 'hidden')
+    assert.equal(domWindow.getComputedStyle(proxy).opacity, '0')
+    assert.equal(domWindow.getComputedStyle(proxy).animation, 'none')
+  } finally {
+    domWindow.close()
+  }
+})
+
 test('keeps opening lines hidden until the Logo has settled into the Core', () => {
   const domWindow = new Window()
 
@@ -158,8 +291,95 @@ test('keeps opening lines hidden until the Logo has settled into the Core', () =
   }
 })
 
+test('keeps the ambient route packet moving through most of each cycle', () => {
+  const domWindow = new Window()
+
+  try {
+    const style = domWindow.document.createElement('style')
+    style.textContent = landingStyles
+    domWindow.document.head.append(style)
+
+    const infrastructure = domWindow.document.createElement('div')
+    infrastructure.className = 'home-infrastructure'
+    infrastructure.dataset.openingPhase = 'ambient'
+    const packetTrail = domWindow.document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'path'
+    )
+    packetTrail.setAttribute('class', 'zzapi-route-packet-trail')
+    const packetHead = domWindow.document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'path'
+    )
+    packetHead.setAttribute('class', 'zzapi-route-packet-head')
+    infrastructure.append(packetTrail, packetHead)
+    domWindow.document.body.append(infrastructure)
+
+    assert.ok(style.sheet)
+    const trailAnimation = [...style.sheet.cssRules].find((rule) =>
+      rule.cssText.startsWith(
+        ".home-infrastructure[data-opening-phase='ambient'] .zzapi-route-packet-trail"
+      )
+    )
+    assert.ok(trailAnimation)
+    assert.match(
+      trailAnimation.cssText,
+      /animation: zzapi-route-packet-trail 4\.8s linear 0\.8s infinite/
+    )
+
+    const headAnimation = [...style.sheet.cssRules].find((rule) =>
+      rule.cssText.startsWith(
+        ".home-infrastructure[data-opening-phase='ambient'] .zzapi-route-packet-head"
+      )
+    )
+    assert.ok(headAnimation)
+    assert.match(
+      headAnimation.cssText,
+      /animation: zzapi-route-packet-head 4\.8s linear 0\.8s infinite/
+    )
+
+    const trailAppearance = [...style.sheet.cssRules].find((rule) =>
+      rule.cssText.startsWith('.zzapi-route-packet-trail {')
+    )
+    assert.ok(trailAppearance)
+    assert.match(trailAppearance.cssText, /stroke: var\(--zzapi-blue-flow\)/)
+    assert.match(trailAppearance.cssText, /stroke-width: 1\.7/)
+    assert.match(trailAppearance.cssText, /stroke-dasharray: 0\.052 0\.948/)
+
+    const headAppearance = [...style.sheet.cssRules].find((rule) =>
+      rule.cssText.startsWith('.zzapi-route-packet-head {')
+    )
+    assert.ok(headAppearance)
+    assert.match(headAppearance.cssText, /stroke: var\(--zzapi-blue\)/)
+    assert.match(headAppearance.cssText, /stroke-width: 2\.1/)
+    assert.match(headAppearance.cssText, /stroke-dasharray: 0\.012 0\.988/)
+    assert.match(headAppearance.cssText, /stroke-dashoffset: 0\.96/)
+
+    const trailKeyframes = [...style.sheet.cssRules].find((rule) =>
+      rule.cssText.startsWith('@keyframes zzapi-route-packet-trail')
+    )
+    assert.ok(trailKeyframes)
+    assert.match(trailKeyframes.cssText, /12%\s*{\s*opacity: 0\.12/)
+    assert.match(trailKeyframes.cssText, /38%\s*{\s*opacity: 0\.2/)
+    assert.match(trailKeyframes.cssText, /66%,\s*92%\s*{\s*opacity: 0\.3/)
+
+    const headKeyframes = [...style.sheet.cssRules].find((rule) =>
+      rule.cssText.startsWith('@keyframes zzapi-route-packet-head')
+    )
+    assert.ok(headKeyframes)
+    assert.match(headKeyframes.cssText, /12%\s*{\s*opacity: 0\.42/)
+    assert.match(headKeyframes.cssText, /38%\s*{\s*opacity: 0\.64/)
+    assert.match(headKeyframes.cssText, /66%,\s*92%\s*{\s*opacity: 0\.88/)
+    assert.match(headKeyframes.cssText, /stroke-dashoffset: -0\.04/)
+  } finally {
+    domWindow.close()
+  }
+})
+
 test('removes settlement transitions when reduced motion is requested', () => {
   const domWindow = new Window({
+    width: 390,
+    height: 844,
     settings: { device: { prefersReducedMotion: 'reduce' } },
   })
 
@@ -178,11 +398,30 @@ test('removes settlement transitions when reduced motion is requested', () => {
     heroGeometry.className = 'home-hero-geometry'
     const infrastructure = domWindow.document.createElement('div')
     infrastructure.className = 'home-infrastructure'
+    infrastructure.dataset.openingPhase = 'ambient'
     const infrastructureDepth = domWindow.document.createElement('div')
     infrastructureDepth.className = 'home-infrastructure-depth'
     const coreOrbit = domWindow.document.createElement('span')
     coreOrbit.className = 'zzapi-core-orbit zzapi-core-orbit-one'
-    infrastructure.append(infrastructureDepth, coreOrbit)
+    const modelControls = domWindow.document.createElement('div')
+    modelControls.className = 'zzapi-model-controls'
+    const packetTrail = domWindow.document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'path'
+    )
+    packetTrail.setAttribute('class', 'zzapi-route-packet-trail')
+    const packetHead = domWindow.document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'path'
+    )
+    packetHead.setAttribute('class', 'zzapi-route-packet-head')
+    infrastructure.append(
+      infrastructureDepth,
+      coreOrbit,
+      modelControls,
+      packetTrail,
+      packetHead
+    )
     openingState.append(heroField, heroGeometry, infrastructure)
     domWindow.document.body.append(openingState)
 
@@ -197,6 +436,11 @@ test('removes settlement transitions when reduced motion is requested', () => {
       'none'
     )
     assert.equal(domWindow.getComputedStyle(coreOrbit).transition, 'none')
+    assert.equal(domWindow.getComputedStyle(modelControls).transition, 'none')
+    assert.equal(domWindow.getComputedStyle(packetTrail).animation, 'none')
+    assert.equal(domWindow.getComputedStyle(packetTrail).opacity, '0')
+    assert.equal(domWindow.getComputedStyle(packetHead).animation, 'none')
+    assert.equal(domWindow.getComputedStyle(packetHead).opacity, '0')
   } finally {
     domWindow.close()
   }

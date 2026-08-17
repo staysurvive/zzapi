@@ -760,7 +760,8 @@ For commercial licensing, please contact support@quantumnous.com
 
 .zzapi-route-axis,
 .zzapi-route-input,
-.zzapi-route-pulse,
+.zzapi-route-packet-trail,
+.zzapi-route-packet-head,
 .zzapi-model-route {
   fill: none;
   stroke-linecap: round;
@@ -785,16 +786,28 @@ For commercial licensing, please contact support@quantumnous.com
   opacity: 0.78;
 }
 
-.zzapi-route-pulse {
+.zzapi-route-packet-trail {
   stroke: var(--zzapi-blue-flow);
-  stroke-width: 2;
-  stroke-dasharray: 0.018 0.982;
+  stroke-width: 1.7;
+  stroke-dasharray: 0.052 0.948;
   stroke-dashoffset: 1;
   opacity: 0;
 }
 
-.home-infrastructure[data-opening-phase='ambient'] .zzapi-route-pulse {
-  animation: zzapi-route-pulse 7.2s linear 1.2s infinite;
+.zzapi-route-packet-head {
+  stroke: var(--zzapi-blue);
+  stroke-width: 2.1;
+  stroke-dasharray: 0.012 0.988;
+  stroke-dashoffset: 0.96;
+  opacity: 0;
+}
+
+.home-infrastructure[data-opening-phase='ambient'] .zzapi-route-packet-trail {
+  animation: zzapi-route-packet-trail 4.8s linear 0.8s infinite;
+}
+
+.home-infrastructure[data-opening-phase='ambient'] .zzapi-route-packet-head {
+  animation: zzapi-route-packet-head 4.8s linear 0.8s infinite;
 }
 
 .zzapi-model-route {
@@ -1458,6 +1471,13 @@ For commercial licensing, please contact support@quantumnous.com
   animation: zzapi-wordmark-handoff 360ms var(--zzapi-ease-out) forwards;
 }
 
+.zzapi-opening[data-opening-phase='settle'] .zzapi-opening-wordmark-proxy {
+  visibility: hidden;
+  opacity: 0;
+  animation: none;
+  transition: none;
+}
+
 .zzapi-opening--skipping {
   pointer-events: none;
 }
@@ -1720,19 +1740,48 @@ For commercial licensing, please contact support@quantumnous.com
   }
 }
 
-@keyframes zzapi-route-pulse {
+@keyframes zzapi-route-packet-trail {
   0%,
-  10% {
+  6% {
     stroke-dashoffset: 1;
     opacity: 0;
   }
-  16%,
-  56% {
-    opacity: 0.72;
+  12% {
+    opacity: 0.12;
+  }
+  38% {
+    opacity: 0.2;
   }
   66%,
+  92% {
+    opacity: 0.3;
+  }
+  98%,
   100% {
     stroke-dashoffset: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes zzapi-route-packet-head {
+  0%,
+  6% {
+    stroke-dashoffset: 0.96;
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.42;
+  }
+  38% {
+    opacity: 0.64;
+  }
+  66%,
+  92% {
+    opacity: 0.88;
+  }
+  98%,
+  100% {
+    stroke-dashoffset: -0.04;
     opacity: 0;
   }
 }
@@ -1874,13 +1923,13 @@ For commercial licensing, please contact support@quantumnous.com
 @media (max-width: 767px) {
   .home-hero {
     height: 88svh;
-    min-height: 0;
+    min-height: 44rem;
     padding: 4.75rem 1rem 1rem;
   }
 
   .home-hero-stage {
     height: calc(88svh - 5.75rem);
-    min-height: 0;
+    min-height: 38.25rem;
   }
 
   .home-hero-copy {
@@ -1920,7 +1969,12 @@ For commercial licensing, please contact support@quantumnous.com
   .home-infrastructure {
     --zzapi-core-x: 50%;
     --zzapi-core-y: 40%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: 3rem clamp(12rem, 46%, 14rem) auto;
+    align-content: start;
     min-height: 0;
+    padding-top: 1rem;
   }
 
   .home-infrastructure-depth {
@@ -1935,11 +1989,14 @@ For commercial licensing, please contact support@quantumnous.com
     display: none;
   }
 
-  .zzapi-route-topology-mobile {
-    display: block;
+  .zzapi-network-meta {
+    display: none;
   }
 
-  .zzapi-network-meta {
+  .zzapi-route-field,
+  .zzapi-core-orbit,
+  .zzapi-client-origin small,
+  .zzapi-core-lockup span {
     display: none;
   }
 
@@ -1963,32 +2020,88 @@ For commercial licensing, please contact support@quantumnous.com
   }
 
   .zzapi-client-origin {
-    top: 7%;
+    position: relative;
+    top: auto;
     bottom: auto;
-    left: 50%;
+    left: auto;
+    grid-row: 1;
+    grid-column: 1 / -1;
     width: max-content;
-    translate: -50% 0;
+    align-self: start;
+    justify-self: center;
+    translate: none;
+  }
+
+  .zzapi-client-origin::after {
+    position: absolute;
+    top: calc(100% + 0.4rem);
+    left: 50%;
+    width: 1px;
+    height: 2.25rem;
+    content: '';
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      var(--zzapi-blue),
+      color-mix(in oklch, var(--zzapi-blue) 24%, transparent)
+    );
+    transform: translateX(-50%);
   }
 
   .zzapi-model-node {
+    position: relative;
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
     min-width: 5.5rem;
     min-height: 2.75rem;
+    justify-self: center;
     padding: 0.5rem 0.25rem;
     font-size: 0.75rem;
+    translate: none;
   }
 
-  .zzapi-node-openai {
-    top: 72%;
-    right: auto;
-    left: 29%;
-    translate: -50% 0;
+  .zzapi-model-controls {
+    position: relative;
+    display: grid;
+    grid-row: 3;
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem 0.5rem;
+    padding-top: 1.75rem;
+    opacity: 1;
+    transition: opacity 220ms var(--zzapi-ease-out);
   }
 
-  .zzapi-node-claude {
-    top: 72%;
-    right: auto;
-    left: 71%;
-    translate: -50% 0;
+  .home-infrastructure[data-opening-phase='signal'] .zzapi-model-controls,
+  .home-infrastructure[data-opening-phase='assemble'] .zzapi-model-controls,
+  .home-infrastructure[data-opening-phase='focus'] .zzapi-model-controls,
+  .home-infrastructure[data-opening-phase='ignite'] .zzapi-model-controls,
+  .home-infrastructure[data-opening-phase='expand'] .zzapi-model-controls,
+  .home-infrastructure[data-opening-phase='lockup'] .zzapi-model-controls,
+  .home-infrastructure[data-opening-phase='handoff'] .zzapi-model-controls {
+    opacity: 0;
+  }
+
+  .home-infrastructure[data-opening-phase='settle'] .zzapi-model-controls {
+    transition-delay: 48ms;
+  }
+
+  .zzapi-model-controls::before {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 1px;
+    height: 1.25rem;
+    content: '';
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      color-mix(in oklch, var(--zzapi-blue) 24%, transparent),
+      var(--zzapi-blue)
+    );
+    transform: translateX(-50%);
   }
 
   .zzapi-node-gemini,
@@ -1997,16 +2110,42 @@ For commercial licensing, please contact support@quantumnous.com
   }
 
   .zzapi-gateway-core {
-    top: var(--zzapi-core-y);
-    left: var(--zzapi-core-x);
+    position: relative;
+    top: auto;
+    left: auto;
+    grid-row: 2;
+    grid-column: 1 / -1;
+    align-self: center;
+    justify-self: center;
+    transform: none;
   }
 
   .zzapi-model-aggregate {
-    top: 89%;
-    left: 50%;
+    position: relative;
+    top: auto;
+    left: auto;
     display: block;
+    grid-column: 1 / -1;
     width: max-content;
-    translate: -50% 0;
+    margin-top: 0.25rem;
+    justify-self: center;
+    translate: none;
+  }
+
+  .zzapi-model-aggregate::after {
+    position: absolute;
+    top: calc(100% + 0.65rem);
+    left: 50%;
+    width: 1px;
+    height: clamp(1.5rem, 4svh, 2rem);
+    content: '';
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      color-mix(in oklch, var(--zzapi-blue) 30%, transparent),
+      transparent
+    );
+    transform: translateX(-50%);
   }
 
   .zzapi-core-lockup strong {
@@ -2076,7 +2215,7 @@ For commercial licensing, please contact support@quantumnous.com
   }
 
   .home-hero-map {
-    top: 16.25rem;
+    top: 14.75rem;
   }
 }
 
@@ -2120,7 +2259,8 @@ For commercial licensing, please contact support@quantumnous.com
   .home-hero-field,
   .home-hero-geometry,
   .home-infrastructure-depth,
-  .home-infrastructure .zzapi-core-orbit {
+  .home-infrastructure .zzapi-core-orbit,
+  .home-infrastructure .zzapi-model-controls {
     transition: none;
   }
 
@@ -2146,7 +2286,8 @@ For commercial licensing, please contact support@quantumnous.com
     animation: none;
   }
 
-  .zzapi-route-pulse {
+  .zzapi-route-packet-trail,
+  .zzapi-route-packet-head {
     animation: none !important;
     opacity: 0;
   }
