@@ -284,6 +284,12 @@ export type DataTablePageProps<TData> = {
    * Responsive grid className override for the card view.
    */
   cardGridClassName?: string
+
+  /**
+   * Opt into the product table scope without changing the existing wrapper
+   * structure or responsive table behavior.
+   */
+  appearance?: 'legacy' | 'product'
 }
 
 /**
@@ -336,6 +342,13 @@ export function DataTablePage<TData>(props: DataTablePageProps<TData>) {
   return (
     <>
       <div
+        data-zzapi-product={props.appearance === 'product' ? 'true' : undefined}
+        data-product-surface={
+          props.appearance === 'product' ? 'workspace' : undefined
+        }
+        data-product-table-page={
+          props.appearance === 'product' ? 'true' : undefined
+        }
         className={cn(
           props.fixedHeight !== false
             ? 'flex h-full min-h-0 flex-col gap-2.5 sm:gap-3'

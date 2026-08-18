@@ -26,6 +26,7 @@ import { cn } from '@/lib/utils'
 
 import { AppHeader } from './app-header'
 import { AppSidebar } from './app-sidebar'
+import { ProductShell } from './product-shell'
 
 type AuthenticatedLayoutProps = {
   children?: React.ReactNode
@@ -43,6 +44,8 @@ export function AuthenticatedLayout(props: AuthenticatedLayoutProps) {
           <div className='flex min-h-0 w-full flex-1'>
             <AppSidebar />
             <SidebarInset
+              id='main-content'
+              tabIndex={-1}
               className={cn(
                 '@container/content',
                 'h-[calc(100svh-var(--app-header-height,0px))]',
@@ -50,7 +53,13 @@ export function AuthenticatedLayout(props: AuthenticatedLayoutProps) {
                 'peer-data-[variant=inset]:h-[calc(100svh-var(--app-header-height,0px)-(var(--spacing)*4))]'
               )}
             >
-              {props.children ?? <AnimatedOutlet />}
+              <ProductShell
+                surface='workspace'
+                motion='none'
+                className='flex min-h-0 flex-1 flex-col overflow-hidden'
+              >
+                {props.children ?? <AnimatedOutlet />}
+              </ProductShell>
             </SidebarInset>
           </div>
         </SidebarProvider>

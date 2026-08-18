@@ -26,6 +26,7 @@ import {
 
 import { Main } from './main'
 import { PageFooterProvider } from './page-footer'
+import { ResourceHeader } from './resource-header'
 
 type SlotProps = { children?: ReactNode }
 
@@ -49,9 +50,25 @@ function SectionPageLayoutBreadcrumb(_props: SlotProps) {
 }
 SectionPageLayoutBreadcrumb.displayName = 'SectionPageLayout.Breadcrumb'
 
+function SectionPageLayoutDescription(_props: SlotProps) {
+  return null
+}
+SectionPageLayoutDescription.displayName = 'SectionPageLayout.Description'
+
+function SectionPageLayoutMeta(_props: SlotProps) {
+  return null
+}
+SectionPageLayoutMeta.displayName = 'SectionPageLayout.Meta'
+
+function SectionPageLayoutStatus(_props: SlotProps) {
+  return null
+}
+SectionPageLayoutStatus.displayName = 'SectionPageLayout.Status'
+
 export type SectionPageLayoutProps = {
   children: ReactNode
   fixedContent?: boolean
+  appearance?: 'legacy' | 'product'
 }
 
 export function SectionPageLayout(props: SectionPageLayoutProps) {
@@ -63,38 +80,68 @@ export function SectionPageLayout(props: SectionPageLayoutProps) {
   let actions: ReactNode = null
   let content: ReactNode = null
   let breadcrumb: ReactNode = null
+  let description: ReactNode = null
+  let meta: ReactNode = null
+  let status: ReactNode = null
 
   Children.forEach(props.children, (node) => {
     if (!isValidElement(node)) return
     const child = node as ReactElement<SlotProps>
-    if (child.type === SectionPageLayoutTitle) title = child.props.children
-    else if (child.type === SectionPageLayoutActions)
+    if (child.type === SectionPageLayoutTitle) {
+      title = child.props.children
+    } else if (child.type === SectionPageLayoutActions) {
       actions = child.props.children
-    else if (child.type === SectionPageLayoutContent)
+    } else if (child.type === SectionPageLayoutContent) {
       content = child.props.children
-    else if (child.type === SectionPageLayoutBreadcrumb)
+    } else if (child.type === SectionPageLayoutBreadcrumb) {
       breadcrumb = child.props.children
+    } else if (child.type === SectionPageLayoutDescription) {
+      description = child.props.children
+    } else if (child.type === SectionPageLayoutMeta) {
+      meta = child.props.children
+    } else if (child.type === SectionPageLayoutStatus) {
+      status = child.props.children
+    }
   })
+
+  const isProduct = props.appearance === 'product'
 
   return (
     <PageFooterProvider container={footerContainer}>
-      <Main>
+      <Main
+        as='div'
+        data-zzapi-product={isProduct ? 'true' : undefined}
+        data-product-surface={isProduct ? 'workspace' : undefined}
+        data-product-motion={isProduct ? 'none' : undefined}
+        data-product-section-page={isProduct ? 'true' : undefined}
+      >
         <div className='shrink-0 px-3 pt-3 pb-2.5 sm:px-4 sm:pt-5 sm:pb-3'>
           {breadcrumb != null && (
             <div className='mb-2 sm:mb-3'>{breadcrumb}</div>
           )}
-          <div className='flex flex-wrap items-center justify-between gap-x-3 gap-y-2 sm:gap-x-4'>
-            <div className='min-w-0 flex-1'>
-              <h2 className='truncate text-base font-bold tracking-tight sm:text-lg'>
-                {title}
-              </h2>
-            </div>
-            {actions != null && (
-              <div className='flex shrink-0 flex-wrap items-center justify-end gap-2 sm:gap-x-4'>
-                {actions}
+          {isProduct ? (
+            <ResourceHeader
+              title={title}
+              description={description}
+              meta={meta}
+              status={status}
+              actions={actions}
+              compact
+            />
+          ) : (
+            <div className='flex flex-wrap items-center justify-between gap-x-3 gap-y-2 sm:gap-x-4'>
+              <div className='min-w-0 flex-1'>
+                <h2 className='truncate text-base font-bold tracking-tight sm:text-lg'>
+                  {title}
+                </h2>
               </div>
-            )}
-          </div>
+              {actions != null && (
+                <div className='flex shrink-0 flex-wrap items-center justify-end gap-2 sm:gap-x-4'>
+                  {actions}
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         <div
@@ -120,3 +167,6 @@ SectionPageLayout.Title = SectionPageLayoutTitle
 SectionPageLayout.Actions = SectionPageLayoutActions
 SectionPageLayout.Content = SectionPageLayoutContent
 SectionPageLayout.Breadcrumb = SectionPageLayoutBreadcrumb
+SectionPageLayout.Description = SectionPageLayoutDescription
+SectionPageLayout.Meta = SectionPageLayoutMeta
+SectionPageLayout.Status = SectionPageLayoutStatus

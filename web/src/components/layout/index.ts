@@ -26,6 +26,10 @@ export { AppSidebar } from './components/app-sidebar'
 export { AuthenticatedLayout } from './components/authenticated-layout'
 export { PublicLayout } from './components/public-layout'
 export { PublicHeader } from './components/public-header'
+export { ProductPublicHeader } from './components/product-public-header'
+export type { ProductPublicHeaderProps } from './components/product-public-header'
+export { ProductShell } from './components/product-shell'
+export { ResourceHeader } from './components/resource-header'
 export { PublicNavigation } from './components/public-navigation'
 export { HeaderLogo } from './components/header-logo'
 export { NavLinkItem, NavLinkList } from './components/nav-link-item'
@@ -65,3 +69,10 @@ export type {
   TopNavLink,
 } from './types'
 export type { SectionPageLayoutProps } from './components/section-page-layout'
+export type {
+  ProductShellProps,
+  ProductSurface,
+} from './components/product-shell'
+export type { ResourceHeaderProps } from './components/resource-header'
+export { MetricStrip } from '../metric-strip'
+export type { MetricStripItem, MetricStripProps } from '../metric-strip'

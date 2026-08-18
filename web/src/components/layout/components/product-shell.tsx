@@ -16,30 +16,34 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 For commercial licensing, please contact support@quantumnous.com
 */
+import type { ReactNode } from 'react'
+
+import '@/styles/product-shell.css'
+
 import { cn } from '@/lib/utils'
 
-type MainProps = React.HTMLAttributes<HTMLElement> & {
-  fluid?: boolean
-  as?: 'main' | 'div'
+export type ProductSurface = 'public' | 'auth' | 'workspace'
+
+export type ProductShellProps = {
+  children: ReactNode
+  surface?: ProductSurface
+  className?: string
+  motion?: 'enter' | 'none'
 }
 
-export function Main({
-  className,
-  fluid = true,
-  as: element = 'main',
-  ...props
-}: MainProps) {
-  const Element = element
-
+/**
+ * Provides the product-only canvas and token scope without owning a landmark.
+ * Layouts remain responsible for deciding where the page's single main lives.
+ */
+export function ProductShell(props: ProductShellProps) {
   return (
-    <Element
-      className={cn(
-        'flex min-h-0 flex-1 flex-col overflow-hidden',
-        !fluid &&
-          '@7xl/content:mx-auto @7xl/content:w-full @7xl/content:max-w-7xl',
-        className
-      )}
-      {...props}
-    />
+    <div
+      data-zzapi-product='true'
+      data-product-surface={props.surface ?? 'public'}
+      data-product-motion={props.motion ?? 'enter'}
+      className={cn('product-shell min-h-0', props.className)}
+    >
+      {props.children}
+    </div>
   )
 }

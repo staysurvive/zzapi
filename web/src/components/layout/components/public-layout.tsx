@@ -17,6 +17,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@quantumnous.com
 */
 import type { TopNavLink } from '../types'
+import { ProductPublicHeader } from './product-public-header'
+import { ProductShell } from './product-shell'
 import { PublicHeader, type PublicHeaderProps } from './public-header'
 
 type PublicLayoutProps = {
@@ -30,9 +32,42 @@ type PublicLayoutProps = {
   showNotifications?: boolean
   logo?: React.ReactNode
   siteName?: string
+  appearance?: 'legacy' | 'product'
 }
 
 export function PublicLayout(props: PublicLayoutProps) {
+  if (props.appearance === 'product') {
+    return (
+      <ProductShell
+        surface='public'
+        className='product-public-layout overflow-x-clip'
+      >
+        <ProductPublicHeader
+          navContent={props.navContent}
+          navLinks={props.navLinks}
+          showThemeSwitch={props.showThemeSwitch}
+          showAuthButtons={props.showAuthButtons}
+          showNotifications={props.showNotifications}
+          logo={props.logo}
+          siteName={props.siteName}
+          {...props.headerProps}
+        />
+        <main
+          id='main-content'
+          tabIndex={-1}
+          data-product-public-main='true'
+          className={
+            props.showMainContainer === false
+              ? 'product-public-main'
+              : 'product-public-main container px-4 py-6 md:px-4'
+          }
+        >
+          {props.children}
+        </main>
+      </ProductShell>
+    )
+  }
+
   return (
     <div className='bg-background text-foreground relative min-h-svh overflow-x-clip'>
       <PublicHeader

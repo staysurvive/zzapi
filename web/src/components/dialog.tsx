@@ -44,6 +44,8 @@ type DialogProps = React.ComponentProps<typeof DialogRoot> & {
   footerClassName?: string
   initialFocus?: boolean
   showCloseButton?: boolean
+  productScope?: boolean
+  closeLabel?: React.ReactNode
 }
 
 const dialogContentMotionClassName =
@@ -64,6 +66,8 @@ export function Dialog({
   footerClassName,
   initialFocus,
   showCloseButton,
+  productScope = false,
+  closeLabel,
   ...dialogProps
 }: DialogProps) {
   return (
@@ -77,6 +81,8 @@ export function Dialog({
         )}
         initialFocus={initialFocus}
         showCloseButton={showCloseButton}
+        productScope={productScope}
+        closeLabel={closeLabel}
         style={
           {
             '--dialog-content-height': contentHeight,

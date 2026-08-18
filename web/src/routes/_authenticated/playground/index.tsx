@@ -33,7 +33,7 @@ export const Route = createFileRoute('/_authenticated/playground/')({
 
 function PlaygroundPage() {
   return (
-    <Main className='p-0'>
+    <Main as='div' className='p-0'>
       <Playground />
     </Main>
   )

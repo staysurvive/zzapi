@@ -32,8 +32,18 @@ function DialogTrigger({ ...props }: DialogPrimitive.Trigger.Props) {
   return <DialogPrimitive.Trigger data-slot='dialog-trigger' {...props} />
 }
 
-function DialogPortal({ ...props }: DialogPrimitive.Portal.Props) {
-  return <DialogPrimitive.Portal data-slot='dialog-portal' {...props} />
+function DialogPortal({
+  productScope = false,
+  ...props
+}: DialogPrimitive.Portal.Props & { productScope?: boolean }) {
+  return (
+    <DialogPrimitive.Portal
+      data-slot='dialog-portal'
+      data-zzapi-product={productScope ? 'true' : undefined}
+      data-product-dialog-portal={productScope ? 'true' : undefined}
+      {...props}
+    />
+  )
 }
 
 function DialogClose({ ...props }: DialogPrimitive.Close.Props) {
@@ -60,15 +70,20 @@ function DialogContent({
   className,
   children,
   showCloseButton = true,
+  productScope = false,
+  closeLabel = 'Close',
   ...props
 }: DialogPrimitive.Popup.Props & {
   showCloseButton?: boolean
+  productScope?: boolean
+  closeLabel?: React.ReactNode
 }) {
   return (
-    <DialogPortal>
+    <DialogPortal productScope={productScope}>
       <DialogOverlay />
       <DialogPrimitive.Popup
         data-slot='dialog-content'
+        data-product-dialog={productScope ? 'true' : undefined}
         className={cn(
           'bg-popover text-popover-foreground ring-foreground/10 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-4 rounded-xl p-4 text-sm ring-1 duration-100 outline-none sm:max-w-sm',
           className
@@ -88,7 +103,7 @@ function DialogContent({
             }
           >
             <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} />
-            <span className='sr-only'>Close</span>
+            <span className='sr-only'>{closeLabel}</span>
           </DialogPrimitive.Close>
         )}
       </DialogPrimitive.Popup>
