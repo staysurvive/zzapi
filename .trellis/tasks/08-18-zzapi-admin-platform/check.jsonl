@@ -1,0 +1,7 @@
+{"file":"AGENTS.md","reason":"Permission, security and protected identity review"}
+{"file":"web/AGENTS.md","reason":"Changed-file quality and accessibility review"}
+{"file":".trellis/spec/guides/index.md","reason":"Reuse and cross-layer audit"}
+{"file":".trellis/tasks/08-18-zzapi-product-redesign/research/route-surface-manifest.md","reason":"Verify admin routes and settings sections"}
+{"file":".trellis/tasks/08-18-zzapi-product-redesign/research/home-freeze-manifest.md","reason":"Verify homepage isolation"}
+{"file":".trellis/tasks/08-18-zzapi-admin-platform/research/screen-contract.md","reason":"Verify role/state contracts"}
+{"file":".trellis/tasks/08-18-zzapi-admin-platform/research/evidence-matrix.md","reason":"Verify direct evidence"}

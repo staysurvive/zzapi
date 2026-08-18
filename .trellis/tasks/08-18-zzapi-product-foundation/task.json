@@ -1,0 +1,32 @@
+{
+  "id": "zzapi-product-foundation",
+  "name": "zzapi-product-foundation",
+  "title": "阶段一：子页面品牌基础设施",
+  "description": "Build scoped zzapi product foundations, additive layout APIs, single-main semantics and accessible product navigation without changing the homepage.",
+  "status": "in_progress",
+  "dev_type": null,
+  "scope": null,
+  "package": null,
+  "priority": "P1",
+  "creator": "staysurvive",
+  "assignee": "staysurvive",
+  "createdAt": "2026-08-18",
+  "completedAt": null,
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": "08-18-zzapi-product-redesign",
+  "relatedFiles": [
+    "web/src/components/layout/",
+    "web/src/components/data-table/layout/data-table-page.tsx",
+    "web/src/components/skip-to-main.tsx",
+    "web/src/components/ui/sidebar.tsx",
+    "web/src/styles/product-shell.css"
+  ],
+  "notes": "",
+  "meta": {}
+}

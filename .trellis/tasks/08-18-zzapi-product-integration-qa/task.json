@@ -1,0 +1,31 @@
+{
+  "id": "zzapi-product-integration-qa",
+  "name": "zzapi-product-integration-qa",
+  "title": "阶段六：全站整体验收",
+  "description": "Prove full-route brand, UX, responsive, accessibility, motion and code quality with reproducible browser evidence.",
+  "status": "planning",
+  "dev_type": null,
+  "scope": null,
+  "package": null,
+  "priority": "P1",
+  "creator": "staysurvive",
+  "assignee": "staysurvive",
+  "createdAt": "2026-08-18",
+  "completedAt": null,
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": "08-18-zzapi-product-redesign",
+  "relatedFiles": [
+    ".trellis/tasks/08-18-zzapi-product-redesign/research/route-surface-manifest.md",
+    ".trellis/tasks/08-18-zzapi-product-redesign/research/home-freeze-manifest.md",
+    "design-qa.md",
+    "web/src/routes/"
+  ],
+  "notes": "",
+  "meta": {}
+}

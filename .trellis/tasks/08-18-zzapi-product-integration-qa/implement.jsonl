@@ -1,0 +1,8 @@
+{"file":"AGENTS.md","reason":"Repository governance and final quality requirements"}
+{"file":"web/AGENTS.md","reason":"Frontend validation, accessibility, i18n and build requirements"}
+{"file":".trellis/spec/guides/index.md","reason":"Final reuse and cross-layer audit triggers"}
+{"file":".trellis/tasks/08-18-zzapi-product-redesign/research/route-surface-manifest.md","reason":"Authoritative route and logical-section enumeration"}
+{"file":".trellis/tasks/08-18-zzapi-product-redesign/research/home-freeze-manifest.md","reason":"Homepage code and visual freeze evidence"}
+{"file":".trellis/tasks/08-18-zzapi-product-redesign/research/quality-baseline.md","reason":"Machine-readable baseline and zero-new-failure gate"}
+{"file":".trellis/tasks/08-18-zzapi-product-integration-qa/research/screen-contract.md","reason":"Final screen evidence contract"}
+{"file":".trellis/tasks/08-18-zzapi-product-integration-qa/research/evidence-matrix.md","reason":"Final audit and quality evidence mapping"}

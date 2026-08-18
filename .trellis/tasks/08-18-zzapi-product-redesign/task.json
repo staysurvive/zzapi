@@ -1,0 +1,39 @@
+{
+  "id": "zzapi-product-redesign",
+  "name": "zzapi-product-redesign",
+  "title": "zzapi 子页面品牌化重设计",
+  "description": "Freeze the final homepage and redesign every post-home route as a mature zzapi product through independently verified phases.",
+  "status": "planning",
+  "dev_type": null,
+  "scope": null,
+  "package": null,
+  "priority": "P1",
+  "creator": "staysurvive",
+  "assignee": "staysurvive",
+  "createdAt": "2026-08-18",
+  "completedAt": null,
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [
+    "08-18-zzapi-product-foundation",
+    "08-18-zzapi-public-discovery",
+    "08-18-zzapi-auth-workspace-shell",
+    "08-18-zzapi-user-workspace",
+    "08-18-zzapi-admin-platform",
+    "08-18-zzapi-product-integration-qa"
+  ],
+  "parent": null,
+  "relatedFiles": [
+    "web/src/routes/",
+    "web/src/features/",
+    "web/src/components/layout/",
+    "web/src/components/data-table/",
+    "web/src/styles/"
+  ],
+  "notes": "",
+  "meta": {}
+}

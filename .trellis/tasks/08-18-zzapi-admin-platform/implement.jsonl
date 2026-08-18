@@ -1,0 +1,8 @@
+{"file":"AGENTS.md","reason":"Repository permission, security, billing and protected identity rules"}
+{"file":"web/AGENTS.md","reason":"Frontend tables, accessibility, i18n, testing and responsive rules"}
+{"file":".trellis/spec/guides/index.md","reason":"Reuse and cross-layer review triggers"}
+{"file":".trellis/tasks/08-18-zzapi-product-redesign/research/route-surface-manifest.md","reason":"Admin route and permission ownership"}
+{"file":".trellis/tasks/08-18-zzapi-product-redesign/research/home-freeze-manifest.md","reason":"Homepage isolation contract"}
+{"file":".trellis/tasks/08-18-zzapi-product-foundation/design.md","reason":"Shared shell and DataTable dependency"}
+{"file":".trellis/tasks/08-18-zzapi-admin-platform/research/screen-contract.md","reason":"Wave-specific admin contracts"}
+{"file":".trellis/tasks/08-18-zzapi-admin-platform/research/evidence-matrix.md","reason":"Permission and responsive evidence mapping"}

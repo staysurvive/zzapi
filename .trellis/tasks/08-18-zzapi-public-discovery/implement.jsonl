@@ -1,0 +1,8 @@
+{"file":"AGENTS.md","reason":"Repository governance, protected identity and frontend scope rules"}
+{"file":"web/AGENTS.md","reason":"Frontend i18n, accessibility, testing and responsive conventions"}
+{"file":".trellis/spec/guides/index.md","reason":"Shared reuse and boundary review triggers"}
+{"file":".trellis/tasks/08-18-zzapi-product-redesign/research/route-surface-manifest.md","reason":"Authoritative public route ownership and state matrix"}
+{"file":".trellis/tasks/08-18-zzapi-product-redesign/research/home-freeze-manifest.md","reason":"Homepage immutability and visual regression contract"}
+{"file":".trellis/tasks/08-18-zzapi-product-foundation/design.md","reason":"Product shell API and semantic dependency contract"}
+{"file":".trellis/tasks/08-18-zzapi-public-discovery/research/screen-contract.md","reason":"Phase-specific route and state screen contracts"}
+{"file":".trellis/tasks/08-18-zzapi-public-discovery/research/evidence-matrix.md","reason":"Phase-specific automated and browser evidence mapping"}

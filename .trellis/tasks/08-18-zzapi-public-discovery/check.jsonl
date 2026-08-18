@@ -1,0 +1,7 @@
+{"file":"AGENTS.md","reason":"Protected branding and quality governance review"}
+{"file":"web/AGENTS.md","reason":"Changed-file lint, tests, i18n and accessibility review"}
+{"file":".trellis/spec/guides/index.md","reason":"Reuse and cross-boundary audit checklist"}
+{"file":".trellis/tasks/08-18-zzapi-product-redesign/research/route-surface-manifest.md","reason":"Verify every public route and state has evidence"}
+{"file":".trellis/tasks/08-18-zzapi-product-redesign/research/home-freeze-manifest.md","reason":"Verify no homepage regression"}
+{"file":".trellis/tasks/08-18-zzapi-public-discovery/research/screen-contract.md","reason":"Verify screen-level acceptance coverage"}
+{"file":".trellis/tasks/08-18-zzapi-public-discovery/research/evidence-matrix.md","reason":"Verify evidence is direct and reproducible"}

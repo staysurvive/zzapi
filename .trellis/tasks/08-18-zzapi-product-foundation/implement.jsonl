@@ -1,0 +1,8 @@
+{"file": "AGENTS.md", "reason": "Repository governance, protected identity, frontend and quality constraints"}
+{"file": "web/AGENTS.md", "reason": "Frontend TypeScript, accessibility, testing, i18n and validation conventions"}
+{"file": ".trellis/spec/guides/index.md", "reason": "Shared code-reuse and cross-layer thinking triggers"}
+{"file": ".trellis/tasks/08-18-zzapi-product-foundation/research/current-frontend-evidence.md", "reason": "Verified layout, motion, navigation, tests and frozen-home evidence"}
+{"file": ".trellis/tasks/08-18-zzapi-product-foundation/research/screen-contract.md", "reason": "Phase 1 observable surfaces, deferred consumer evidence and explicit failure conditions"}
+{"file": ".trellis/tasks/08-18-zzapi-product-foundation/research/evidence-matrix.md", "reason": "Traceable automated, browser and baseline evidence required before Phase 1 close"}
+{"file": ".trellis/tasks/08-18-zzapi-product-redesign/research/home-freeze-manifest.md", "reason": "Fixed homepage source and visual regression contract"}
+{"file": ".trellis/tasks/08-18-zzapi-product-redesign/research/quality-baseline.md", "reason": "Existing lint/test baseline and zero-new-failure gate"}

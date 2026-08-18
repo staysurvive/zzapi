@@ -1,0 +1,33 @@
+{
+  "id": "zzapi-auth-workspace-shell",
+  "name": "zzapi-auth-workspace-shell",
+  "title": "阶段三：认证与工作区外壳",
+  "description": "Create a trustworthy zzapi identity experience and accessible authenticated workspace shell.",
+  "status": "planning",
+  "dev_type": null,
+  "scope": null,
+  "package": null,
+  "priority": "P2",
+  "creator": "staysurvive",
+  "assignee": "staysurvive",
+  "createdAt": "2026-08-18",
+  "completedAt": null,
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": "08-18-zzapi-product-redesign",
+  "relatedFiles": [
+    "web/src/features/auth/",
+    "web/src/routes/(auth)/",
+    "web/src/routes/oauth/",
+    "web/src/routes/(errors)/",
+    "web/src/components/layout/components/authenticated-layout.tsx",
+    "web/src/components/layout/components/app-sidebar.tsx"
+  ],
+  "notes": "",
+  "meta": {}
+}

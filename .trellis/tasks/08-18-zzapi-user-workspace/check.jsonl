@@ -1,0 +1,7 @@
+{"file":"AGENTS.md","reason":"Billing safety, security and protected identity review"}
+{"file":"web/AGENTS.md","reason":"Changed-file quality, accessibility and i18n review"}
+{"file":".trellis/spec/guides/index.md","reason":"Reuse and data-boundary audit"}
+{"file":".trellis/tasks/08-18-zzapi-product-redesign/research/route-surface-manifest.md","reason":"Verify all user routes and states"}
+{"file":".trellis/tasks/08-18-zzapi-product-redesign/research/home-freeze-manifest.md","reason":"Verify homepage isolation"}
+{"file":".trellis/tasks/08-18-zzapi-user-workspace/research/screen-contract.md","reason":"Verify wave contracts"}
+{"file":".trellis/tasks/08-18-zzapi-user-workspace/research/evidence-matrix.md","reason":"Verify direct evidence"}

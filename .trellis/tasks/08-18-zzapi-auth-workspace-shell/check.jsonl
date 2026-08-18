@@ -1,0 +1,7 @@
+{"file":"AGENTS.md","reason":"Protected branding, security and quality review"}
+{"file":"web/AGENTS.md","reason":"Changed-file lint, tests, accessibility and i18n review"}
+{"file":".trellis/spec/guides/index.md","reason":"Reuse and boundary audit"}
+{"file":".trellis/tasks/08-18-zzapi-product-redesign/research/route-surface-manifest.md","reason":"Verify auth and workspace route coverage"}
+{"file":".trellis/tasks/08-18-zzapi-product-redesign/research/home-freeze-manifest.md","reason":"Verify homepage isolation"}
+{"file":".trellis/tasks/08-18-zzapi-auth-workspace-shell/research/screen-contract.md","reason":"Verify rendered semantic contracts"}
+{"file":".trellis/tasks/08-18-zzapi-auth-workspace-shell/research/evidence-matrix.md","reason":"Verify direct reproducible evidence"}

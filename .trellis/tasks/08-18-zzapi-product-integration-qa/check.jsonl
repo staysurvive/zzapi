@@ -1,0 +1,8 @@
+{"file":"AGENTS.md","reason":"Final governance and protected identity review"}
+{"file":"web/AGENTS.md","reason":"Final frontend quality and accessibility review"}
+{"file":".trellis/spec/guides/index.md","reason":"Final reuse and boundary audit"}
+{"file":".trellis/tasks/08-18-zzapi-product-redesign/research/route-surface-manifest.md","reason":"Verify complete route ownership"}
+{"file":".trellis/tasks/08-18-zzapi-product-redesign/research/home-freeze-manifest.md","reason":"Verify code and visual homepage freeze"}
+{"file":".trellis/tasks/08-18-zzapi-product-redesign/research/quality-baseline.md","reason":"Verify baseline-relative quality claims"}
+{"file":".trellis/tasks/08-18-zzapi-product-integration-qa/research/screen-contract.md","reason":"Verify all final screen states are evidenced"}
+{"file":".trellis/tasks/08-18-zzapi-product-integration-qa/research/evidence-matrix.md","reason":"Verify direct QA evidence and final gates"}

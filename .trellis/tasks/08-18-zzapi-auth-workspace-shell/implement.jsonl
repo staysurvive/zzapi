@@ -1,0 +1,8 @@
+{"file":"AGENTS.md","reason":"Repository governance and protected identity rules"}
+{"file":"web/AGENTS.md","reason":"Frontend auth, accessibility, i18n, testing and responsive rules"}
+{"file":".trellis/spec/guides/index.md","reason":"Reuse and cross-layer review triggers"}
+{"file":".trellis/tasks/08-18-zzapi-product-redesign/research/route-surface-manifest.md","reason":"Auth/workspace route ownership and state requirements"}
+{"file":".trellis/tasks/08-18-zzapi-product-redesign/research/home-freeze-manifest.md","reason":"Homepage immutability and regression contract"}
+{"file":".trellis/tasks/08-18-zzapi-product-foundation/design.md","reason":"ProductShell and main ownership dependency"}
+{"file":".trellis/tasks/08-18-zzapi-auth-workspace-shell/research/screen-contract.md","reason":"Phase-specific auth and shell contracts"}
+{"file":".trellis/tasks/08-18-zzapi-auth-workspace-shell/research/evidence-matrix.md","reason":"Phase-specific evidence mapping"}
