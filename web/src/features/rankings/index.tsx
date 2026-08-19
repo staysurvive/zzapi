@@ -17,10 +17,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@quantumnous.com
 */
 import { useNavigate, useSearch } from '@tanstack/react-router'
+import { BarChart3 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
-import { PublicLayout } from '@/components/layout'
-import { PageTransition } from '@/components/page-transition'
+import { EmptyState } from '@/components/empty-state'
+import { ErrorState } from '@/components/error-state'
+import { ProductShell, PublicLayout } from '@/components/layout'
 import { Skeleton } from '@/components/ui/skeleton'
 
 import {
@@ -32,14 +34,14 @@ import {
 import { useRankings } from './hooks/use-rankings'
 import type { RankingPeriod } from './types'
 
-const VALID_PERIODS: RankingPeriod[] = ['today', 'week', 'month', 'year']
+const VALID_PERIODS = new Set<RankingPeriod>(['today', 'week', 'month', 'year'])
 
 export function Rankings() {
   const { t } = useTranslation()
   const search = useSearch({ from: '/rankings/' })
   const navigate = useNavigate()
 
-  const period: RankingPeriod = VALID_PERIODS.includes(
+  const period: RankingPeriod = VALID_PERIODS.has(
     search.period as RankingPeriod
   )
     ? (search.period as RankingPeriod)
@@ -47,6 +49,14 @@ export function Rankings() {
 
   const rankingsQuery = useRankings(period)
   const snapshot = rankingsQuery.data?.data
+  const isEmpty =
+    snapshot != null &&
+    snapshot.models.length === 0 &&
+    snapshot.vendors.length === 0 &&
+    snapshot.top_movers.length === 0 &&
+    snapshot.top_droppers.length === 0 &&
+    snapshot.models_history.points.length === 0 &&
+    snapshot.vendor_share_history.points.length === 0
 
   const handlePeriodChange = (next: RankingPeriod) => {
     navigate({
@@ -57,57 +67,70 @@ export function Rankings() {
 
   return (
     <PublicLayout showMainContainer={false}>
-      <div className='relative'>
-        <div
-          aria-hidden
-          className='pointer-events-none absolute inset-x-0 top-0 h-[600px] opacity-20 dark:opacity-[0.10]'
-          style={{
-            background: [
-              'radial-gradient(ellipse 60% 50% at 20% 20%, oklch(0.72 0.18 250 / 80%) 0%, transparent 70%)',
-              'radial-gradient(ellipse 50% 40% at 80% 15%, oklch(0.65 0.15 200 / 60%) 0%, transparent 70%)',
-              'radial-gradient(ellipse 40% 35% at 50% 70%, oklch(0.70 0.12 280 / 40%) 0%, transparent 70%)',
-            ].join(', '),
-            maskImage:
-              'linear-gradient(to bottom, black 40%, transparent 100%)',
-            WebkitMaskImage:
-              'linear-gradient(to bottom, black 40%, transparent 100%)',
-          }}
-        />
-        <PageTransition className='relative mx-auto w-full max-w-[1280px] space-y-8 px-3 pt-16 pb-10 sm:px-6 sm:pt-20 sm:pb-12 xl:px-8'>
-          <RankingsHero period={period} onPeriodChange={handlePeriodChange} />
+      <ProductShell surface='public' className='rankings-page-shell'>
+        <main
+          id='main-content'
+          tabIndex={-1}
+          className='rankings-page relative'
+        >
+          <div className='relative mx-auto w-full max-w-[1280px] space-y-8 px-3 pt-20 pb-10 sm:px-6 sm:pt-24 sm:pb-12 xl:px-8'>
+            <RankingsHero period={period} onPeriodChange={handlePeriodChange} />
 
-          {rankingsQuery.isLoading ? (
-            <RankingsLoading />
-          ) : !snapshot ? (
-            <RankingsError
-              message={
-                rankingsQuery.error instanceof Error
-                  ? rankingsQuery.error.message
-                  : t('Unable to load rankings data')
-              }
-            />
-          ) : (
-            <>
-              <ModelsSection
-                history={snapshot.models_history}
-                rows={snapshot.models}
-                period={period}
-              />
+            <section
+              id='rankings-results-panel'
+              role='tabpanel'
+              aria-labelledby={`ranking-period-${period}-tab`}
+              aria-busy={rankingsQuery.isFetching}
+              tabIndex={0}
+            >
+              {rankingsQuery.isLoading ? <RankingsLoading /> : null}
+              {!rankingsQuery.isLoading && !snapshot ? (
+                <ErrorState
+                  title={t('Unable to load rankings')}
+                  description={
+                    rankingsQuery.error instanceof Error
+                      ? rankingsQuery.error.message
+                      : t('Unable to load rankings data')
+                  }
+                  onRetry={() => void rankingsQuery.refetch()}
+                  className='bg-card rounded-lg border'
+                />
+              ) : null}
+              {!rankingsQuery.isLoading && isEmpty ? (
+                <EmptyState
+                  icon={BarChart3}
+                  title={t('No ranking activity yet')}
+                  description={t(
+                    'Rankings will appear after models receive traffic during this period.'
+                  )}
+                  className='bg-card rounded-lg'
+                  bordered
+                />
+              ) : null}
+              {!rankingsQuery.isLoading && snapshot && !isEmpty ? (
+                <div className='space-y-8'>
+                  <ModelsSection
+                    history={snapshot.models_history}
+                    rows={snapshot.models}
+                    period={period}
+                  />
 
-              <MarketShareSection
-                history={snapshot.vendor_share_history}
-                rows={snapshot.vendors}
-                period={period}
-              />
+                  <MarketShareSection
+                    history={snapshot.vendor_share_history}
+                    rows={snapshot.vendors}
+                    period={period}
+                  />
 
-              <PulseSection
-                movers={snapshot.top_movers}
-                droppers={snapshot.top_droppers}
-              />
-            </>
-          )}
-        </PageTransition>
-      </div>
+                  <PulseSection
+                    movers={snapshot.top_movers}
+                    droppers={snapshot.top_droppers}
+                  />
+                </div>
+              ) : null}
+            </section>
+          </div>
+        </main>
+      </ProductShell>
     </PublicLayout>
   )
 }
@@ -115,23 +138,9 @@ export function Rankings() {
 function RankingsLoading() {
   return (
     <div className='space-y-6'>
-      <Skeleton className='h-[420px] w-full rounded-xl' />
-      <Skeleton className='h-[360px] w-full rounded-xl' />
-      <Skeleton className='h-[180px] w-full rounded-xl' />
-    </div>
-  )
-}
-
-function RankingsError(props: { message: string }) {
-  const { t } = useTranslation()
-  return (
-    <div className='bg-card rounded-xl border border-dashed px-6 py-12 text-center'>
-      <h2 className='text-foreground text-base font-semibold'>
-        {t('Unable to load rankings')}
-      </h2>
-      <p className='text-muted-foreground mx-auto mt-2 max-w-md text-sm'>
-        {props.message}
-      </p>
+      <Skeleton className='h-[420px] w-full rounded-lg' />
+      <Skeleton className='h-[360px] w-full rounded-lg' />
+      <Skeleton className='h-[180px] w-full rounded-lg' />
     </div>
   )
 }

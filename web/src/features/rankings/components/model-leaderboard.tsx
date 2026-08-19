@@ -103,7 +103,7 @@ function ModelList(props: {
                   : 'text-muted-foreground/80 truncate text-xs italic'
               }
             >
-              by{' '}
+              {t('by')}{' '}
               <VendorLink vendor={row.vendor}>
                 {row.vendor.toLowerCase()}
               </VendorLink>

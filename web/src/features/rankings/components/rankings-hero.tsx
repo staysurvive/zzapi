@@ -16,6 +16,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 For commercial licensing, please contact support@quantumnous.com
 */
+import { useRef, type KeyboardEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { cn } from '@/lib/utils'
@@ -40,11 +41,40 @@ type RankingsHeroProps = {
  */
 export function RankingsHero(props: RankingsHeroProps) {
   const { t } = useTranslation()
+  const periodTabs = useRef<Array<HTMLButtonElement | null>>([])
+
+  const handlePeriodKeyDown = (
+    event: KeyboardEvent<HTMLButtonElement>,
+    currentIndex: number
+  ) => {
+    let nextIndex: number | null = null
+    if (event.key === 'ArrowRight') {
+      nextIndex = (currentIndex + 1) % PERIODS.length
+    } else if (event.key === 'ArrowLeft') {
+      nextIndex = (currentIndex - 1 + PERIODS.length) % PERIODS.length
+    } else if (event.key === 'Home') {
+      nextIndex = 0
+    } else if (event.key === 'End') {
+      nextIndex = PERIODS.length - 1
+    }
+
+    if (nextIndex == null) return
+
+    event.preventDefault()
+    periodTabs.current[nextIndex]?.focus()
+    props.onPeriodChange(PERIODS[nextIndex].id)
+  }
 
   return (
-    <section className='space-y-5'>
+    <section className='rankings-hero relative space-y-5'>
+      <img
+        aria-hidden
+        src='/product-brand/rankings-pulse-accent.png'
+        alt=''
+        className='rankings-pulse-accent pointer-events-none absolute top-0 right-0 hidden select-none lg:block'
+      />
       <div className='space-y-2'>
-        <h1 className='text-[clamp(1.75rem,4vw,2.5rem)] leading-[1.15] font-bold tracking-tight'>
+        <h1 className='text-[clamp(1.75rem,4vw,2.5rem)] leading-[1.15] font-semibold'>
           {t('Rankings')}
         </h1>
         <p className='text-muted-foreground/80 max-w-2xl text-sm'>
@@ -58,17 +88,25 @@ export function RankingsHero(props: RankingsHeroProps) {
       <div
         role='tablist'
         aria-label={t('Period')}
+        aria-orientation='horizontal'
         className='border-border/60 flex items-center border-b'
       >
-        {PERIODS.map((p) => {
+        {PERIODS.map((p, index) => {
           const isActive = props.period === p.id
           return (
             <button
               key={p.id}
+              id={`ranking-period-${p.id}-tab`}
+              ref={(node) => {
+                periodTabs.current[index] = node
+              }}
               role='tab'
               type='button'
               aria-selected={isActive}
+              aria-controls='rankings-results-panel'
+              tabIndex={isActive ? 0 : -1}
               onClick={() => props.onPeriodChange(p.id)}
+              onKeyDown={(event) => handlePeriodKeyDown(event, index)}
               className={cn(
                 'focus-visible:ring-ring/40 relative -mb-px rounded-sm px-3 py-2 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:outline-none',
                 isActive
@@ -80,7 +118,7 @@ export function RankingsHero(props: RankingsHeroProps) {
               <span
                 aria-hidden
                 className={cn(
-                  'bg-foreground absolute inset-x-3 -bottom-px h-[2px] rounded-full transition-opacity',
+                  'bg-primary absolute inset-x-3 -bottom-px h-[2px] rounded-full transition-opacity',
                   isActive ? 'opacity-100' : 'opacity-0'
                 )}
               />
