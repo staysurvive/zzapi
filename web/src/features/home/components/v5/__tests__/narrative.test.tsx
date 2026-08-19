@@ -100,6 +100,31 @@ describe('Homepage V5 narrative', () => {
     ).toBeInTheDocument()
   })
 
+  test('keeps every stage visible when IntersectionObserver is unavailable', async () => {
+    render(
+      <HomepageV5
+        isAuthenticated={false}
+        openingPhase='ambient'
+        pricingState='empty'
+        performanceState='empty'
+        catalogPreview={[]}
+        remainingModelCount={0}
+        selectedModel={null}
+        selectedModelName={null}
+        onSelectModel={vi.fn()}
+        baseUrl='<YOUR_BASE_URL>'
+        docsLink={null}
+      />
+    )
+
+    await waitFor(() => {
+      for (const stage of screen.getAllByRole('region')) {
+        expect(stage).toHaveAttribute('data-revealed', 'true')
+        expect(stage).not.toHaveAttribute('data-reveal-pending')
+      }
+    })
+  })
+
   test('renders the request path as an ordered five-stage process', () => {
     const isAuthenticated = true
     render(

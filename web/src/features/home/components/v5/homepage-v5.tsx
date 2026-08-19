@@ -16,6 +16,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 For commercial licensing, please contact support@quantumnous.com
 */
+import { useLayoutEffect, useRef } from 'react'
+
 import type {
   HomepageDataState,
   HomepageModelSignal,
@@ -43,8 +45,58 @@ export interface HomepageV5Props {
 }
 
 export function HomepageV5(props: HomepageV5Props) {
+  const rootRef = useRef<HTMLDivElement>(null)
+
+  useLayoutEffect(() => {
+    const root = rootRef.current
+    if (!root || props.openingPhase !== 'ambient') return
+
+    const stages = [
+      ...root.querySelectorAll<HTMLElement>('[data-home-v5-stage]'),
+    ]
+    const revealAll = () => {
+      for (const stage of stages) {
+        delete stage.dataset.revealPending
+        stage.dataset.revealed = 'true'
+      }
+    }
+    const motionQuery = window.matchMedia?.('(prefers-reduced-motion: reduce)')
+    if (motionQuery?.matches || typeof IntersectionObserver === 'undefined') {
+      revealAll()
+      return
+    }
+
+    for (const stage of stages) stage.dataset.revealPending = 'true'
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue
+          const stage = entry.target as HTMLElement
+          delete stage.dataset.revealPending
+          stage.dataset.revealed = 'true'
+          observer.unobserve(stage)
+        }
+      },
+      { rootMargin: '0px 0px -14% 0px', threshold: 0.08 }
+    )
+    for (const stage of stages) observer.observe(stage)
+
+    const handleMotionPreference = () => {
+      if (!motionQuery.matches) return
+      observer.disconnect()
+      revealAll()
+    }
+    motionQuery.addEventListener?.('change', handleMotionPreference)
+
+    return () => {
+      observer.disconnect()
+      motionQuery.removeEventListener?.('change', handleMotionPreference)
+    }
+  }, [props.openingPhase])
+
   return (
     <div
+      ref={rootRef}
       className='home-v5'
       data-home-v5-narrative='true'
       data-opening-phase={props.openingPhase}
