@@ -27,13 +27,15 @@ const (
 )
 
 func normalizeLocale(locale string) (string, bool) {
-	l := strings.ToLower(strings.TrimSpace(locale))
-	switch l {
-	case "en", "zh-CN", "zh-TW", "ja":
-		return l, true
-	default:
-		return "", false
-	}
+ l := strings.ToLower(strings.ReplaceAll(strings.TrimSpace(locale), "_", "-"))
+ switch {
+ case l == "en" || strings.HasPrefix(l, "en-"):
+  return "en", true
+ case l == "zh" || strings.HasPrefix(l, "zh-"):
+  return "zh", true
+ default:
+  return "", false
+ }
 }
 
 func getUpstreamBase() string {
