@@ -17,7 +17,6 @@ import (
 
 const (
 	LangZhCN    = "zh-CN"
-	LangZhTW    = "zh-TW"
 	LangEn      = "en"
 	DefaultLang = LangEn // Fallback to English if language not supported
 )
@@ -36,11 +35,11 @@ var (
 func Init() error {
 	var initErr error
 	initOnce.Do(func() {
-		bundle = i18n.NewBundle(language.Chinese)
+		bundle = i18n.NewBundle(language.English)
 		bundle.RegisterUnmarshalFunc("yaml", yaml.Unmarshal)
 
 		// Load embedded translation files
-		files := []string{"locales/zh-CN.yaml", "locales/zh-TW.yaml", "locales/en.yaml"}
+		files := []string{"locales/zh-CN.yaml", "locales/en.yaml"}
 		for _, file := range files {
 			_, err := bundle.LoadMessageFileFS(localeFS, file)
 			if err != nil {
@@ -51,7 +50,6 @@ func Init() error {
 
 		// Pre-create localizers for supported languages
 		localizers[LangZhCN] = i18n.NewLocalizer(bundle, LangZhCN)
-		localizers[LangZhTW] = i18n.NewLocalizer(bundle, LangZhTW)
 		localizers[LangEn] = i18n.NewLocalizer(bundle, LangEn)
 
 		// Set the TranslateMessage function in common package
@@ -176,56 +174,57 @@ func GetLangFromContext(c *gin.Context) string {
 	return DefaultLang
 }
 
-// ParseAcceptLanguage parses the Accept-Language header and returns the preferred language
+// ParseAcceptLanguage returns the highest-priority Chinese or English language
+// from the Accept-Language header. Unsupported language sets fall back to English.
 func ParseAcceptLanguage(header string) string {
-	if header == "" {
+	if strings.TrimSpace(header) == "" {
 		return DefaultLang
 	}
 
-	// Simple parsing: take the first language tag
-	parts := strings.Split(header, ",")
-	if len(parts) == 0 {
+	tags, _, err := language.ParseAcceptLanguage(header)
+	if err != nil {
 		return DefaultLang
 	}
 
-	// Get the first language and remove quality value
-	firstLang := strings.TrimSpace(parts[0])
-	if idx := strings.Index(firstLang, ";"); idx > 0 {
-		firstLang = firstLang[:idx]
+	for _, tag := range tags {
+		base, _ := tag.Base()
+		switch base.String() {
+		case "zh":
+			return LangZhCN
+		case "en":
+			return LangEn
+		}
 	}
 
-	return normalizeLang(firstLang)
+	return DefaultLang
 }
 
 // normalizeLang normalizes language code to supported format
 func normalizeLang(lang string) string {
-	lang = strings.ToLower(strings.TrimSpace(lang))
+	normalized, _ := matchSupportedLanguage(lang)
+	return normalized
+}
 
-	// Handle common variations
+func matchSupportedLanguage(lang string) (string, bool) {
+	lang = strings.ToLower(strings.ReplaceAll(strings.TrimSpace(lang), "_", "-"))
+
 	switch {
-	case strings.HasPrefix(lang, "zh-tw"):
-		return LangZhTW
-	case strings.HasPrefix(lang, "zh"):
-		return LangZhCN
-	case strings.HasPrefix(lang, "en"):
-		return LangEn
+	case lang == "zh" || strings.HasPrefix(lang, "zh-"):
+		return LangZhCN, true
+	case lang == "en" || strings.HasPrefix(lang, "en-"):
+		return LangEn, true
 	default:
-		return DefaultLang
+		return DefaultLang, false
 	}
 }
 
 // SupportedLanguages returns a list of supported language codes
 func SupportedLanguages() []string {
-	return []string{LangZhCN, LangZhTW, LangEn}
+	return []string{LangZhCN, LangEn}
 }
 
 // IsSupported checks if a language code is supported
 func IsSupported(lang string) bool {
-	lang = normalizeLang(lang)
-	for _, supported := range SupportedLanguages() {
-		if lang == supported {
-			return true
-		}
-	}
-	return false
+	_, supported := matchSupportedLanguage(lang)
+	return supported
 }

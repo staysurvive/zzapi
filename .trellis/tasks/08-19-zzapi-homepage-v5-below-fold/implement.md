@@ -68,9 +68,10 @@ Commit: `feat(web): complete homepage v5 motion and responsive system`
 ## Stage 5 — i18n And Code Quality
 
 - [ ] 加载并遵循 `i18n-translate` skill。
-- [ ] 新文案以英文 key 使用 `t()`，运行 `bun run i18n:sync`，补齐 en/zh/zh-TW/fr/ja/ru/vi。
+- [ ] 新文案以英文 key 使用 `t()`，运行 `bun run i18n:sync`，补齐 en/zh。
+- [ ] 删除 zh-TW/fr/ja/ru/vi 前端 locale 与后端 zh-TW 错误资源；语言选项、日期 locale、检测/登录历史偏好统一为双语契约。
 - [ ] 模型名、路径、代码、catalog metadata 不翻译。
-- [ ] 七语言自动测长文本/overflow，人工检查 zh/en/ru。
+- [ ] 中文/英文自动测长文本与 overflow，并在语言选择器、个人设置和登录恢复路径验证双语契约。
 - [ ] 删除确认无引用的旧 home helpers；不做无关重构。
 
 Commit: `feat(web): localize and clean homepage v5`

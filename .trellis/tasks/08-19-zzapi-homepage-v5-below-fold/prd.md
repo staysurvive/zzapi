@@ -82,7 +82,7 @@
 ### R9 — 内容、数据与国际化
 
 - 优先复用 `/api/status`、模型/Provider 配置、现有价格与能力元数据；动态数据必须有明确 loading/empty/error/fallback。
-- 新增界面文案使用 i18n，覆盖 en、zh、zh-TW、fr、ja、ru、vi。
+- 全站界面与 API 错误 i18n 只保留英文和简体中文；删除 zh-TW、fr、ja、ru、vi 资源与界面选项。历史中文变体统一归一化到简体中文，其他历史语言值安全回退英文。
 - 保留 new-api、QuantumNous、许可证和原项目归属，不删除、不替换、不弱化。
 
 ### R10 — 末尾价值选项卡
@@ -106,7 +106,7 @@
 - [ ] Light/Dark 与 `1440/1280/1024/768/390` 代表视口无重叠、截断、页面横向溢出或不可达交互。
 - [ ] 键盘、focus、语义结构、WCAG 2.1 AA 对比度和 reduced-motion 检查通过。
 - [ ] 末尾 Tabs 具有正确的 vertical Tabs 语义、方向键/Home/End/Enter/Space 行为、单一活动面板、稳定高度、移动端重排，且不存在自动切换或滚动劫持。
-- [ ] 七语言 i18n 同步无缺失；受影响测试、changed-file lint/format、typecheck、production build 和浏览器 console 检查通过。
+- [ ] 双语 i18n 同步无缺失；语言选择器与个人设置只显示简体中文/英文，历史 locale 安全降级；受影响测试、changed-file lint/format、typecheck、production build 和浏览器 console 检查通过。
 - [ ] 至少执行 Brand、Design、Product、Responsive、Motion/Accessibility 五类独立审查；所有 P0/P1/P2 问题修复并复验。
 - [ ] 设计 QA 使用选定视觉目标与同状态实现截图进行同视口比较，`design-qa.md` 最终为 `passed`。
 - [ ] 除 `/` 首页实现、首页专属测试/样式/资产和本任务文档外，其他产品页面无 diff。

@@ -205,6 +205,7 @@ type HomepageModelSignal = {
 - 指标使用 `<dl>`，流程使用 `<ol>`；装饰线路 `aria-hidden='true' focusable='false'`。
 - 状态同时有文字/形状，不只依赖蓝色；正文 4.5:1，图形/大字 3:1。
 - focus ring 2px 品牌色并为外扩预留空间；`forced-colors` 使用系统边框。
+- 界面 locale 只保留 `en / zhCN`，后端语言只保留 `en / zh-CN`；任何 `zh-*` 历史值归一化到简体中文，旧 fr/ja/ru/vi 值回退英文。模型元数据同步语言属于独立业务能力，不随界面 locale 删除。
 - light：白、近白、黑/graphite、silver、精确蓝；dark：`#0e1116` 高级黑、graphite/silver、`#73a2ff` 信号蓝。显式 preset 继续由 preset token 主导。
 
 ## 10. Performance, Rollback And Compatibility

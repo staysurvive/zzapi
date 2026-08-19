@@ -22,6 +22,7 @@ import path from 'node:path'
 // This script is executed from the web/ package root (see package.json script).
 const LOCALES_DIR = path.resolve('src/i18n/locales')
 const FALLBACK_COMPARE_LOCALE = 'en' // used for "still English" detection only
+const SUPPORTED_LOCALE_FILES = new Set(['en.json', 'zh.json'])
 const OBFUSCATED_KEYS = [
   {
     runtime: ['footer', 'new' + 'api', 'projectAttributionSuffix'].join('.'),
@@ -126,18 +127,6 @@ function stableStringify(obj) {
   return text + '\n'
 }
 
-function countLeafKeys(obj) {
-  if (Array.isArray(obj)) return obj.length
-  if (!isPlainObject(obj)) return 0
-  let count = 0
-  for (const k of Object.keys(obj)) {
-    const v = obj[k]
-    if (isPlainObject(v) || Array.isArray(v)) count += countLeafKeys(v)
-    else count += 1
-  }
-  return count
-}
-
 function reorderLikeBase(
   base,
   target,
@@ -224,13 +213,8 @@ function isLikelyUntranslated({ locale, baseValue, value }) {
   if (s.length < 6) return false
   if (!/[A-Za-z]{3,}/.test(s)) return false
 
-  // For locales with non-latin scripts, equality with EN is a strong signal.
-  if (locale === 'ja' || locale === 'zh') return true
-  if (locale === 'ru') return true
-
-  // For fr/vi: still useful but noisier; keep it conservative.
-  if (locale === 'fr' || locale === 'vi')
-    return /\b(the|and|or|to|with|please)\b/i.test(s)
+  // Simplified Chinese is the only translated interface locale.
+  if (locale === 'zh') return true
 
   return false
 }
@@ -242,7 +226,15 @@ async function main() {
     .map((e) => e.name)
     .sort((a, b) => a.localeCompare(b))
 
-  // Auto-pick base locale as the one with the most leaf keys under translation (most "rich").
+  const unexpectedFiles = localeFiles.filter(
+    (filename) => !SUPPORTED_LOCALE_FILES.has(filename)
+  )
+  if (unexpectedFiles.length > 0) {
+    throw new Error(
+      `Unsupported interface locale files: ${unexpectedFiles.join(', ')}`
+    )
+  }
+
   const parsedByLocale = {}
   for (const filename of localeFiles) {
     const locale = filename.replace(/\.json$/i, '')
@@ -250,17 +242,10 @@ async function main() {
     parsedByLocale[locale] = JSON.parse(raw)
   }
 
-  const baseLocale = Object.keys(parsedByLocale)
-    .map((locale) => {
-      const json = parsedByLocale[locale]
-      const trans = json?.translation ?? {}
-      return { locale, score: countLeafKeys(trans) }
-    })
-    .sort(
-      (a, b) => b.score - a.score || a.locale.localeCompare(b.locale)
-    )[0]?.locale
+  const baseLocale = parsedByLocale.en ? 'en' : undefined
 
-  if (!baseLocale) throw new Error('No locale files found.')
+  if (!baseLocale)
+    throw new Error('Required base locale en.json was not found.')
 
   const baseFile = `${baseLocale}.json`
   const baseJson = parsedByLocale[baseLocale]
