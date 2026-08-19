@@ -1,11 +1,14 @@
 # Public Discovery Screen Contract
 
-| Surface | Route/state | Primary user job | Required evidence |
-| --- | --- | --- | --- |
-| Model plaza | `/pricing` populated, loading, empty, error, gated | Find and choose a model | desktop/tablet/mobile, light/dark, keyboard filter |
-| Model detail | `/pricing/$modelId` found, not-found, error | Validate a model before use | desktop/mobile, copy/use action, recovery |
-| Rankings | `/rankings` populated, loading, empty, error, disabled | Compare model performance | desktop/tablet/mobile, trend text, sort/filter |
-| About | `/about` configured and default fallback | Understand product and attribution | desktop/mobile, configured/missing content |
-| Legal | `/privacy-policy`, `/user-agreement` configured/missing | Read policy text | desktop/mobile, heading anchors, long text |
+| Surface           | Route/state                                                                        | Role / deterministic fixture                                                                                                | Verified evidence                                                                                      |
+| ----------------- | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Model plaza       | `/pricing` populated, loading, empty, fatal error, cached-refresh error, gated     | Guest/admin seeded three-model API; hook fixtures for request states; route guard mocks for disabled/auth-required          | zh light/dark `1280x720`, `834x1194`, `390x844` under `evidence/final-pass/`; pricing/hook/route tests |
+| Model detail      | `/pricing/$modelId` found, not-found, fatal error, cached-refresh error            | Seeded `gpt-5.6-sol`; hook fixtures for missing/error/retry                                                                 | zh light/dark desktop/tablet/mobile captures; detail state, table keyboard, tab/overflow tests         |
+| Rankings          | `/rankings` populated, loading, empty, error, disabled                             | Seeded week snapshot; deterministic empty/error query mocks; route guard disabled fixture                                   | zh light/dark desktop/tablet/mobile captures; keyboard period, retry, empty and i18n tests             |
+| About             | `/about` configured, URL, default fallback, error                                  | Runtime missing-content fallback; query fixtures for Markdown/URL/error                                                     | zh light/dark desktop/tablet/mobile fallback captures; configured/sandbox/attribution/retry tests      |
+| Legal             | `/privacy-policy`, `/user-agreement` configured Markdown/HTML, URL, missing, error | Runtime missing content; query fixtures for long Markdown, sanitized HTML, duplicate headings, wide table, hashes and retry | zh light/dark desktop/tablet/mobile missing captures; 8 configured/missing/error behavior tests        |
+| Public navigation | closed/open, route close, Escape, breakpoint, disabled Docs                        | Component fixtures plus live route navigation                                                                               | Legacy and product header tests; one landmark, focus/scroll restoration, no hidden tab stops           |
 
 Every row must record role, fixture/seed method, locale, theme, viewport, and screenshot/test artifact before phase completion.
+
+All captures use the frontend development runtime at `http://localhost:3001`, locale `zh`, and device scale factor `1`. State fixtures use React Query and route-guard mocks where mutating live site configuration would be unsafe or nondeterministic. `current-runtime-audit.md` records the exact screenshot paths and evidence limits.

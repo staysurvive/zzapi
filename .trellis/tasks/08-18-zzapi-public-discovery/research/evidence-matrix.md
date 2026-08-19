@@ -1,9 +1,17 @@
 # Public Discovery Evidence Matrix
 
-| Contract | Automated evidence | Browser evidence | Owner |
-| --- | --- | --- | --- |
-| Discovery filters and result states | route/component behavior tests | `/pricing` populated/empty/error | Phase 2 |
-| Detail recovery and call action | detail route tests | found/not-found/error | Phase 2 |
-| Ranking comparison semantics | ranking rendering tests | trend and comparison views | Phase 2 |
-| About/legal fallbacks | configured/missing content tests | long-form mobile capture | Phase 2 |
-| Homepage isolation | frozen path diff + baseline hashes | homepage four-state recapture | Phase 2 |
+| Contract                              | Automated evidence                                                                                                                                                                    | Browser evidence                                                                                             | Owner   |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------- |
+| Discovery filters and result states   | `pricing-toolbar.test.tsx`, `pricing-table.test.tsx`, `pricing-states.test.tsx`, `request-state.test.tsx`                                                                             | `evidence/detail-pass/pricing-*`; `evidence/final-pass/pricing-*` for desktop/tablet/mobile and light/dark   | Phase 2 |
+| Detail recovery and call action       | `model-details-state.test.tsx` covers loading, fatal error/retry, cached refresh failure, not-found and recovery; table keyboard activation is covered separately                     | `evidence/detail-pass/model-detail-*`; `evidence/final-pass/model-detail-*`                                  | Phase 2 |
+| Module access and docs fallback       | `public-module-access.test.ts`, `top-nav-links.test.tsx`, `top-nav.test.tsx`                                                                                                          | Authenticated and guest runtime navigation plus disabled Docs DOM inspection                                 | Phase 2 |
+| Ranking comparison semantics          | `rankings-hero.test.tsx`, `rankings-states.test.tsx`, `model-leaderboard-i18n.test.tsx`                                                                                               | `evidence/detail-pass/rankings-*`; `evidence/final-pass/rankings-*` for desktop/tablet/mobile and light/dark | Phase 2 |
+| About configured/default/error states | `about-default.test.tsx` covers configured Markdown, sandboxed URL, fallback attribution and retry                                                                                    | `evidence/detail-pass/about-*`; `evidence/final-pass/about-*`                                                | Phase 2 |
+| Legal configured/missing/error states | `legal-document.test.tsx` covers Markdown/HTML headings, unique route h1, stable anchors, initial/runtime hash, Back/Forward focus, table overflow wrapper, missing content and retry | `evidence/detail-pass/privacy-*`, `user-agreement-*`; `evidence/final-pass/privacy-*`                        | Phase 2 |
+| Public navigation keyboard lifecycle  | `public-header-mobile.test.tsx`, `product-public-header.test.tsx` cover closed tab exclusion, focus loop, Escape, route and 640px cleanup, accessible landmark, mobile tools          | Desktop/mobile navigation interactions on `/pricing`, `/rankings`, `/about`                                  | Phase 2 |
+| Seven-locale copy                     | `i18n:sync` report: missing/extras/untranslated all `0`; full literal `t()` scan returns no missing key                                                                               | Light/dark locale UI inspection; model author prefix uses translated `by`                                    | Phase 2 |
+| Homepage isolation                    | frozen path diff + baseline hashes                                                                                                                                                    | homepage four-state recapture                                                                                | Phase 2 |
+
+## Current Runtime Evidence
+
+The accepted route captures and deterministic fixtures are recorded in `current-runtime-audit.md`. The final pass covers populated, loading, empty, fatal error, cached-refresh error, not-found, configured/default, disabled, auth-gated, and retry states. Browser evidence covers desktop/tablet/mobile and light/dark; automated evidence owns states that cannot be changed safely through the live backend configuration.

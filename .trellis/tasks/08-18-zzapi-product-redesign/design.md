@@ -2,7 +2,7 @@
 
 ## Architecture
 
-采用“冻结首页 + 子页面显式 opt-in”的增量架构。现有业务组件、路由数据契约、TanStack Router、React Query、Base UI 和 Tailwind 保持不变，在其上建立 scoped Product Shell。
+采用“冻结首页第一屏 + 子页面显式 opt-in”的增量架构。现有业务组件、路由数据契约、TanStack Router、React Query、Base UI 和 Tailwind 保持不变，在其上建立 scoped Product Shell。
 
 ### Frozen boundary
 
@@ -15,7 +15,7 @@ web/public/landing-brand-core.png
 web/src/styles/index.css
 ```
 
-`web/src/styles/index.css` 整个文件冻结。共享组件若必须扩展，只能新增 opt-in prop/variant，默认输出保持不变。
+`web/src/styles/index.css` 整个文件冻结。共享组件若必须扩展，只能新增 opt-in prop/variant，默认输出保持不变。用户后续授权的首页第二屏之后配色调整必须放在新的 `.home-below-fold` scoped stylesheet 中，并从共享入口显式导入；该例外不得影响第一屏。
 
 ### Product layer
 

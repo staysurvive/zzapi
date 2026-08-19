@@ -15,12 +15,12 @@
 
 ## Acceptance Criteria
 
-- [ ] 五类公开页面拥有符合各自任务的独立布局。
-- [ ] 搜索、筛选、详情入口和排行榜比较在键盘与移动端可用。
-- [ ] 页面在 light/dark、desktop/tablet/mobile 下可读、无截断和重叠。
-- [ ] loading、empty、error 状态与 Product Shell 一致且不误导。
-- [ ] 新增文案完成七语言 i18n；受影响检查和浏览器审计通过。
-- [ ] 首页冻结路径无 diff，受保护归属完整保留。
+- [x] 五类公开页面拥有符合各自任务的独立布局。
+- [x] 搜索、筛选、详情入口和排行榜比较在键盘与移动端可用。
+- [x] 页面在 light/dark、desktop/tablet/mobile 下可读、无截断和重叠。
+- [x] loading、empty、error 状态与 Product Shell 一致且不误导。
+- [x] 新增文案完成七语言 i18n；受影响检查和浏览器审计通过。
+- [x] 首页冻结路径无 diff，受保护归属完整保留。
 
 ## Out of Scope
 
