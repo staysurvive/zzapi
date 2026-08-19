@@ -1,8 +1,8 @@
 {"file": "AGENTS.md", "reason": "Repository governance and protected identity verification"}
 {"file": "web/AGENTS.md", "reason": "Frontend quality gates, accessibility and testing requirements"}
 {"file": ".trellis/spec/guides/index.md", "reason": "Review checklist for reuse and boundary consistency"}
-{"file": ".trellis/tasks/08-18-zzapi-product-foundation/research/current-frontend-evidence.md", "reason": "Authoritative evidence for homepage isolation and known defects"}
-{"file": ".trellis/tasks/08-18-zzapi-product-foundation/research/screen-contract.md", "reason": "Verify every Phase 1 surface against its observable and deferred evidence contract"}
-{"file": ".trellis/tasks/08-18-zzapi-product-foundation/research/evidence-matrix.md", "reason": "Verify pass, deferred and baseline evidence is accurate and directly traceable"}
+{"file": ".trellis/tasks/archive/2026-08/08-18-zzapi-product-foundation/research/current-frontend-evidence.md", "reason": "Authoritative evidence for homepage isolation and known defects"}
+{"file": ".trellis/tasks/archive/2026-08/08-18-zzapi-product-foundation/research/screen-contract.md", "reason": "Verify every Phase 1 surface against its observable and deferred evidence contract"}
+{"file": ".trellis/tasks/archive/2026-08/08-18-zzapi-product-foundation/research/evidence-matrix.md", "reason": "Verify pass, deferred and baseline evidence is accurate and directly traceable"}
 {"file": ".trellis/tasks/08-18-zzapi-product-redesign/research/home-freeze-manifest.md", "reason": "Verify direct and indirect homepage isolation"}
 {"file": ".trellis/tasks/08-18-zzapi-product-redesign/research/quality-baseline.md", "reason": "Verify changed-file quality and precise baseline deltas"}
