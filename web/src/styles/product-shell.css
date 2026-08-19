@@ -28,7 +28,17 @@ For commercial licensing, please contact support@quantumnous.com
   background-color: var(--product-canvas);
 }
 
-[data-zzapi-product]:where(.dark *) {
+[data-zzapi-product]:where(.dark body:not([data-theme-preset]) *) {
+  --product-canvas: #0e1012;
+  --product-text-strong: #f1f2f4;
+  --product-text-secondary: #a8adb5;
+  --product-hairline: #2b2f34;
+  --product-brand: #c9cdd3;
+  --product-brand-soft: #25282d;
+  --product-focus: #d8dce1;
+}
+
+[data-zzapi-product]:where(.dark body[data-theme-preset] *) {
   --product-canvas: #0e1116;
   --product-text-strong: #f2f5f7;
   --product-text-secondary: #aab4c0;
@@ -188,6 +198,31 @@ For commercial licensing, please contact support@quantumnous.com
   color: var(--product-text-strong);
 }
 
+[data-zzapi-product].pricing-page-shell {
+  background-color: var(--product-canvas);
+}
+
+[data-zzapi-product] .pricing-page {
+  min-height: 100svh;
+  isolation: isolate;
+}
+
+[data-zzapi-product] .pricing-poster-background {
+  z-index: 0;
+  object-position: center top;
+  opacity: 0.96;
+  filter: saturate(0.92) contrast(0.98);
+}
+
+[data-zzapi-product] .pricing-poster-background-dark {
+  display: none;
+}
+
+[data-zzapi-product] .pricing-poster-scrim {
+  z-index: 1;
+  background-color: rgb(250 252 255 / 20%);
+}
+
 [data-zzapi-product] .product-public-brand-mark {
   display: inline-flex;
   width: 1.875rem;
@@ -240,6 +275,15 @@ For commercial licensing, please contact support@quantumnous.com
 [data-product-public-menu] .product-public-mobile-links .product-public-link {
   min-height: 2.75rem;
   padding-inline: 0.75rem;
+}
+
+[data-product-public-menu] .product-public-mobile-tools {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin: 0 1rem;
+  padding: 0.875rem 0;
+  border-block: 1px solid var(--product-hairline);
 }
 
 [data-product-public-menu] .product-public-mobile-footer {
@@ -411,9 +455,246 @@ For commercial licensing, please contact support@quantumnous.com
   line-height: 1.35;
 }
 
+[data-zzapi-product] .pricing-page,
+[data-zzapi-product] .pricing-model-details-page,
+[data-zzapi-product] .rankings-page,
+[data-zzapi-product] .about-page,
+[data-zzapi-product] .legal-page,
+[data-zzapi-product].pricing-filter-sheet,
+[data-zzapi-product].pricing-model-details-sheet {
+  --background: var(--product-canvas);
+  --foreground: var(--product-text-strong);
+  --muted-foreground: var(--product-text-secondary);
+  --border: var(--product-hairline);
+  --primary: var(--product-brand);
+  --primary-foreground: var(--product-canvas);
+  --muted: color-mix(in srgb, var(--product-hairline) 42%, transparent);
+  --card: color-mix(
+    in srgb,
+    var(--product-canvas) 96%,
+    var(--product-brand-soft)
+  );
+  --card-foreground: var(--product-text-strong);
+  --accent: var(--product-brand-soft);
+  --accent-foreground: var(--product-text-strong);
+  --ring: var(--product-brand);
+  color: var(--product-text-strong);
+}
+
+[data-zzapi-product] .pricing-page-hero {
+  position: relative;
+  z-index: 1;
+}
+
+[data-zzapi-product] .pricing-page-results {
+  container-type: inline-size;
+}
+
+[data-zzapi-product] .pricing-page-hero h1 {
+  color: var(--product-text-strong);
+  letter-spacing: 0;
+}
+
+[data-zzapi-product] .pricing-status-dot {
+  display: inline-block;
+  width: 0.375rem;
+  height: 0.375rem;
+  margin-inline-end: 0.5rem;
+  border-radius: 999px;
+  background-color: var(--product-brand);
+  box-shadow: 0 0 0 0.1875rem
+    color-mix(in srgb, var(--product-brand-soft) 82%, transparent);
+  vertical-align: 0.08em;
+}
+
+[data-zzapi-product] .rankings-pulse-accent {
+  width: 9rem;
+  height: auto;
+  opacity: 0.13;
+  filter: saturate(0.72);
+}
+
+[data-zzapi-product] .about-route-accent {
+  opacity: 0.09;
+  filter: saturate(0.68);
+}
+
+[data-zzapi-product] [data-pricing-search] input {
+  border-color: var(--product-hairline);
+  background-color: color-mix(in srgb, var(--product-canvas) 94%, transparent);
+}
+
+[data-zzapi-product] [data-pricing-search] input:focus {
+  border-color: color-mix(in srgb, var(--product-brand) 52%, transparent);
+  box-shadow: 0 0 0 0.1875rem
+    color-mix(in srgb, var(--product-brand-soft) 74%, transparent);
+}
+
+[data-zzapi-product] [data-pricing-toolbar],
+[data-zzapi-product] [data-pricing-sidebar],
+[data-zzapi-product] .pricing-model-card,
+[data-zzapi-product] .pricing-empty-state {
+  border-color: var(--product-hairline);
+  background-color: color-mix(
+    in srgb,
+    var(--product-canvas) 96%,
+    var(--product-brand-soft)
+  );
+}
+
+[data-zzapi-product] [data-pricing-toolbar],
+[data-zzapi-product] [data-pricing-sidebar] {
+  box-shadow: 0 0.75rem 2rem -2rem
+    color-mix(in srgb, var(--product-text-strong) 22%, transparent);
+}
+
+[data-zzapi-product] .pricing-page [data-pricing-search] input,
+[data-zzapi-product] .pricing-page [data-pricing-toolbar],
+[data-zzapi-product] .pricing-page [data-pricing-sidebar],
+[data-zzapi-product] .pricing-page .pricing-model-card,
+[data-zzapi-product] .pricing-page .pricing-table-surface,
+[data-zzapi-product] .pricing-page .pricing-empty-state {
+  background-color: color-mix(in srgb, var(--product-canvas) 88%, transparent);
+}
+
+[data-zzapi-product] [data-pricing-segmented] {
+  border-color: var(--product-hairline);
+  background-color: color-mix(
+    in srgb,
+    var(--product-hairline) 38%,
+    transparent
+  );
+}
+
+[data-zzapi-product] [data-pricing-segmented] button[aria-pressed='true'] {
+  background-color: var(--product-brand-soft);
+  color: var(--product-brand);
+  box-shadow: inset 0 0 0 1px
+    color-mix(in srgb, var(--product-brand) 24%, transparent);
+}
+
+[data-zzapi-product] [data-pricing-filter-chip][data-active='true'] {
+  border-color: color-mix(in srgb, var(--product-brand) 30%, transparent);
+  background-color: var(--product-brand-soft);
+  color: var(--product-brand);
+  box-shadow: none;
+}
+
+[data-zzapi-product] .pricing-model-card {
+  overflow: hidden;
+  box-shadow: 0 0.75rem 2rem -2rem
+    color-mix(in srgb, var(--product-text-strong) 28%, transparent);
+  transition:
+    border-color 140ms ease,
+    background-color 140ms ease,
+    box-shadow 140ms ease,
+    transform 140ms ease;
+}
+
+[data-zzapi-product] .pricing-model-card:hover {
+  border-color: color-mix(
+    in srgb,
+    var(--product-brand) 28%,
+    var(--product-hairline)
+  );
+  background-color: color-mix(
+    in srgb,
+    var(--product-canvas) 92%,
+    var(--product-brand-soft)
+  );
+  box-shadow: 0 1rem 2.25rem -2rem
+    color-mix(in srgb, var(--product-brand) 32%, transparent);
+  transform: translateY(-1px);
+}
+
+[data-zzapi-product] .pricing-card-action {
+  border-color: var(--product-hairline);
+}
+
+[data-zzapi-product] .pricing-card-action:hover {
+  border-color: color-mix(
+    in srgb,
+    var(--product-brand) 28%,
+    var(--product-hairline)
+  );
+}
+
+[data-zzapi-product] .pricing-table-surface {
+  border-color: var(--product-hairline);
+  background-color: color-mix(
+    in srgb,
+    var(--product-canvas) 96%,
+    var(--product-brand-soft)
+  );
+}
+
+[data-zzapi-product] .pricing-empty-state img {
+  opacity: 0.72;
+}
+
+[data-zzapi-product] .legal-page {
+  overflow-wrap: anywhere;
+}
+
+[data-zzapi-product] .legal-page :where(pre, code) {
+  max-width: 100%;
+}
+
+[data-zzapi-product]:where(.dark *) .pricing-poster-background {
+  opacity: 0.96;
+  filter: saturate(0.9) contrast(1.02);
+}
+
+[data-zzapi-product]:where(.dark *) .pricing-poster-background-light {
+  display: none;
+}
+
+[data-zzapi-product]:where(.dark *) .pricing-poster-background-dark {
+  display: block;
+}
+
+[data-zzapi-product]:where(.dark *) .pricing-poster-scrim {
+  background-color: rgb(3 7 12 / 34%);
+}
+
+[data-zzapi-product]:where(.dark *) .pricing-page [data-pricing-search] input,
+[data-zzapi-product]:where(.dark *) .pricing-page [data-pricing-toolbar],
+[data-zzapi-product]:where(.dark *) .pricing-page [data-pricing-sidebar],
+[data-zzapi-product]:where(.dark *) .pricing-page .pricing-model-card,
+[data-zzapi-product]:where(.dark *) .pricing-page .pricing-table-surface,
+[data-zzapi-product]:where(.dark *) .pricing-page .pricing-empty-state {
+  background-color: color-mix(in srgb, var(--product-canvas) 92%, transparent);
+}
+
+[data-zzapi-product]:where(.dark *) .rankings-pulse-accent {
+  opacity: 0.1;
+  filter: saturate(0.62) brightness(1.35);
+}
+
+[data-zzapi-product]:where(.dark *) .about-route-accent {
+  opacity: 0.07;
+  filter: saturate(0.58) brightness(1.35);
+}
+
+[data-zzapi-product]:where(.dark *) .pricing-empty-state img {
+  opacity: 0.58;
+}
+
 [data-zzapi-product] :where(a, button, input, select, textarea):focus-visible {
   outline: 2px solid var(--product-focus);
   outline-offset: 2px;
+}
+
+@container (min-width: 40rem) {
+  [data-zzapi-product] .pricing-model-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@container (min-width: 64rem) {
+  [data-zzapi-product] .pricing-model-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 @keyframes zzapi-product-enter {
@@ -429,6 +710,18 @@ For commercial licensing, please contact support@quantumnous.com
 }
 
 @media (max-width: 640px) {
+  [data-zzapi-product] .pricing-poster-background {
+    object-position: 68% top;
+  }
+
+  [data-zzapi-product]:where(.dark *) .pricing-poster-background-dark {
+    opacity: 0.58;
+  }
+
+  [data-zzapi-product]:where(.dark *) .pricing-poster-scrim {
+    background-color: rgb(3 5 7 / 48%);
+  }
+
   [data-zzapi-product] [data-product-public-header-inner] {
     padding-inline: 0.75rem;
   }
@@ -472,6 +765,25 @@ For commercial licensing, please contact support@quantumnous.com
 
   [data-product-metric]:first-child {
     border-block-start: 0;
+  }
+
+  [data-zzapi-product] .pricing-toolbar-display {
+    border-color: var(--product-hairline);
+  }
+
+  [data-zzapi-product] .pricing-toolbar-display [data-pricing-segmented] {
+    flex: 1;
+  }
+
+  [data-zzapi-product]
+    .pricing-toolbar-display
+    [data-pricing-segmented]
+    button {
+    flex: 1;
+  }
+
+  [data-zzapi-product] .pricing-model-card:hover {
+    transform: none;
   }
 }
 

@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@quantumnous.com
 */
 import { Link, useNavigate, useRouterState } from '@tanstack/react-router'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Dialog } from '@/components/dialog'
@@ -38,10 +38,21 @@ import type { TopNavLink } from '../types'
 import { HeaderLogo } from './header-logo'
 
 const AUTH_PROMPT_SECONDS = 5
+const MOBILE_MENU_ID = 'public-header-mobile-menu'
 
 type AuthPromptTarget = {
   title: string
   href: string
+}
+
+function focusPublicMainContent() {
+  const main = document.querySelector<HTMLElement>('#main-content, main')
+  if (!main) return
+
+  if (!main.hasAttribute('tabindex')) {
+    main.tabIndex = -1
+  }
+  main.focus({ preventScroll: true })
 }
 
 export interface PublicHeaderProps {
@@ -81,6 +92,9 @@ export function PublicHeader(props: PublicHeaderProps) {
     useState<AuthPromptTarget | null>(null)
   const [authPromptSecondsLeft, setAuthPromptSecondsLeft] =
     useState(AUTH_PROMPT_SECONDS)
+  const mobileMenuTriggerRef = useRef<HTMLButtonElement>(null)
+  const mobileMenuRef = useRef<HTMLDivElement>(null)
+  const pendingRouteFocusRef = useRef(false)
   const { auth } = useAuthStore()
   const {
     systemName,
@@ -92,6 +106,9 @@ export function PublicHeader(props: PublicHeaderProps) {
   const notifications = useNotifications()
   const routerState = useRouterState()
   const pathname = routerState.location.pathname
+  const mobileOpenRef = useRef(mobileOpen)
+  const previousPathnameRef = useRef(pathname)
+  mobileOpenRef.current = mobileOpen
 
   const user = auth.user
   const isAuthenticated = !!user
@@ -106,11 +123,83 @@ export function PublicHeader(props: PublicHeaderProps) {
   }, [])
 
   useEffect(() => {
-    document.body.style.overflow = mobileOpen ? 'hidden' : ''
+    if (!mobileOpen) return
+
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
+    const firstFocusable = mobileMenuRef.current?.querySelector<HTMLElement>(
+      'a[href]:not([aria-disabled="true"]), button:not(:disabled)'
+    )
+    firstFocusable?.focus()
+
+    const handleMenuKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault()
+        setMobileOpen(false)
+        mobileMenuTriggerRef.current?.focus()
+        return
+      }
+
+      if (event.key !== 'Tab') return
+
+      const focusable = [
+        mobileMenuTriggerRef.current,
+        ...(mobileMenuRef.current?.querySelectorAll<HTMLElement>(
+          'a[href]:not([aria-disabled="true"]):not([tabindex="-1"]), button:not(:disabled):not([tabindex="-1"])'
+        ) ?? []),
+      ].filter((element): element is HTMLElement => element != null)
+      if (focusable.length === 0) {
+        event.preventDefault()
+        return
+      }
+
+      const first = focusable[0]
+      const last = focusable.at(-1)
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault()
+        last?.focus()
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault()
+        first.focus()
+      }
+    }
+
+    window.addEventListener('keydown', handleMenuKeyDown)
+
     return () => {
-      document.body.style.overflow = ''
+      window.removeEventListener('keydown', handleMenuKeyDown)
+      document.body.style.overflow = previousOverflow
     }
   }, [mobileOpen])
+
+  useEffect(() => {
+    if (previousPathnameRef.current === pathname) return
+
+    previousPathnameRef.current = pathname
+    const shouldFocusMain =
+      mobileOpenRef.current || pendingRouteFocusRef.current
+    pendingRouteFocusRef.current = false
+    if (!shouldFocusMain) return
+
+    setMobileOpen(false)
+    focusPublicMainContent()
+  }, [pathname])
+
+  useEffect(() => {
+    const desktopQuery = window.matchMedia('(min-width: 640px)')
+    const handleDesktopBreakpoint = (event: MediaQueryListEvent) => {
+      if (!event.matches || !mobileOpenRef.current) return
+
+      setMobileOpen(false)
+      focusPublicMainContent()
+    }
+
+    desktopQuery.addEventListener('change', handleDesktopBreakpoint)
+    return () => {
+      desktopQuery.removeEventListener('change', handleDesktopBreakpoint)
+    }
+  }, [])
 
   useEffect(() => {
     if (!authPromptTarget) return
@@ -167,11 +256,48 @@ export function PublicHeader(props: PublicHeaderProps) {
       }
 
       if (closeMobile) {
-        setMobileOpen(false)
+        if (link.external) {
+          setMobileOpen(false)
+          mobileMenuTriggerRef.current?.focus()
+        } else if (link.href === pathname) {
+          setMobileOpen(false)
+          mobileMenuTriggerRef.current?.focus()
+        } else {
+          pendingRouteFocusRef.current = true
+        }
       }
     },
-    [t]
+    [pathname, t]
   )
+
+  let logoContent: React.ReactNode = (
+    <HeaderLogo
+      src={systemLogo}
+      loading={loading}
+      logoLoaded={logoLoaded}
+      className='size-full rounded-lg object-contain'
+    />
+  )
+  if (loading) {
+    logoContent = <Skeleton className='size-full rounded-lg' />
+  } else if (customLogo) {
+    logoContent = customLogo
+  }
+
+  let desktopAuthControl: React.ReactNode = (
+    <Button
+      size='sm'
+      className='h-8 rounded-lg px-3.5 text-xs font-medium'
+      render={<Link to='/sign-in' />}
+    >
+      {t('Sign in')}
+    </Button>
+  )
+  if (loading) {
+    desktopAuthControl = <Skeleton className='h-8 w-20 rounded-lg' />
+  } else if (isAuthenticated) {
+    desktopAuthControl = <ProfileDropdown />
+  }
 
   return (
     <>
@@ -196,18 +322,7 @@ export function PublicHeader(props: PublicHeaderProps) {
               className='group flex shrink-0 items-center gap-2.5'
             >
               <div className='flex size-7 shrink-0 items-center justify-center transition-all duration-300 group-hover:scale-105'>
-                {loading ? (
-                  <Skeleton className='size-full rounded-lg' />
-                ) : customLogo ? (
-                  customLogo
-                ) : (
-                  <HeaderLogo
-                    src={systemLogo}
-                    loading={loading}
-                    logoLoaded={logoLoaded}
-                    className='size-full rounded-lg object-contain'
-                  />
-                )}
+                {logoContent}
               </div>
               <span className='text-sm font-semibold tracking-tight'>
                 {loading ? <Skeleton className='h-4 w-16' /> : displaySiteName}
@@ -216,12 +331,12 @@ export function PublicHeader(props: PublicHeaderProps) {
 
             {/* Desktop nav */}
             <div className='hidden items-center gap-0.5 sm:flex'>
-              {links.map((link, i) => {
+              {links.map((link) => {
                 const isActive = pathname === link.href
                 if (link.external) {
                   return (
                     <a
-                      key={i}
+                      key={`${link.title}:${link.href}`}
                       href={link.href}
                       target='_blank'
                       rel='noopener noreferrer'
@@ -239,7 +354,7 @@ export function PublicHeader(props: PublicHeaderProps) {
                 }
                 return (
                   <Link
-                    key={i}
+                    key={`${link.title}:${link.href}`}
                     to={link.href}
                     disabled={link.disabled}
                     onClick={(event) => handleNavLinkClick(event, link)}
@@ -280,19 +395,7 @@ export function PublicHeader(props: PublicHeaderProps) {
               {showAuthButtons && (
                 <>
                   <div className='bg-border/40 mx-1 h-4 w-px' />
-                  {loading ? (
-                    <Skeleton className='h-8 w-20 rounded-lg' />
-                  ) : isAuthenticated ? (
-                    <ProfileDropdown />
-                  ) : (
-                    <Button
-                      size='sm'
-                      className='h-8 rounded-lg px-3.5 text-xs font-medium'
-                      render={<Link to='/sign-in' />}
-                    >
-                      {t('Sign in')}
-                    </Button>
-                  )}
+                  {desktopAuthControl}
                 </>
               )}
             </div>
@@ -304,12 +407,15 @@ export function PublicHeader(props: PublicHeaderProps) {
                 <ProfileDropdown />
               )}
               <Button
+                ref={mobileMenuTriggerRef}
                 type='button'
                 variant='ghost'
                 size='icon'
                 className='size-9'
                 onClick={() => setMobileOpen((v) => !v)}
                 aria-label={t('Toggle navigation menu')}
+                aria-expanded={mobileOpen}
+                aria-controls={MOBILE_MENU_ID}
               >
                 <div className='relative size-4'>
                   <span
@@ -339,6 +445,10 @@ export function PublicHeader(props: PublicHeaderProps) {
 
       {/* Mobile full-screen overlay */}
       <div
+        ref={mobileMenuRef}
+        id={MOBILE_MENU_ID}
+        aria-hidden={!mobileOpen}
+        inert={mobileOpen ? undefined : true}
         className={cn(
           'bg-background/98 fixed inset-0 z-40 backdrop-blur-2xl transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] sm:pointer-events-none sm:hidden',
           mobileOpen
@@ -347,7 +457,10 @@ export function PublicHeader(props: PublicHeaderProps) {
         )}
       >
         <div className='flex h-full flex-col justify-between px-8 pt-20 pb-10'>
-          <nav className='flex flex-col gap-1'>
+          <nav
+            aria-label={t('Primary navigation')}
+            className='flex flex-col gap-1'
+          >
             {links.map((link, i) => {
               const isActive = pathname === link.href
               const linkClassName = cn(
@@ -364,12 +477,12 @@ export function PublicHeader(props: PublicHeaderProps) {
               if (link.external) {
                 return (
                   <a
-                    key={i}
+                    key={`${link.title}:${link.href}`}
                     href={link.href}
                     target='_blank'
                     rel='noopener noreferrer'
                     aria-disabled={link.disabled}
-                    tabIndex={link.disabled ? -1 : undefined}
+                    tabIndex={!mobileOpen || link.disabled ? -1 : undefined}
                     onClick={(event) => handleNavLinkClick(event, link, true)}
                     className={linkClassName}
                     style={transitionStyle}
@@ -380,9 +493,10 @@ export function PublicHeader(props: PublicHeaderProps) {
               }
               return (
                 <Link
-                  key={i}
+                  key={`${link.title}:${link.href}`}
                   to={link.href}
                   disabled={link.disabled}
+                  tabIndex={!mobileOpen || link.disabled ? -1 : undefined}
                   onClick={(event) => handleNavLinkClick(event, link, true)}
                   className={linkClassName}
                   style={transitionStyle}
@@ -405,7 +519,10 @@ export function PublicHeader(props: PublicHeaderProps) {
             {showAuthButtons && (
               <Link
                 to={isAuthenticated ? '/dashboard' : '/sign-in'}
-                onClick={() => setMobileOpen(false)}
+                tabIndex={mobileOpen ? undefined : -1}
+                onClick={() => {
+                  pendingRouteFocusRef.current = true
+                }}
                 className='bg-foreground text-background inline-flex h-10 items-center justify-center rounded-lg text-sm font-medium transition-opacity hover:opacity-90 active:opacity-80'
               >
                 {isAuthenticated ? t('Go to Dashboard') : t('Sign in')}

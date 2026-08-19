@@ -355,6 +355,26 @@ export function ProductPublicHeader(props: ProductPublicHeaderProps) {
                     )}
                     {navContent}
                   </nav>
+                  {showLanguageSwitcher ||
+                  showThemeSwitch ||
+                  showNotifications ? (
+                    <div className='product-public-mobile-tools'>
+                      {showLanguageSwitcher ? <LanguageSwitcher /> : null}
+                      {showThemeSwitch ? <ThemeSwitch /> : null}
+                      {showNotifications ? (
+                        <NotificationPopover
+                          open={notifications.popoverOpen}
+                          onOpenChange={notifications.setPopoverOpen}
+                          unreadCount={notifications.unreadCount}
+                          activeTab={notifications.activeTab}
+                          onTabChange={notifications.setActiveTab}
+                          notice={notifications.notice}
+                          announcements={notifications.announcements}
+                          loading={notifications.loading}
+                        />
+                      ) : null}
+                    </div>
+                  ) : null}
                   {showAuthButtons ? (
                     <div className='product-public-mobile-footer'>
                       <Link

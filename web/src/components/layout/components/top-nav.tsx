@@ -19,6 +19,7 @@ For commercial licensing, please contact support@quantumnous.com
 import { Link } from '@tanstack/react-router'
 import { Menu } from 'lucide-react'
 import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -29,7 +30,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { cn } from '@/lib/utils'
 
-import { type TopNavLink } from '../types'
+import type { TopNavLink } from '../types'
 
 type TopNavProps = React.HTMLAttributes<HTMLElement> & {
   links: TopNavLink[]
@@ -40,6 +41,7 @@ type TopNavProps = React.HTMLAttributes<HTMLElement> & {
  * 在大屏幕显示水平导航，在小屏幕显示下拉菜单
  */
 export function TopNav({ className, links, ...props }: TopNavProps) {
+  const { t } = useTranslation()
   // 规范化链接，确保所有可选属性都有默认值
   const normalizedLinks = useMemo(
     () =>
@@ -58,36 +60,54 @@ export function TopNav({ className, links, ...props }: TopNavProps) {
       <div className='lg:hidden'>
         <DropdownMenu modal={false}>
           <DropdownMenuTrigger
-            render={<Button size='icon' variant='outline' className='size-7' />}
+            render={
+              <Button
+                size='icon'
+                variant='outline'
+                className='size-7'
+                aria-label={t('Toggle navigation menu')}
+              />
+            }
           >
-            <Menu />
+            <Menu aria-hidden='true' />
           </DropdownMenuTrigger>
           <DropdownMenuContent side='bottom' align='start'>
             {normalizedLinks.map(
               ({ title, href, isActive, disabled, external }) => (
                 <DropdownMenuItem
                   key={`${title}-${href}`}
+                  disabled={disabled}
                   render={
                     external ? (
                       <a
-                        href={href}
+                        href={disabled ? undefined : href}
                         target='_blank'
                         rel='noopener noreferrer'
-                        className={!isActive ? 'text-muted-foreground' : ''}
+                        aria-disabled={disabled || undefined}
+                        tabIndex={disabled ? -1 : undefined}
+                        className={cn(
+                          !isActive && 'text-muted-foreground',
+                          disabled && 'pointer-events-none opacity-50'
+                        )}
                       >
                         {title}
                       </a>
                     ) : (
                       <Link
                         to={href}
-                        className={!isActive ? 'text-muted-foreground' : ''}
                         disabled={disabled}
+                        aria-disabled={disabled || undefined}
+                        tabIndex={disabled ? -1 : undefined}
+                        className={cn(
+                          !isActive && 'text-muted-foreground',
+                          disabled && 'pointer-events-none opacity-50'
+                        )}
                       >
                         {title}
                       </Link>
                     )
                   }
-                ></DropdownMenuItem>
+                />
               )
             )}
           </DropdownMenuContent>
@@ -106,10 +126,18 @@ export function TopNav({ className, links, ...props }: TopNavProps) {
           external ? (
             <a
               key={`${title}-${href}`}
-              href={href}
+              href={disabled ? undefined : href}
               target='_blank'
               rel='noopener noreferrer'
-              className={`hover:text-primary text-sm font-medium transition-colors ${isActive ? '' : 'text-muted-foreground'}`}
+              role={disabled ? 'link' : undefined}
+              aria-disabled={disabled || undefined}
+              tabIndex={disabled ? -1 : undefined}
+              className={cn(
+                'hover:text-primary text-sm font-medium transition-colors',
+                !isActive && 'text-muted-foreground',
+                disabled &&
+                  'pointer-events-none cursor-not-allowed opacity-50 hover:text-current'
+              )}
             >
               {title}
             </a>
@@ -118,7 +146,15 @@ export function TopNav({ className, links, ...props }: TopNavProps) {
               key={`${title}-${href}`}
               to={href}
               disabled={disabled}
-              className={`hover:text-primary text-sm font-medium transition-colors ${isActive ? '' : 'text-muted-foreground'}`}
+              role={disabled ? 'link' : undefined}
+              aria-disabled={disabled || undefined}
+              tabIndex={disabled ? -1 : undefined}
+              className={cn(
+                'hover:text-primary text-sm font-medium transition-colors',
+                !isActive && 'text-muted-foreground',
+                disabled &&
+                  'pointer-events-none cursor-not-allowed opacity-50 hover:text-current'
+              )}
             >
               {title}
             </Link>

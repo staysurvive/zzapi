@@ -87,15 +87,17 @@ vi.mock('@/hooks/use-notifications', () => ({
 }))
 
 vi.mock('@/components/language-switcher', () => ({
-  LanguageSwitcher: () => null,
+  LanguageSwitcher: () => <button type='button'>Language control</button>,
 }))
 
 vi.mock('@/components/theme-switch', () => ({
-  ThemeSwitch: () => null,
+  ThemeSwitch: () => <button type='button'>Theme control</button>,
 }))
 
 vi.mock('@/components/notification-popover', () => ({
-  NotificationPopover: () => null,
+  NotificationPopover: () => (
+    <button type='button'>Notification control</button>
+  ),
 }))
 
 vi.mock('@/components/profile-dropdown', () => ({
@@ -131,6 +133,14 @@ describe('ProductPublicHeader navigation behavior', () => {
     routerLocation.pathname = '/'
     useAuthStore.getState().auth.setUser(null)
     document.body.style.overflow = ''
+  })
+
+  it('gives the primary navigation landmark an accessible name', () => {
+    renderHeader()
+
+    expect(
+      screen.getByRole('navigation', { name: 'Primary navigation' })
+    ).toBeVisible()
   })
 
   it('locks body scroll and returns focus after closing the mobile menu with Escape', async () => {
@@ -177,6 +187,30 @@ describe('ProductPublicHeader navigation behavior', () => {
     unmount()
 
     expect(document.body.style.overflow).toBe('clip')
+  })
+
+  it('keeps language, theme, and notification tools reachable in the mobile menu', async () => {
+    const user = userEvent.setup()
+    renderHeader(navLinks, {
+      showLanguageSwitcher: true,
+      showThemeSwitch: true,
+      showNotifications: true,
+    })
+
+    await user.click(
+      screen.getByRole('button', { name: 'Toggle navigation menu' })
+    )
+
+    const menu = await screen.findByRole('dialog')
+    expect(
+      within(menu).getByRole('button', { name: 'Language control' })
+    ).toBeVisible()
+    expect(
+      within(menu).getByRole('button', { name: 'Theme control' })
+    ).toBeVisible()
+    expect(
+      within(menu).getByRole('button', { name: 'Notification control' })
+    ).toBeVisible()
   })
 
   it('closes the mobile menu and restores body scroll after a route change', async () => {

@@ -96,7 +96,7 @@ export function useTopNavLinks(): TopNavLink[] {
     } else if (isSafeInternalUrl(docsLink)) {
       links.push({ title: t('Docs'), href: docsLink })
     } else {
-      links.push({ title: t('Docs'), href: '/docs' })
+      links.push({ title: t('Docs'), href: '', disabled: true })
     }
   }
 
