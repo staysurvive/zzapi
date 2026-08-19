@@ -16,6 +16,22 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 For commercial licensing, please contact support@quantumnous.com
 */
-export { Hero } from './sections/hero'
-export { HomepageV5Container } from './v5'
-export { LandingEntrance } from './landing-entrance'
+interface SignalSpineProps {
+  branch?: 'left' | 'right' | 'none'
+  node?: 'active' | 'quiet' | 'ring'
+}
+
+export function SignalSpine(props: SignalSpineProps) {
+  return (
+    <div
+      aria-hidden='true'
+      className='home-v5-signal-spine'
+      data-branch={props.branch ?? 'none'}
+      data-node={props.node ?? 'quiet'}
+    >
+      <span className='home-v5-signal-spine__line' />
+      <span className='home-v5-signal-spine__branch' />
+      <span className='home-v5-signal-spine__node' />
+    </div>
+  )
+}

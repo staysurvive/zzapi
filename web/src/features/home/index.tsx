@@ -28,18 +28,13 @@ import { useTranslation } from 'react-i18next'
 import { PublicLayout } from '@/components/layout'
 import { Footer } from '@/components/layout/components/footer'
 import { RichContent } from '@/components/rich-content'
+import { SkipToMain } from '@/components/skip-to-main'
 import { useTheme } from '@/context/theme-provider'
+import { toIntlLocale } from '@/i18n/languages'
 import { isLikelyHtml } from '@/lib/content-format'
 import { useAuthStore } from '@/stores/auth-store'
 
-import {
-  CTA,
-  Features,
-  Hero,
-  HowItWorks,
-  LandingEntrance,
-  Stats,
-} from './components'
+import { Hero, HomepageV5Container, LandingEntrance } from './components'
 import { useHomePageContent } from './hooks'
 import { shouldRenderCustomHome, type OpeningPhase } from './types'
 
@@ -181,7 +176,12 @@ export function Home() {
         />
       }
     >
-      <main>
+      {openingPhase === 'ambient' && <SkipToMain />}
+      <main
+        id='main-content'
+        tabIndex={-1}
+        lang={toIntlLocale(i18n.resolvedLanguage ?? i18n.language)}
+      >
         {openingPhase !== 'ambient' && (
           <LandingEntrance
             logo={landingLogo}
@@ -195,11 +195,11 @@ export function Home() {
           logo={landingLogo}
           openingPhase={openingPhase}
         />
-        <div className='home-below-fold'>
-          <Stats />
-          <Features />
-          <HowItWorks />
-          <CTA isAuthenticated={isAuthenticated} />
+        <div className='home-below-fold' data-home-v5='true'>
+          <HomepageV5Container
+            isAuthenticated={isAuthenticated}
+            openingPhase={openingPhase}
+          />
           <Footer />
         </div>
       </main>

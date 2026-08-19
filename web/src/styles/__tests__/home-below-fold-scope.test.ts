@@ -47,19 +47,20 @@ describe('home below-fold palette scope', () => {
       hero.className = 'home-hero'
       const belowFold = domWindow.document.createElement('div')
       belowFold.className = 'home-below-fold'
+      belowFold.dataset.homeV5 = 'true'
       domWindow.document.body.append(hero, belowFold)
 
       expect(
         domWindow.getComputedStyle(hero).getPropertyValue('--background')
       ).toBe('')
       expect(
-        domWindow.getComputedStyle(belowFold).getPropertyValue('--background')
-      ).toBe('#ffffff')
-      expect(
         domWindow
           .getComputedStyle(belowFold)
-          .getPropertyValue('--home-footer-surface')
-      ).toBe('#edf3f9')
+          .getPropertyValue('--home-v5-canvas')
+      ).toBe('#fcfdfe')
+      expect(
+        domWindow.getComputedStyle(belowFold).getPropertyValue('--home-v5-blue')
+      ).toBe('#1549f4')
     } finally {
       domWindow.close()
     }
@@ -71,19 +72,22 @@ describe('home below-fold palette scope', () => {
     try {
       const belowFold = domWindow.document.createElement('div')
       belowFold.className = 'home-below-fold'
+      belowFold.dataset.homeV5 = 'true'
       domWindow.document.body.append(belowFold)
 
       expect(
-        domWindow.getComputedStyle(belowFold).getPropertyValue('--background')
-      ).toBe('#1a1d21')
-      expect(
-        domWindow.getComputedStyle(belowFold).getPropertyValue('--card')
-      ).toBe('#1d2024')
+        domWindow
+          .getComputedStyle(belowFold)
+          .getPropertyValue('--home-v5-canvas')
+      ).toBe('#0e1116')
       expect(
         domWindow
           .getComputedStyle(belowFold)
-          .getPropertyValue('--home-footer-surface')
-      ).toBe('#121417')
+          .getPropertyValue('--home-v5-surface')
+      ).toBe('#15191f')
+      expect(
+        domWindow.getComputedStyle(belowFold).getPropertyValue('--home-v5-blue')
+      ).toBe('#73a2ff')
     } finally {
       domWindow.close()
     }
@@ -96,9 +100,11 @@ describe('home below-fold palette scope', () => {
       domWindow.document.body.dataset.themePreset = 'anthropic'
       domWindow.document.body.style.setProperty('--background', '#0b0b0b')
       domWindow.document.body.style.setProperty('--card', '#121212')
+      domWindow.document.body.style.setProperty('--primary', '#b46f3c')
 
       const belowFold = domWindow.document.createElement('div')
       belowFold.className = 'home-below-fold'
+      belowFold.dataset.homeV5 = 'true'
       domWindow.document.body.append(belowFold)
 
       expect(
@@ -108,15 +114,21 @@ describe('home below-fold palette scope', () => {
         '#121212'
       )
       expect(
-        domWindow.getComputedStyle(belowFold).getPropertyValue('--background')
-      ).toBe('')
-      expect(
-        domWindow.getComputedStyle(belowFold).getPropertyValue('--card')
-      ).toBe('')
-      expect(
         domWindow
           .getComputedStyle(belowFold)
-          .getPropertyValue('--home-footer-surface')
+          .getPropertyValue('--home-v5-canvas')
+      ).toBe('#0b0b0b')
+      expect(
+        domWindow.getComputedStyle(belowFold).getPropertyValue('--home-v5-blue')
+      ).toBe('#b46f3c')
+
+      const legacyBelowFold = domWindow.document.createElement('div')
+      legacyBelowFold.className = 'home-below-fold'
+      domWindow.document.body.append(legacyBelowFold)
+      expect(
+        domWindow
+          .getComputedStyle(legacyBelowFold)
+          .getPropertyValue('--home-v5-canvas')
       ).toBe('')
     } finally {
       domWindow.close()
