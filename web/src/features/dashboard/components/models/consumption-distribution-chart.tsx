@@ -28,7 +28,10 @@ import {
   CONSUMPTION_DISTRIBUTION_CHART_OPTIONS,
   DEFAULT_TIME_GRANULARITY,
 } from '@/features/dashboard/constants'
-import { processChartData } from '@/features/dashboard/lib'
+import {
+  getDashboardChartStyle,
+  processChartData,
+} from '@/features/dashboard/lib'
 import type {
   ConsumptionDistributionChartType,
   QuotaDataItem,
@@ -62,6 +65,7 @@ export function ConsumptionDistributionChart(
   const { t } = useTranslation()
   const { resolvedTheme } = useTheme()
   const { customization } = useThemeCustomization()
+  const chartStyle = getDashboardChartStyle(resolvedTheme, customization.preset)
   const chartRadius = useThemeRadiusPx(
     '--radius-md',
     `${customization.preset}:${customization.radius}`
@@ -104,9 +108,10 @@ export function ConsumptionDistributionChart(
         props.loading ? [] : props.data,
         timeGranularity,
         t,
-        chartRadius
+        chartRadius,
+        chartStyle
       ),
-    [props.data, props.loading, timeGranularity, t, chartRadius]
+    [props.data, props.loading, timeGranularity, t, chartRadius, chartStyle]
   )
   const spec = chartType === 'bar' ? chartData.spec_line : chartData.spec_area
   const specType = typeof spec?.type === 'string' ? spec.type : chartType

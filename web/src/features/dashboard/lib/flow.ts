@@ -33,7 +33,11 @@ import type {
   ProcessedFlowData,
 } from '@/features/dashboard/types'
 
-import { getDashboardChartColors } from './charts'
+import {
+  getDashboardChartColors,
+  getDashboardChartStyle,
+  type DashboardChartStyle,
+} from './charts'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type VChartSpec = Record<string, any>
@@ -98,7 +102,7 @@ const DEFAULT_FLOW_SANKEY_LABELS: FlowSankeyLabels = {
   share: 'Share',
 }
 
-const DEFAULT_FLOW_CHART_COLOR = '#1664FF'
+const DEFAULT_FLOW_CHART_COLOR = '#B8BDC4'
 
 const FLOW_NODE_KINDS: readonly FlowNodeKind[] = [
   'user',
@@ -1119,7 +1123,8 @@ export function buildFlowSankeySpec(
   flow: DashboardFlowGraph,
   title: string,
   valueFormatter: (value: number) => string = formatNumber,
-  labels: FlowSankeyLabels = DEFAULT_FLOW_SANKEY_LABELS
+  labels: FlowSankeyLabels = DEFAULT_FLOW_SANKEY_LABELS,
+  chartStyle: DashboardChartStyle = getDashboardChartStyle('light')
 ): VChartSpec {
   return {
     type: 'sankey',
@@ -1210,7 +1215,7 @@ export function buildFlowSankeySpec(
       limit: 220,
       interactive: false,
       style: {
-        fill: '#475569',
+        fill: chartStyle.flow.labelFill,
         fontSize: 11,
         fontWeight: 600,
       },
@@ -1227,8 +1232,8 @@ export function buildFlowSankeySpec(
         },
         stroke: (datum: Record<string, unknown>) =>
           sankeyDatumFlag(datum, 'highlighted')
-            ? 'rgba(15, 23, 42, 0.74)'
-            : 'rgba(148, 163, 184, 0.45)',
+            ? chartStyle.flow.activeNodeStroke
+            : chartStyle.flow.nodeStroke,
         lineWidth: (datum: Record<string, unknown>) =>
           sankeyDatumFlag(datum, 'highlighted') ? 1.5 : 1,
         cursor: 'pointer',
@@ -1237,12 +1242,12 @@ export function buildFlowSankeySpec(
       state: {
         hover: {
           fillOpacity: 1,
-          stroke: 'rgba(15, 23, 42, 0.68)',
+          stroke: chartStyle.flow.interactiveNodeStroke,
           lineWidth: 1.5,
         },
         selected: {
           fillOpacity: 1,
-          stroke: 'rgba(15, 23, 42, 0.68)',
+          stroke: chartStyle.flow.interactiveNodeStroke,
           lineWidth: 1.5,
         },
         blur: {

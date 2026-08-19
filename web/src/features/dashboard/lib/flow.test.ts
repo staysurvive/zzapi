@@ -19,6 +19,7 @@ For commercial licensing, please contact support@quantumnous.com
 import { describe, expect, test } from 'vitest'
 
 import type { FlowQuotaDataItem } from '../types'
+import { getDashboardChartStyle } from './charts'
 import {
   buildDashboardFlowData,
   buildFlowFilterOptions,
@@ -715,6 +716,11 @@ describe('dashboard flow data', () => {
     expect(values.links.length).toBe(5)
     expect(aliceNode.name).toBe('alice')
     expect(userNodeLink.linkColor).toMatch(/^rgba\(/)
+    expect(flowSpec.label.style.fill).toBe('#475569')
+    expect(flowSpec.node.style.stroke({ highlighted: true })).toBe(
+      'rgba(15, 23, 42, 0.74)'
+    )
+    expect(flowSpec.node.state.hover.stroke).toBe('rgba(15, 23, 42, 0.68)')
 
     const tooltipRows = flowSpec.tooltip.mark.content
     expect(
@@ -736,6 +742,30 @@ describe('dashboard flow data', () => {
       ['Requests', '2'],
       ['Share', '100.0%'],
     ])
+  })
+
+  test('uses readable labels and silver node strokes in premium dark mode', () => {
+    const result = buildDashboardFlowData(rows.slice(0, 1), 'quota', {
+      role: 'root',
+      colorPalette: getDashboardChartStyle('dark').colorPalette,
+    })
+    const flowSpec = buildFlowSankeySpec(
+      result.flow,
+      'Flow',
+      undefined,
+      undefined,
+      getDashboardChartStyle('dark')
+    )
+
+    expect(flowSpec.label.style.fill).toBe('#D7DCE4')
+    expect(flowSpec.node.style.stroke({ highlighted: false })).toBe(
+      'rgba(224, 230, 238, 0.42)'
+    )
+    expect(flowSpec.node.style.stroke({ highlighted: true })).toBe(
+      'rgba(244, 246, 249, 0.86)'
+    )
+    expect(flowSpec.node.state.hover.stroke).toBe('rgba(244, 246, 249, 0.82)')
+    expect(flowSpec.data[0].values[0].nodes[0].color).toBe('#D3D6DB')
   })
 
   test('maps active flow highlight states into the Sankey spec', () => {

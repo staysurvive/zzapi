@@ -71,7 +71,7 @@ export function FAQPanel() {
                   </Markdown>
                 </AccordionTrigger>
                 <AccordionContent>
-                  <Markdown className='text-muted-foreground/60 text-sm'>
+                  <Markdown className='workspace-supporting-text text-muted-foreground/60 text-sm'>
                     {item.answer}
                   </Markdown>
                 </AccordionContent>

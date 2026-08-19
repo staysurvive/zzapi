@@ -28,7 +28,10 @@ import {
   DEFAULT_TIME_GRANULARITY,
   MODEL_ANALYTICS_CHART_OPTIONS,
 } from '@/features/dashboard/constants'
-import { processChartData } from '@/features/dashboard/lib'
+import {
+  getDashboardChartStyle,
+  processChartData,
+} from '@/features/dashboard/lib'
 import type {
   ModelAnalyticsChartTab,
   QuotaDataItem,
@@ -60,6 +63,7 @@ export function ModelCharts(props: ModelChartsProps) {
   const { t } = useTranslation()
   const { resolvedTheme } = useTheme()
   const { customization } = useThemeCustomization()
+  const chartStyle = getDashboardChartStyle(resolvedTheme, customization.preset)
   const chartRadius = useThemeRadiusPx(
     '--radius-md',
     `${customization.preset}:${customization.radius}`
@@ -102,9 +106,10 @@ export function ModelCharts(props: ModelChartsProps) {
         props.loading ? [] : props.data,
         timeGranularity,
         t,
-        chartRadius
+        chartRadius,
+        chartStyle
       ),
-    [props.data, props.loading, timeGranularity, t, chartRadius]
+    [props.data, props.loading, timeGranularity, t, chartRadius, chartStyle]
   )
 
   const spec = chartData[CHART_SPEC_KEYS[activeTab]]

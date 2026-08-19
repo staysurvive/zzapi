@@ -32,7 +32,12 @@ export {
   openExternalSpeedTest,
   getDefaultPingStatus,
 } from './api-info'
-export { processChartData, processUserChartData } from './charts'
+export {
+  getDashboardChartStyle,
+  processChartData,
+  processUserChartData,
+} from './charts'
+export type { DashboardChartStyle } from './charts'
 export {
   buildDashboardFlowData,
   buildFlowSankeySpec,

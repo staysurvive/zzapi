@@ -262,7 +262,7 @@ export function StatCard(props: StatCardProps) {
         </div>
         <p
           className={cn(
-            'text-muted-foreground/60 line-clamp-1 text-[11px] sm:text-xs',
+            'workspace-supporting-text text-muted-foreground/60 line-clamp-1 text-[11px] sm:text-xs',
             props.compactMobile && 'hidden sm:block'
           )}
         >
@@ -278,7 +278,7 @@ export function StatCard(props: StatCardProps) {
         </div>
         <p
           className={cn(
-            'text-muted-foreground/60 line-clamp-1 text-[11px] leading-relaxed sm:text-xs',
+            'workspace-supporting-text text-muted-foreground/60 line-clamp-1 text-[11px] leading-relaxed sm:text-xs',
             props.compactMobile && 'hidden sm:block'
           )}
         >
@@ -316,7 +316,7 @@ export function StatCard(props: StatCardProps) {
           >
             <Icon />
           </IconBadge>
-          <span className='line-clamp-1 leading-snug sm:line-clamp-2'>
+          <span className='line-clamp-2 min-h-[2.5em] leading-snug text-balance sm:min-h-0'>
             {props.title}
           </span>
         </div>

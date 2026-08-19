@@ -38,6 +38,50 @@ For commercial licensing, please contact support@quantumnous.com
   --product-focus: #73a2ff;
 }
 
+[data-product-workspace-active='true']:where(.dark *):not([data-theme-preset]) {
+  --background: #111315;
+  --foreground: #f1f2f4;
+  --card: #1a1c1f;
+  --card-foreground: #f1f2f4;
+  --popover: #222529;
+  --popover-foreground: #f1f2f4;
+  --primary: #c9cdd3;
+  --primary-foreground: #111315;
+  --secondary: #24272b;
+  --secondary-foreground: #e5e7ea;
+  --muted: #202327;
+  --muted-foreground: #a7acb4;
+  --accent: #2b2e33;
+  --accent-foreground: #eff0f2;
+  --border: rgb(224 230 238 / 14%);
+  --input: rgb(224 230 238 / 19%);
+  --ring: #d8dce1;
+  --chart-1: #d3d6db;
+  --chart-2: #a8b0ae;
+  --chart-3: #b8aea4;
+  --chart-4: #b19fa6;
+  --chart-5: #9eaf9f;
+  --overview-accent-1: #d3d6db;
+  --overview-accent-2: #a8b0ae;
+  --overview-accent-3: #b8aea4;
+  --sidebar: #151719;
+  --sidebar-foreground: #e8eaed;
+  --sidebar-primary: #c9cdd3;
+  --sidebar-primary-foreground: #111315;
+  --sidebar-accent: #292c30;
+  --sidebar-accent-foreground: #f0f1f3;
+  --sidebar-border: rgb(224 230 238 / 13%);
+  --sidebar-ring: #d8dce1;
+  --skeleton-base: #25282c;
+  --skeleton-highlight: #30343a;
+  --table-row: #17191c;
+  --table-header: #24272b;
+  --table-header-hover: #2a2d31;
+  --table-disabled: #1f2226;
+  --table-disabled-hover: #272a2f;
+  --table-disabled-border: rgb(224 230 238 / 21%);
+}
+
 [data-zzapi-product][data-product-surface='public'] {
   min-height: 100svh;
 }
@@ -48,6 +92,30 @@ For commercial licensing, please contact support@quantumnous.com
 
 [data-zzapi-product][data-product-surface='workspace'] {
   min-height: 100%;
+}
+
+[data-product-workspace-active='true']:where(.dark *):not([data-theme-preset])
+  [data-zzapi-product][data-product-surface='workspace'] {
+  --product-canvas: var(--background);
+  --product-text-strong: var(--foreground);
+  --product-text-secondary: var(--muted-foreground);
+  --product-hairline: var(--border);
+  --product-brand: var(--primary);
+  --product-brand-soft: var(--accent);
+  --product-focus: var(--ring);
+}
+
+[data-product-workspace-active='true']:where(.dark *):not([data-theme-preset])
+  [data-slot='sidebar-wrapper']
+  > header {
+  border-block-end: 1px solid var(--sidebar-border);
+  background-color: color-mix(in srgb, var(--sidebar) 90%, transparent);
+  backdrop-filter: blur(18px) saturate(120%);
+}
+
+[data-product-workspace-active='true']:where(.dark *):not([data-theme-preset])
+  .workspace-supporting-text {
+  color: color-mix(in srgb, var(--muted-foreground) 88%, transparent);
 }
 
 [data-zzapi-product] [data-product-public-header] {

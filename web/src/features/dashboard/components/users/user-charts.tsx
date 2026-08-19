@@ -25,6 +25,7 @@ import { useTranslation } from 'react-i18next'
 import { IconBadge } from '@/components/ui/icon-badge'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { useThemeCustomization } from '@/context/theme-customization-provider'
 import { useTheme } from '@/context/theme-provider'
 import { getUserQuotaDataByUsers } from '@/features/dashboard/api'
 import {
@@ -33,6 +34,7 @@ import {
 } from '@/features/dashboard/constants'
 import {
   getDefaultDays,
+  getDashboardChartStyle,
   saveGranularity,
   processUserChartData,
 } from '@/features/dashboard/lib'
@@ -74,6 +76,8 @@ interface UserChartsProps {
 export function UserCharts(props: UserChartsProps) {
   const { t } = useTranslation()
   const { resolvedTheme } = useTheme()
+  const { customization } = useThemeCustomization()
+  const chartStyle = getDashboardChartStyle(resolvedTheme, customization.preset)
   const [themeReady, setThemeReady] = useState(false)
   const themeManagerRef = useRef<
     (typeof import('@visactor/vchart'))['ThemeManager'] | null
@@ -149,9 +153,10 @@ export function UserCharts(props: UserChartsProps) {
         isLoading ? [] : (userData ?? []),
         timeGranularity,
         t,
-        topUserLimit
+        topUserLimit,
+        chartStyle
       ),
-    [userData, isLoading, timeGranularity, t, topUserLimit]
+    [userData, isLoading, timeGranularity, t, topUserLimit, chartStyle]
   )
 
   return (
@@ -244,7 +249,7 @@ export function UserCharts(props: UserChartsProps) {
                   themeReady &&
                   spec && (
                     <VChart
-                      key={`user-${chart.value}-${topUserLimit}-${resolvedTheme}`}
+                      key={`user-${chart.value}-${topUserLimit}-${resolvedTheme}-${customization.preset}`}
                       spec={{
                         ...spec,
                         theme: resolvedTheme === 'dark' ? 'dark' : 'light',

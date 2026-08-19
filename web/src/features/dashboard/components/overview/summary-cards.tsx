@@ -263,11 +263,14 @@ export function SummaryCards() {
               </p>
             </div>
           </div>
-          <StaggerContainer className='grid grid-cols-3 gap-1.5 sm:gap-3'>
-            {items.map((it) => (
+          <StaggerContainer className='grid grid-cols-2 gap-1.5 sm:grid-cols-3 sm:gap-3'>
+            {items.map((it, index) => (
               <StaggerItem
                 key={it.key}
-                className='bg-background/60 rounded-lg border px-2 py-1.5 sm:rounded-xl sm:p-3'
+                className={cn(
+                  'bg-background/60 rounded-lg border px-2 py-1.5 sm:rounded-xl sm:p-3',
+                  index === items.length - 1 && 'col-span-2 sm:col-span-1'
+                )}
               >
                 <StatCard
                   title={it.title}

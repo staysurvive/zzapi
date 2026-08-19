@@ -36,7 +36,7 @@ const STATUS_COLOR_MAP: Record<number, string> = {
   1: 'bg-emerald-500',
   0: 'bg-red-500',
   2: 'bg-amber-500',
-  3: 'bg-blue-500',
+  3: 'bg-muted-foreground/60',
 }
 const DEFAULT_STATUS_COLOR = 'bg-muted-foreground/40'
 
@@ -134,7 +134,7 @@ export function UptimePanel() {
                   <h4 className='text-muted-foreground text-xs font-semibold tracking-wider uppercase'>
                     {group.categoryName}
                   </h4>
-                  <span className='text-muted-foreground/40 font-mono text-xs tabular-nums'>
+                  <span className='workspace-supporting-text text-muted-foreground/40 font-mono text-xs tabular-nums'>
                     {group.monitors?.length || 0}
                   </span>
                 </div>
@@ -157,7 +157,7 @@ export function UptimePanel() {
                       <StatusDot status={monitor.status} />
                       <span className='truncate text-sm'>{monitor.name}</span>
                       {monitor.group && (
-                        <span className='text-muted-foreground/40 shrink-0 text-xs'>
+                        <span className='workspace-supporting-text text-muted-foreground/40 shrink-0 text-xs'>
                           ({monitor.group})
                         </span>
                       )}

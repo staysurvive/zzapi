@@ -1,4 +1,4 @@
-# Homepage Freeze Manifest
+# Homepage First-Viewport Freeze Manifest
 
 ## Fixed source baseline
 
@@ -18,6 +18,8 @@ web/src/styles/index.css
 ```
 
 `index.css` is frozen as a whole for this task. New product CSS must live in a separate scoped file and be imported from the ProductShell module.
+
+User-authorized exception (2026-08-18): the palette below the first viewport may change through a new stylesheet scoped to `.home-below-fold`. The immutable paths above and the four first-viewport visual baselines remain frozen.
 
 Validation command:
 
@@ -74,4 +76,4 @@ Image SHA is an integrity check, not a substitute for aligned visual comparison.
 - Immutable paths have no diff against the fixed commit.
 - No untracked file exists under immutable directories.
 - Legacy shared branches pass structure/behavior tests.
-- Four aligned screenshots show no visible homepage regression.
+- Four aligned first-viewport screenshots show no visible regression; below-fold palette changes are verified separately.

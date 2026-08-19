@@ -1,0 +1,145 @@
+/*
+Copyright (C) 2023-2026 QuantumNous
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+For commercial licensing, please contact support@quantumnous.com
+*/
+body:not([data-theme-preset]) .home-below-fold {
+  --background: #ffffff;
+  --foreground: #172033;
+  --card: #ffffff;
+  --card-foreground: #172033;
+  --popover: #ffffff;
+  --popover-foreground: #172033;
+  --primary: #245edb;
+  --primary-foreground: #ffffff;
+  --secondary: #e8f0fb;
+  --secondary-foreground: #234b92;
+  --muted: #edf3f9;
+  --muted-foreground: #5d6c80;
+  --accent: #e5efff;
+  --accent-foreground: #173b74;
+  --border: #d7e1ec;
+  --input: #cbd8e6;
+  --ring: #4e82ef;
+  --home-stats-surface: linear-gradient(90deg, #f1f6fc, #fafcff 50%, #f1f6fc);
+  --home-capabilities-surface:
+    radial-gradient(
+      ellipse 62% 32% at 50% 0%,
+      rgb(88 139 255 / 8%),
+      transparent 74%
+    ),
+    #f8fbff;
+  --home-workflow-surface: #f1f6fb;
+  --home-cta-surface: #f8fbff;
+  --home-footer-surface: #edf3f9;
+
+  color: var(--foreground);
+  background: var(--home-capabilities-surface);
+}
+
+body:not([data-theme-preset]) .home-below-fold > div {
+  background: var(--home-stats-surface);
+}
+
+body:not([data-theme-preset]) .home-below-fold > #capabilities {
+  background: var(--home-capabilities-surface);
+}
+
+body:not([data-theme-preset]) .home-below-fold > #capabilities + section {
+  background: var(--home-workflow-surface);
+}
+
+body:not([data-theme-preset])
+  .home-below-fold
+  > section:has(> .home-cta-field) {
+  background: var(--home-cta-surface);
+}
+
+body:not([data-theme-preset]) .home-below-fold > section > .home-cta-field {
+  background: radial-gradient(
+    ellipse 42% 76% at 50% 50%,
+    rgb(56 112 232 / 11%),
+    transparent 76%
+  );
+}
+
+body:not([data-theme-preset]) .home-below-fold > footer {
+  background: var(--home-footer-surface);
+}
+
+html.dark body:not([data-theme-preset]) .home-below-fold {
+  --background: #1a1d21;
+  --foreground: #f3f4f6;
+  --card: #1d2024;
+  --card-foreground: #f3f4f6;
+  --popover: #22262b;
+  --popover-foreground: #f3f4f6;
+  --primary: #c9cdd3;
+  --primary-foreground: #111315;
+  --secondary: #25282d;
+  --secondary-foreground: #e1e4e8;
+  --muted: #22262b;
+  --muted-foreground: #a9afb8;
+  --accent: #2d3036;
+  --accent-foreground: #eef0f3;
+  --border: #363b42;
+  --input: #464c54;
+  --ring: #d8dce1;
+  --home-stats-surface: linear-gradient(90deg, #171a1e, #1d2024 50%, #171a1e);
+  --home-capabilities-surface:
+    radial-gradient(
+      ellipse 66% 36% at 50% 0%,
+      rgb(205 209 214 / 5%),
+      transparent 74%
+    ),
+    #171a1e;
+  --home-workflow-surface: #15181c;
+  --home-cta-surface: #181b1f;
+  --home-footer-surface: #121417;
+}
+
+html.dark
+  body:not([data-theme-preset])
+  .home-below-fold
+  > section
+  > .home-cta-field {
+  background: radial-gradient(
+    ellipse 42% 76% at 50% 50%,
+    rgb(205 209 214 / 6%),
+    transparent 76%
+  );
+}
+
+html.dark
+  body:not([data-theme-preset])
+  .home-below-fold
+  > footer
+  :where(
+    [class~='text-muted-foreground/40'],
+    [class~='text-muted-foreground/45'],
+    [class~='text-muted-foreground/50'],
+    [class~='text-muted-foreground/60']
+  ) {
+  color: #90969f;
+}
+
+html.dark
+  body:not([data-theme-preset])
+  .home-below-fold
+  > footer
+  [class~='text-muted-foreground/30'] {
+  color: #737981;
+}

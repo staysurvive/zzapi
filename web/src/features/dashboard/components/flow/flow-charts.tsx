@@ -60,6 +60,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
+import { useThemeCustomization } from '@/context/theme-customization-provider'
 import { getFlowQuotaDates } from '@/features/dashboard/api'
 import {
   buildDashboardFlowData,
@@ -67,6 +68,7 @@ import {
   buildQueryParams,
   flowNodeFilterFromSankeyDatum,
   flowSankeyDatumValue,
+  getDashboardChartStyle,
   getDefaultDays,
   getFlowStages,
 } from '@/features/dashboard/lib'
@@ -255,6 +257,8 @@ function formatFlowMetricNumber(value: number): string {
 export function FlowCharts(props: FlowChartsProps) {
   const { t } = useTranslation()
   const { resolvedTheme, themeReady } = useChartTheme()
+  const { customization } = useThemeCustomization()
+  const chartStyle = getDashboardChartStyle(resolvedTheme, customization.preset)
   const chartInstanceRef = useRef<IVChart | null>(null)
   const user = useAuthStore((state) => state.auth.user)
   const isRoot = Boolean(user?.role && user.role >= ROLE.SUPER_ADMIN)
@@ -354,6 +358,7 @@ export function FlowCharts(props: FlowChartsProps) {
         visibleStages,
         topNodeLimit,
         overflowMode,
+        colorPalette: chartStyle.colorPalette,
         maskSensitive,
         deletedTokenLabel: (tokenId) => t('Deleted ({{id}})', { id: tokenId }),
         otherNodeLabel: (kind) => t(FLOW_OTHER_NODE_LABEL_KEYS[kind]),
@@ -364,6 +369,7 @@ export function FlowCharts(props: FlowChartsProps) {
       isLoading,
       metric,
       overflowMode,
+      chartStyle,
       activeFlowNode,
       activeFlowLink,
       selectedNodes,
@@ -454,13 +460,19 @@ export function FlowCharts(props: FlowChartsProps) {
   const chartTitle = t('Flow')
   const flowSpec = useMemo(
     () =>
-      buildFlowSankeySpec(flowData.flow, chartTitle, formatQuota, {
-        quota: t('Quota'),
-        tokens: t('Tokens'),
-        requests: t('Requests'),
-        share: t('Share'),
-      }),
-    [chartTitle, flowData.flow, t]
+      buildFlowSankeySpec(
+        flowData.flow,
+        chartTitle,
+        formatQuota,
+        {
+          quota: t('Quota'),
+          tokens: t('Tokens'),
+          requests: t('Requests'),
+          share: t('Share'),
+        },
+        chartStyle
+      ),
+    [chartTitle, flowData.flow, t, chartStyle]
   )
   const chartTheme = resolvedTheme === 'dark' ? 'dark' : 'light'
   const chartKey = [
@@ -478,6 +490,7 @@ export function FlowCharts(props: FlowChartsProps) {
     maskSensitive ? 'masked' : 'plain',
     flowRows?.length ?? 0,
     resolvedTheme,
+    customization.preset,
   ].join('-')
   const displayState = flowDisplayState({
     isLoading,

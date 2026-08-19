@@ -17,6 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@quantumnous.com
 */
 import { render, screen } from '@testing-library/react'
+import { StrictMode } from 'react'
 import { describe, expect, it, vi } from 'vitest'
 
 import { AuthenticatedLayout } from '../components/authenticated-layout'
@@ -88,7 +89,77 @@ describe('product layout contracts', () => {
     expect(
       main.querySelector('[data-product-surface="workspace"]')
     ).toHaveClass('flex-1')
+    expect(document.body).toHaveAttribute(
+      'data-product-workspace-active',
+      'true'
+    )
     expect(document.querySelectorAll('main')).toHaveLength(1)
+  })
+
+  it('restores an existing workspace palette marker after unmount', () => {
+    document.body.setAttribute('data-product-workspace-active', 'existing')
+
+    const { unmount } = render(
+      <AuthenticatedLayout>
+        <div>Workspace content</div>
+      </AuthenticatedLayout>
+    )
+
+    expect(document.body).toHaveAttribute(
+      'data-product-workspace-active',
+      'true'
+    )
+
+    unmount()
+
+    expect(document.body).toHaveAttribute(
+      'data-product-workspace-active',
+      'existing'
+    )
+    document.body.removeAttribute('data-product-workspace-active')
+  })
+
+  it('removes an initially absent workspace marker after a StrictMode unmount', () => {
+    document.body.removeAttribute('data-product-workspace-active')
+
+    const { unmount } = render(
+      <StrictMode>
+        <AuthenticatedLayout>
+          <div>Workspace content</div>
+        </AuthenticatedLayout>
+      </StrictMode>
+    )
+
+    expect(document.body).toHaveAttribute(
+      'data-product-workspace-active',
+      'true'
+    )
+
+    unmount()
+
+    expect(document.body).not.toHaveAttribute('data-product-workspace-active')
+  })
+
+  it('preserves an explicit theme preset across the workspace lifecycle', () => {
+    document.body.setAttribute('data-theme-preset', 'anthropic')
+
+    const { unmount } = render(
+      <AuthenticatedLayout>
+        <div>Workspace content</div>
+      </AuthenticatedLayout>
+    )
+
+    expect(document.body).toHaveAttribute('data-theme-preset', 'anthropic')
+    expect(document.body).toHaveAttribute(
+      'data-product-workspace-active',
+      'true'
+    )
+
+    unmount()
+
+    expect(document.body).toHaveAttribute('data-theme-preset', 'anthropic')
+    expect(document.body).not.toHaveAttribute('data-product-workspace-active')
+    document.body.removeAttribute('data-theme-preset')
   })
 
   it('adds product header slots without changing the legacy heading contract', () => {

@@ -16,6 +16,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 For commercial licensing, please contact support@quantumnous.com
 */
+import { useLayoutEffect } from 'react'
+
 import { AnimatedOutlet } from '@/components/page-transition'
 import { SkipToMain } from '@/components/skip-to-main'
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
@@ -34,6 +36,22 @@ type AuthenticatedLayoutProps = {
 
 export function AuthenticatedLayout(props: AuthenticatedLayoutProps) {
   const defaultOpen = getCookie('sidebar_state') !== 'false'
+
+  useLayoutEffect(() => {
+    const attribute = 'data-product-workspace-active'
+    const previousValue = document.body.getAttribute(attribute)
+
+    document.body.setAttribute(attribute, 'true')
+
+    return () => {
+      if (previousValue === null) {
+        document.body.removeAttribute(attribute)
+        return
+      }
+
+      document.body.setAttribute(attribute, previousValue)
+    }
+  }, [])
 
   return (
     <LayoutProvider>
