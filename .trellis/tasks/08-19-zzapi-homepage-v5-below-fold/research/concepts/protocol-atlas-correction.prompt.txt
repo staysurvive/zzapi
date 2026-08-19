@@ -1,0 +1,16 @@
+Use case: precise-object-edit
+Asset type: corrected zzapi homepage below-fold UI concept
+Primary request: Preserve the entire composition, typography, wide information bands, identity plate, panoramic request route, protocol lanes, developer panel, and CTA of the input design. Change only invented current-catalog/provider labels, unsupported endpoint lanes, the sample base URL, and the footer attribution.
+
+Required corrections:
+- In the panoramic request route, replace the five branch labels "OpenAI", "Claude", "Gemini", "Qwen", and "..." with exactly these three current catalog model IDs: "gpt-5.6-terra", "gpt-5.6-sol", and "deepseek-v4-flash". Show only three branches.
+- In the protocol lanes section, replace the current rows with exactly these four factual rows:
+  1. "Configured endpoint" -> "POST /v1/chat/completions"
+  2. "Interface" -> "OpenAI-compatible"
+  3. "Route policy" -> "Priority and weighted routes"
+  4. "Catalog state" -> "Current catalog"
+- In the developer model selector, replace provider names and the ellipsis with exactly "gpt-5.6-terra", "gpt-5.6-sol", and "deepseek-v4-flash".
+- In the code specimen, replace "https://api.zzapi.com/v1/chat/completions" with "<YOUR_BASE_URL>/v1/chat/completions".
+- Replace the entire footer content with one restrained attribution line: "© 2026 ZZAPI · New API by QuantumNous contributors". Remove Privacy Policy, Terms of Service, Contact, and the old year.
+
+Constraints: change only these labels and footer details; keep all other layout and visual details unchanged. Do not add provider names as current catalog items, an official certification, Verified, Authentic Model, percentage, uptime, latency, request count, cost, unsupported endpoint, unsupported capability, extra legal link, watermark, or extra section. Render every replacement string exactly once with clean readable typography.

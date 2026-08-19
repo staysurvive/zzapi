@@ -1,0 +1,49 @@
+Use case: ui-mockup
+Asset type: zzapi homepage below-fold visual direction
+Primary request: Design a new production-quality, scrollable homepage continuation for zzapi. The output starts immediately after the existing frozen Hero and redesigns only the content below it. The concept is an "Identity Ledger": a calm, precise model identity instrument followed by a request-routing ledger, infrastructure view, developer API example, and final CTA.
+Input images:
+- Image 1: exact current zzapi Hero and brand-language reference. Do not redraw or redesign the Hero; the generated canvas begins below it.
+- Image 2: hierarchy reference for a large model identity object only. Do not copy its purple palette, certification claims, circular percentage, layout, typography, logo, copy, or components.
+- Image 3: rhythm reference for a large data object only. Do not copy its purple/orange palette, chart, accordion, layout, typography, logo, copy, or components.
+
+Target dimensions: a 1440px-wide scrollable landing page direction, rendered on a 2160x3840 portrait canvas. Show only the below-fold continuation; no browser chrome, no device frame, no duplicated navigation, no Hero reconstruction.
+
+Audience and goal: developers and technical buyers evaluating an AI API gateway. Make routing identity and evidence understandable without looking like an admin dashboard.
+
+Visual system: preserve zzapi's existing minimal premium technical language from Image 1. White and very pale neutral surfaces, black and graphite typography, silver-gray rules, restrained zzapi blue only for exact status signals and route paths. Comfortable, spatial, editorial, high-end. No purple, no dark-blue takeover, no gradients as section backgrounds, no glassmorphism, no neon, no decorative particles.
+
+Information hierarchy and layout:
+- Begin with generous transition whitespace from the frozen Hero.
+- First major section uses a 36/64 asymmetric composition. Left: a large concise headline and two short supporting lines. Right: one large horizontal model identity ledger, not a card wall. It shows a selected model identifier, catalog vendor metadata, configured endpoint, recent traffic state, and a restrained sequence of status rows.
+- Build the ledger from light rules, aligned labels, one oversized model ID, small monospace route data, and a single vertical blue scan marker. It must feel like an instrument, not a certificate.
+- Follow with one full-width Request -> zzapi Gateway -> Route -> Model -> Response object. Use a single readable path and compact side annotations for policy-based routing, configured pricing, and observed traffic. No bar chart.
+- Follow with a sparse model network section built around one zzapi node and the current catalog models as named endpoints, then a 40/60 developer section with one short OpenAI-compatible request snippet.
+- End with a calm full-width CTA and the existing project attribution/footer language.
+
+Text (verbatim):
+- "Model identity, made legible"
+- "Current catalog and route signals, not an official certification."
+- "CURRENT CATALOG"
+- "gpt-5.6-sol"
+- "Catalog vendor"
+- "Configured"
+- "Endpoint route"
+- "Route available"
+- "Recent traffic"
+- "Observed"
+- "Capabilities"
+- "Not reported"
+- "One request, through zzapi"
+- "Client"
+- "Gateway"
+- "Route"
+- "Model"
+- "Response"
+- "One endpoint for the current model catalog"
+- "POST /v1/chat/completions"
+- "Open Console"
+- "Read Docs"
+
+Constraints: render only truthful qualitative states; no official certification; no Verified; no Authentic Model; no 100%; no 99.99%; no latency, uptime, request-count, cost, or unsupported capability claims. No cards inside cards. No three-column feature grid. No chart made only for decoration. Use realistic readable typography and generous spacing; render the listed text directly, exactly once where used, with no invented marketing numbers, no third-party logos, no watermark.
+
+Responsive intent: the design must have an obvious mobile reflow path, with each large object able to become a vertical semantic sequence rather than a scaled desktop diagram.

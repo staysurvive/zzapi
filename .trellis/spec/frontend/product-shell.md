@@ -6,7 +6,7 @@
 
 - Trigger: A shared frontend layout, public header, dialog portal, data table, or skip-link target is added or changed for a non-home product route.
 - Scope: `web/src/components/layout/`, `web/src/components/data-table/layout/data-table-page.tsx`, `web/src/components/dialog.tsx`, `web/src/components/ui/{dialog,sheet}.tsx`, and `web/src/styles/product-shell.css`.
-- Homepage boundary: Preserve the legacy/default branches and do not edit `web/src/features/home/**`, `web/src/routes/index.tsx`, `web/public/landing-brand-core.png`, or `web/src/styles/index.css` for product work.
+- Homepage boundary: Preserve the legacy/default branches and do not edit `web/src/routes/index.tsx`, `web/public/landing-brand-core.png`, or `web/src/styles/index.css` for product work. The dedicated Trellis task `08-19-zzapi-homepage-v5-below-fold` is the only authorized exception for a scoped below-fold homepage subtree; it must keep the Hero/opening files frozen and must not alter non-home routes.
 
 ### 2. Signatures
 

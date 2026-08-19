@@ -1,0 +1,18 @@
+Use case: precise-object-edit
+Asset type: polished final zzapi homepage below-fold visual target
+Primary request: Preserve the entire selected Signal Corridor composition, all stages, typography, spacing, model IDs, signal spine, new value-tabs content, CTA and attribution. Polish only the value-tabs proportions and two code strings.
+
+Required value-tabs correction:
+- Keep the section in the same location and preserve its 38/62 left/right split.
+- Make active tab 01 visibly dominant and editorial: about 280-310px tall, with a very pale zzapi-blue surface, one thin blue signal rule, a large ghosted "01", title and short description aligned with generous whitespace.
+- Keep inactive tabs 02 and 03 compact at about 92-104px each, white/near-white, separated by thin silver rules. They remain readable and clearly clickable.
+- The left stack total height must align exactly with the right technical panel. The right panel remains one stable large object and must not become a dashboard grid.
+- Remove the heavy full blue rectangular outline around the active tab. Use a subtle 1px border or signal rule and a small minus affordance.
+- Keep all three titles and descriptions exactly as in the input.
+
+Required code correction:
+- In the developer code panel replace the hardcoded URL with "<YOUR_BASE_URL>/v1/chat/completions".
+- Replace the malformed key token with "$ZZAPI_KEY".
+- Replace the Chinese sample content with "Hello".
+
+Constraints: change only the value-tabs proportions/styling and the three code strings. Keep every other section, route, label, model name, CTA and attribution unchanged. No new metrics, amount, number, claim, section, logo or watermark. No purple, orange, bar chart, strong glow, glass or card wall. Preserve the clean white/graphite/silver/zzapi-blue visual system.

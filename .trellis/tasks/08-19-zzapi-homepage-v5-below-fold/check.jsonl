@@ -1,0 +1,4 @@
+{"file":".trellis/spec/frontend/product-shell.md","reason":"Check homepage-only scoping, one-main/skip-target semantics, default branch compatibility and product-route isolation."}
+{"file":".trellis/tasks/08-19-zzapi-homepage-v5-below-fold/research/home-v5-freeze-contract.md","reason":"Verify byte-frozen paths and aligned Hero-only browser comparison at every required viewport."}
+{"file":".trellis/tasks/08-19-zzapi-homepage-v5-below-fold/research/audits.md","reason":"Check product claims, data fallbacks, motion, responsive and accessibility contracts against the researched evidence."}
+{"file":".trellis/tasks/08-19-zzapi-homepage-v5-below-fold/research/truesota-tabs-live-source.md","reason":"Ensure the final tabs adopt only the intended hierarchy and do not copy scroll-jacking, fake data, colors or business content."}

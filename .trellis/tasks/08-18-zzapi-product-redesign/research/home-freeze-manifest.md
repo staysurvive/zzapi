@@ -11,20 +11,36 @@
 ## Immutable paths
 
 ```text
-web/src/features/home/**
 web/src/routes/index.tsx
 web/public/landing-brand-core.png
 web/src/styles/index.css
+
+The dedicated `.trellis/tasks/08-19-zzapi-homepage-v5-below-fold/` task is an explicit
+user-authorized exception for the homepage below-fold subtree. During that task,
+the following remain byte-frozen:
+
+```text
+web/src/features/home/components/sections/hero.tsx
+web/src/features/home/components/infrastructure-map.tsx
+web/src/features/home/components/landing-entrance.tsx
+web/src/features/home/lib/opening-focus.ts
+```
+
+Only the V5 task may modify `web/src/features/home/index.tsx`,
+`web/src/features/home/components/index.ts`, `web/src/features/home/components/v5/**`,
+the V5 data files/tests, `web/src/styles/home-below-fold.css`, and homepage locale
+entries. The V5 task must keep `LandingEntrance → Hero → .home-below-fold`
+composition intact and compare only the Hero element through its bottom edge.
 ```
 
 `index.css` is frozen as a whole for this task. New product CSS must live in a separate scoped file and be imported from the ProductShell module.
 
 User-authorized exception (2026-08-18): the palette below the first viewport may change through a new stylesheet scoped to `.home-below-fold`. The immutable paths above and the four first-viewport visual baselines remain frozen.
 
-Validation command:
+Validation command for the ordinary frozen-home contract:
 
 ```powershell
-git diff --exit-code d092808a802835e3108be1ad20ba0eb7d04b9cf7 -- web/src/features/home web/src/routes/index.tsx web/public/landing-brand-core.png web/src/styles/index.css
+git diff --exit-code d092808a802835e3108be1ad20ba0eb7d04b9cf7 -- web/src/routes/index.tsx web/public/landing-brand-core.png web/src/styles/index.css web/src/features/home/components/sections/hero.tsx web/src/features/home/components/infrastructure-map.tsx web/src/features/home/components/landing-entrance.tsx web/src/features/home/lib/opening-focus.ts
 git status --short -- web/src/features/home web/src/routes/index.tsx web/public/landing-brand-core.png web/src/styles/index.css
 ```
 

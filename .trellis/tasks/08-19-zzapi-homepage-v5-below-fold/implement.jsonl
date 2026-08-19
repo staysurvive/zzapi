@@ -1,0 +1,4 @@
+{"file":".trellis/spec/frontend/product-shell.md","reason":"Preserve scoped public-layout, landmark, focus and non-home homepage-freeze contracts while adding the dedicated Homepage V5 exception."}
+{"file":".trellis/tasks/08-19-zzapi-homepage-v5-below-fold/research/home-v5-freeze-contract.md","reason":"Defines the exact immutable Hero/opening files, authorized below-fold paths and first-viewport visual gate."}
+{"file":".trellis/tasks/08-19-zzapi-homepage-v5-below-fold/research/audits.md","reason":"Carries the code, truthfulness, responsive, motion and accessibility evidence gathered before implementation."}
+{"file":".trellis/tasks/08-19-zzapi-homepage-v5-below-fold/research/truesota-tabs-live-source.md","reason":"Records which accordion/tab relationships may be learned from the reference and which scroll/data behaviors must not be copied."}

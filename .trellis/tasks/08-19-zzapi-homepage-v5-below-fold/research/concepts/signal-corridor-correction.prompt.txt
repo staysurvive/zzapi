@@ -1,0 +1,9 @@
+Use case: precise-object-edit
+Asset type: corrected zzapi homepage below-fold UI concept
+Primary request: Preserve the entire composition, typography, signal spine, model identity stack, vertical request flow, current catalog branch, developer code panel, and CTA of the input design. Remove only the unsupported statistics strip at the very bottom.
+
+Required correction:
+- Delete the complete bottom strip containing "50+", "100+", "50+", "10+" and its four Chinese labels.
+- Replace that strip with a quiet white footer area containing only one centered attribution line: "zzapi · New API project".
+
+Constraints: change only the bottom statistics strip; keep all other content and layout unchanged. Do not add any numbers, official certification, Verified, Authentic Model, percentage, uptime, latency, request count, cost, provider count, model count, route count, unsupported capability, logo, watermark, or extra section. Render the replacement attribution exactly once with clean readable typography.

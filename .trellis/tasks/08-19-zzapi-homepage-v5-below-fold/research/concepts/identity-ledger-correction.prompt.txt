@@ -1,0 +1,11 @@
+Use case: precise-object-edit
+Asset type: corrected zzapi homepage below-fold UI concept
+Primary request: Preserve the entire composition, spacing, typography, white/graphite/blue visual system, model identity ledger, request flow, developer code panel, and CTA of the input design. Change only invented or unsupported data labels and the stray reference fragment at the very bottom.
+
+Required corrections:
+- In the model network section, show only these three catalog model IDs: "gpt-5.6-sol", "gpt-5.6-terra", and "deepseek-v4-flash". Do not show OpenAI, Claude, Gemini, Qwen, Sonnet, Gemini Pro, or "and more" as current catalog nodes.
+- In the first identity ledger, replace the vendor value "OpenAI" with "Catalog metadata". Do not imply an official vendor or source.
+- Replace "OpenAI-compatible today. Stable routing tomorrow." with "One compatible endpoint. Current catalog routes."
+- Replace the stray Chinese client fragment at the very bottom with one restrained footer line: "zzapi · New API project".
+
+Constraints: change only these labels and the bottom fragment; keep all other layout and visual details unchanged. Do not add any official certification, Verified, Authentic Model, percentage, uptime, latency, request count, cost, vendor logo, marketing number, unsupported capability, watermark, or extra section. Render every replacement string exactly once with clean readable typography.

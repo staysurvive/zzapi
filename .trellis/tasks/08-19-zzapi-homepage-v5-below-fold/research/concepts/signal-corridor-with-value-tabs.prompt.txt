@@ -1,0 +1,51 @@
+Use case: ui-mockup
+Asset type: revised zzapi homepage below-fold visual target
+Primary request: Revise the selected zzapi Signal Corridor design by adding one premium interactive value-tabs section before its final CTA. Preserve the selected design's continuous vertical signal spine, generous white space, typography, real model IDs, request journey, catalog branch, developer integration, CTA, and restrained zzapi brand language. Do not recreate the frozen Hero; this canvas is only the content below it.
+
+Input images:
+- Image 1: the exact selected Signal Corridor concept and primary edit target. Preserve its structure and visual DNA.
+- Image 2: the frozen zzapi Hero reference. Use only to maintain brand continuity; do not render or redesign the Hero.
+- Image 3: the user's expanded-tab reference. Learn only the relationship of a left expanding option stack and a right large visual object; do not copy its brand, colors, chart, text, numbers, header, or layout details.
+
+Target dimensions: 2160x3840 portrait canvas representing a 1440px-wide scrollable desktop landing-page continuation.
+
+Visual system: quiet premium technical editorial design. White and near-white surfaces, black and graphite typography, silver hairlines, zzapi blue used only for active state, routes, focus, and exact signals. No purple, orange, broad gradient, glass, neon, decorative particles, or card wall.
+
+Composition:
+- Keep the existing Signal Corridor stages visually recognizable but tighten redundant whitespace just enough to make room for one new large section before the CTA.
+- The new section title is "Control after connection" with a short line "Routing is only useful when its decisions stay legible."
+- Build a 38/62 desktop split. Left: three vertically stacked expanding tab triggers aligned to the signal spine. Right: one stable large technical panel, not a dashboard card.
+- Active first tab occupies most of the left column height; inactive tabs are compact horizontal rows. Use large numerals 01 / 02 / 03, clear title, one sentence, and a small plus/minus affordance.
+- Active tab 01 is "Usage clarity". Right panel visualizes a readable request-cost ledger without personal usage or fabricated numbers: Input tokens, Cached input, Output tokens, Configured pricing, Group rule, and a final qualitative state "Traceable". Use aligned rows, thin route lines, and an oversized word "USAGE-BASED" instead of a bar chart or fake currency amount.
+- Inactive tab 02 is "Routing control" with summary "Priority, weight and policy stay explicit."
+- Inactive tab 03 is "Runtime signals" with summary "Observed traffic when recent samples exist."
+- The vertical signal spine from the selected concept should enter the tab section, activate the current tab, continue through the right panel, and exit toward the final CTA. It must feel native to zzapi, not pasted on.
+- Keep the final CTA and protected attribution after the tabs.
+
+Text (verbatim):
+- "Control after connection"
+- "Routing is only useful when its decisions stay legible."
+- "01"
+- "Usage clarity"
+- "A readable ledger for configured pricing."
+- "02"
+- "Routing control"
+- "Priority, weight and policy stay explicit."
+- "03"
+- "Runtime signals"
+- "Observed traffic when recent samples exist."
+- "USAGE-BASED"
+- "Input tokens"
+- "Cached input"
+- "Output tokens"
+- "Configured pricing"
+- "Group rule"
+- "Traceable"
+- "Ready to build?"
+- "Open Console"
+- "Read Docs"
+- "zzapi · New API project"
+
+Constraints: no duplicated model identity section, no second request journey, no repeated model catalog, no second code example. No official certification, Verified, Authentic Model, 100%, 99.99%, currency amount, latency, uptime, request count, token amount, price, fake live data, unsupported endpoint, provider claim, or watermark. Do not copy TrueSOTA's purple/orange colors, bar chart, exact accordion proportions, typography, or content. Render every listed string cleanly and exactly once where used; do not invent marketing claims or extra metrics.
+
+Responsive intent: the value tabs must clearly reflow on mobile into a full-width vertical trigger list followed by one stable panel; no scaled desktop graph, no horizontal page overflow, and no auto-rotating tabs.
