@@ -196,7 +196,7 @@ export const ModelCard = memo(function ModelCard(props: ModelCardProps) {
   return (
     <div
       className={cn(
-        'group relative flex flex-col rounded-xl border p-3 transition-colors sm:p-5',
+        'pricing-model-card group relative flex h-full flex-col rounded-lg border p-3 transition-colors sm:p-5',
         'hover:bg-muted/20'
       )}
     >
@@ -211,7 +211,7 @@ export const ModelCard = memo(function ModelCard(props: ModelCardProps) {
             )}
           </div>
           <div className='min-w-0'>
-            <h3 className='text-foreground truncate font-mono text-[15px] leading-tight font-bold'>
+            <h3 className='text-foreground line-clamp-2 min-h-[2.125rem] font-mono text-sm leading-tight font-bold break-words'>
               {props.model.model_name}
             </h3>
             <div className='mt-0.5 flex flex-wrap items-baseline gap-x-2 gap-y-0.5 text-sm sm:mt-1 sm:gap-x-3'>
@@ -224,7 +224,7 @@ export const ModelCard = memo(function ModelCard(props: ModelCardProps) {
           <button
             type='button'
             onClick={props.onClick}
-            className='text-muted-foreground hover:text-foreground hover:bg-muted inline-flex items-center gap-1 rounded-md border px-2 py-1 text-xs transition-colors sm:px-2.5 sm:py-1.5'
+            className='pricing-card-action text-muted-foreground hover:text-foreground hover:bg-muted inline-flex items-center gap-1 rounded-md border px-2 py-1 text-xs transition-colors sm:px-2.5 sm:py-1.5'
           >
             {t('Details')}
             <ChevronRight className='size-3.5' />
@@ -232,7 +232,8 @@ export const ModelCard = memo(function ModelCard(props: ModelCardProps) {
           <button
             type='button'
             onClick={handleCopy}
-            className='text-muted-foreground hover:text-foreground hover:bg-muted rounded-md border p-1.5 transition-colors'
+            aria-label={t('Copy')}
+            className='pricing-card-action text-muted-foreground hover:text-foreground hover:bg-muted rounded-md border p-1.5 transition-colors'
             title={t('Copy')}
           >
             <Copy className='size-3.5' />

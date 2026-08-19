@@ -100,10 +100,12 @@ function FilterChip(props: {
     <button
       type='button'
       onClick={props.onClick}
+      data-pricing-filter-chip='true'
+      data-active={props.active ? 'true' : 'false'}
       className={cn(
         'group inline-flex max-w-full items-center gap-1.5 rounded-md border px-2 py-1 text-xs font-medium transition-all',
         props.active
-          ? 'border-foreground/30 bg-foreground/5 text-foreground shadow-sm'
+          ? 'border-primary/30 bg-primary/10 text-primary shadow-sm'
           : 'border-border/70 bg-background text-muted-foreground hover:border-border hover:bg-muted/50 hover:text-foreground'
       )}
       title={props.option.label}
@@ -246,7 +248,13 @@ export function PricingSidebar(props: PricingSidebarProps) {
   ]
 
   return (
-    <aside className={cn('rounded-xl border p-3', props.className)}>
+    <aside
+      data-pricing-sidebar='true'
+      className={cn(
+        'pricing-filter-sidebar rounded-lg border p-3',
+        props.className
+      )}
+    >
       <div className='mb-2.5 flex items-center justify-between gap-2'>
         <div>
           <h2 className='text-foreground text-sm font-bold'>{t('Filter')}</h2>

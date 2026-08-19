@@ -36,8 +36,9 @@ import { useTranslation } from 'react-i18next'
 import { CopyButton } from '@/components/copy-button'
 import { StaticDataTable } from '@/components/data-table'
 import { sideDrawerContentClassName } from '@/components/drawer-layout'
+import { ErrorState } from '@/components/error-state'
 import { GroupBadge } from '@/components/group-badge'
-import { PublicLayout } from '@/components/layout'
+import { ProductBrandLogo, PublicLayout } from '@/components/layout'
 import { Button } from '@/components/ui/button'
 import {
   Sheet,
@@ -119,6 +120,49 @@ const TOKEN_FORMAT = new Intl.NumberFormat(undefined, {
   maximumFractionDigits: 1,
 })
 const MODEL_DETAILS_SKELETON_KEYS = ['first', 'second', 'third', 'fourth']
+
+function ModelDetailsRetryButton(props: {
+  isFetching: boolean
+  onRetry: () => unknown
+}) {
+  const { t } = useTranslation()
+
+  return (
+    <Button
+      variant='outline'
+      size='sm'
+      disabled={props.isFetching}
+      aria-busy={props.isFetching}
+      className='min-w-20'
+      onClick={() => void props.onRetry()}
+    >
+      {props.isFetching ? t('Loading...') : t('Retry')}
+    </Button>
+  )
+}
+
+function ModelDetailsRefreshNotice(props: {
+  isFetching: boolean
+  onRetry: () => unknown
+}) {
+  const { t } = useTranslation()
+
+  return (
+    <div
+      role='status'
+      aria-live='polite'
+      className='border-border bg-card/90 mb-5 flex items-center justify-between gap-3 rounded-lg border px-3 py-2 shadow-sm'
+    >
+      <span className='text-muted-foreground text-sm'>
+        {t('Refresh failed')}
+      </span>
+      <ModelDetailsRetryButton
+        isFetching={props.isFetching}
+        onRetry={props.onRetry}
+      />
+    </div>
+  )
+}
 
 function formatCatalogTokenCount(tokens: number): string {
   if (!Number.isFinite(tokens) || tokens <= 0) return ''
@@ -531,10 +575,10 @@ function ModelHeader(props: { model: PricingModel }) {
   const description = model.description || model.vendor_description || null
 
   return (
-    <header className='pb-4'>
-      <div className='flex items-center gap-2.5'>
+    <header className='min-w-0 pb-4'>
+      <div className='flex min-w-0 items-start gap-2.5'>
         {modelIcon}
-        <h1 className='font-mono text-xl font-bold tracking-tight sm:text-2xl'>
+        <h1 className='min-w-0 font-mono text-xl leading-tight font-bold tracking-tight break-words sm:text-2xl'>
           {model.model_name}
         </h1>
         <CopyButton
@@ -546,7 +590,7 @@ function ModelHeader(props: { model: PricingModel }) {
           aria-label={t('Copy model name')}
         />
       </div>
-      <div className='mt-1 flex flex-wrap items-center gap-1.5 text-xs'>
+      <div className='mt-1 flex min-w-0 flex-wrap items-center gap-1.5 text-xs'>
         {model.vendor_name && (
           <span className='text-muted-foreground'>{model.vendor_name}</span>
         )}
@@ -554,7 +598,7 @@ function ModelHeader(props: { model: PricingModel }) {
         <ModelBillingModeBadge model={model} />
       </div>
       {description && (
-        <p className='text-muted-foreground mt-2 text-sm leading-relaxed'>
+        <p className='text-muted-foreground mt-2 max-w-3xl text-sm leading-relaxed'>
           {description}
         </p>
       )}
@@ -975,7 +1019,7 @@ function GroupPricingSection(props: {
               new Map<DynamicPricingTier, Map<string, string>>()
 
             return (
-              <div key={group} className='overflow-hidden rounded-lg border'>
+              <div key={group} className='overflow-x-auto rounded-lg border'>
                 <div className='bg-muted/20 flex items-center justify-between gap-3 border-b px-3 py-2'>
                   <GroupBadge group={group} size='sm' />
                   <span className='text-muted-foreground font-mono text-xs'>
@@ -984,7 +1028,7 @@ function GroupPricingSection(props: {
                 </div>
                 <StaticDataTable
                   className='rounded-none border-0'
-                  tableClassName='text-sm'
+                  tableClassName='min-w-[32rem] text-sm'
                   headerRowClassName='hover:bg-transparent'
                   data={dynamicTiers}
                   getRowKey={(tier, tierIndex) =>
@@ -1047,8 +1091,8 @@ function GroupPricingSection(props: {
       <SectionTitle>{t('Pricing by Group')}</SectionTitle>
       <AutoGroupChain model={props.model} autoGroups={props.autoGroups} />
       <StaticDataTable
-        className='-mx-4 rounded-none border-0 sm:mx-0'
-        tableClassName='text-sm'
+        className='-mx-4 overflow-x-auto rounded-none border-0 sm:mx-0'
+        tableClassName='min-w-[34rem] text-sm'
         headerRowClassName='hover:bg-transparent'
         data={availableGroups}
         getRowKey={(group) => group}
@@ -1146,10 +1190,10 @@ export function ModelDetailsContent(props: ModelDetailsContentProps) {
     Boolean(props.model.billing_expr)
 
   return (
-    <div className='@container/details space-y-4'>
+    <div className='@container/details min-w-0 space-y-4'>
       <ModelHeader model={props.model} />
 
-      <Tabs defaultValue='overview' className='gap-4'>
+      <Tabs defaultValue='overview' className='min-w-0 gap-4'>
         <TabsList className='bg-muted/60 grid w-full grid-cols-3 gap-1 rounded-lg p-1 group-data-horizontal/tabs:h-auto'>
           {TAB_VALUES.map((value) => {
             const Icon = TAB_META[value].icon
@@ -1166,7 +1210,10 @@ export function ModelDetailsContent(props: ModelDetailsContentProps) {
           })}
         </TabsList>
 
-        <TabsContent value='overview' className='space-y-6 outline-none'>
+        <TabsContent
+          value='overview'
+          className='min-w-0 space-y-6 outline-none'
+        >
           <OverviewSummaryGrid model={props.model} />
 
           <section className='bg-card/60 space-y-5 rounded-xl border p-4 shadow-sm'>
@@ -1196,11 +1243,11 @@ export function ModelDetailsContent(props: ModelDetailsContentProps) {
           <ModelBackendDetailsSection model={props.model} />
         </TabsContent>
 
-        <TabsContent value='performance' className='outline-none'>
+        <TabsContent value='performance' className='min-w-0 outline-none'>
           <ModelDetailsPerformance model={props.model} />
         </TabsContent>
 
-        <TabsContent value='api' className='outline-none'>
+        <TabsContent value='api' className='min-w-0 outline-none'>
           <ModelDetailsApi
             model={props.model}
             endpointMap={props.endpointMap}
@@ -1228,15 +1275,18 @@ export function ModelDetailsDrawer(props: ModelDetailsDrawerProps) {
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
         side='right'
+        closeLabel={t('Close')}
+        data-zzapi-product='true'
+        data-product-surface='public'
         className={sideDrawerContentClassName(
-          'sm:max-w-2xl lg:max-w-3xl xl:max-w-4xl 2xl:max-w-5xl'
+          'pricing-model-details-sheet sm:max-w-2xl lg:max-w-3xl xl:max-w-4xl 2xl:max-w-5xl'
         )}
       >
         <SheetHeader className='sr-only'>
           <SheetTitle>{props.model.model_name}</SheetTitle>
           <SheetDescription>{t('Model details')}</SheetDescription>
         </SheetHeader>
-        <div className='flex-1 overflow-y-auto px-4 pt-11 pb-5 sm:px-6 sm:pt-12 sm:pb-6'>
+        <div className='min-w-0 flex-1 overflow-x-hidden overflow-y-auto px-4 pt-11 pb-5 sm:px-6 sm:pt-12 sm:pb-6'>
           <ModelDetailsContent {...contentProps} />
         </div>
       </SheetContent>
@@ -1256,10 +1306,16 @@ export function ModelDetails() {
     usableGroup,
     endpointMap,
     autoGroups,
+    hasResolvedData,
     isLoading,
+    isFetching,
+    error,
+    refetch,
     priceRate,
     usdExchangeRate,
   } = usePricingData()
+  const fatalError = Boolean(error) && !hasResolvedData
+  const backgroundError = Boolean(error) && hasResolvedData
 
   const tokenUnit: TokenUnit =
     search.tokenUnit === 'K' ? 'K' : DEFAULT_TOKEN_UNIT
@@ -1273,10 +1329,22 @@ export function ModelDetails() {
     navigate({ to: '/pricing', search })
   }
 
-  if (isLoading) {
+  if (isLoading && !fatalError) {
     return (
-      <PublicLayout>
-        <div className='mx-auto max-w-5xl px-4 sm:px-6'>
+      <PublicLayout
+        appearance='product'
+        showMainContainer={false}
+        logo={<ProductBrandLogo />}
+        siteName='zzapi'
+      >
+        <div
+          aria-busy='true'
+          className='pricing-model-details-page mx-auto w-full max-w-5xl px-4 py-8 sm:px-6 sm:py-10'
+        >
+          <h1 className='sr-only'>{modelId || t('Model details')}</h1>
+          <p role='status' className='sr-only'>
+            {t('Loading...')}
+          </p>
           <Skeleton className='mb-4 h-5 w-16' />
           <div className='space-y-2'>
             <Skeleton className='h-7 w-64' />
@@ -1298,13 +1366,55 @@ export function ModelDetails() {
     )
   }
 
+  if (fatalError) {
+    return (
+      <PublicLayout
+        appearance='product'
+        showMainContainer={false}
+        logo={<ProductBrandLogo />}
+        siteName='zzapi'
+      >
+        <div
+          aria-busy={isFetching}
+          className='pricing-model-details-page mx-auto w-full max-w-2xl px-4 py-16 sm:px-6 sm:py-20'
+        >
+          <h1 className='sr-only'>{t('Failed to load')}</h1>
+          <ErrorState
+            title={t('Failed to load')}
+            description={error instanceof Error ? error.message : undefined}
+            action={
+              <ModelDetailsRetryButton
+                isFetching={isFetching}
+                onRetry={refetch}
+              />
+            }
+          />
+        </div>
+      </PublicLayout>
+    )
+  }
+
   if (!model) {
     return (
-      <PublicLayout>
-        <div className='mx-auto max-w-2xl px-4 text-center sm:px-6'>
-          <h2 className='mb-1 text-base font-semibold'>
+      <PublicLayout
+        appearance='product'
+        showMainContainer={false}
+        logo={<ProductBrandLogo />}
+        siteName='zzapi'
+      >
+        <div
+          aria-busy={isFetching}
+          className='pricing-model-details-page mx-auto w-full max-w-2xl px-4 py-16 text-center sm:px-6 sm:py-20'
+        >
+          {backgroundError && (
+            <ModelDetailsRefreshNotice
+              isFetching={isFetching}
+              onRetry={refetch}
+            />
+          )}
+          <h1 className='mb-1 text-base font-semibold'>
             {t('Model not found')}
-          </h2>
+          </h1>
           <p className='text-muted-foreground mb-4 text-sm'>
             {t("The model you're looking for doesn't exist.")}
           </p>
@@ -1317,8 +1427,16 @@ export function ModelDetails() {
   }
 
   return (
-    <PublicLayout>
-      <div className='mx-auto max-w-5xl px-4 sm:px-6'>
+    <PublicLayout
+      appearance='product'
+      showMainContainer={false}
+      logo={<ProductBrandLogo />}
+      siteName='zzapi'
+    >
+      <div
+        aria-busy={isFetching}
+        className='pricing-model-details-page mx-auto w-full max-w-5xl px-4 py-8 sm:px-6 sm:py-10'
+      >
         <Button
           variant='ghost'
           size='sm'
@@ -1328,6 +1446,13 @@ export function ModelDetails() {
           <ArrowLeft className='size-3.5' />
           {t('Back')}
         </Button>
+
+        {backgroundError && (
+          <ModelDetailsRefreshNotice
+            isFetching={isFetching}
+            onRetry={refetch}
+          />
+        )}
 
         <ModelDetailsContent
           model={model}

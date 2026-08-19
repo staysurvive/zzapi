@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@quantumnous.com
 */
 import { useQuery } from '@tanstack/react-query'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import { useStatus } from '@/hooks/use-status'
 
@@ -26,11 +26,25 @@ import { getPricing } from '../api'
 export function usePricingData() {
   const { status } = useStatus()
 
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, isLoading, isFetching, error, refetch } = useQuery({
     queryKey: ['pricing'],
     queryFn: getPricing,
     staleTime: 5 * 60 * 1000,
   })
+  const [retainedError, setRetainedError] = useState<Error | null>(null)
+
+  useEffect(() => {
+    if (error) {
+      setRetainedError(error)
+      return
+    }
+
+    if (!isFetching) {
+      setRetainedError(null)
+    }
+  }, [error, isFetching])
+
+  const visibleError = error ?? (isFetching ? retainedError : null)
 
   // Ensure rates never reach zero to prevent division errors
   const priceRate = useMemo(
@@ -69,8 +83,10 @@ export function usePricingData() {
     usableGroup: data?.usable_group ?? {},
     endpointMap: data?.supported_endpoint ?? {},
     autoGroups: data?.auto_groups ?? [],
+    hasResolvedData: data != null,
     isLoading,
-    error,
+    isFetching,
+    error: visibleError,
     refetch,
     priceRate,
     usdExchangeRate,

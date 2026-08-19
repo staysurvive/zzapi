@@ -16,7 +16,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 For commercial licensing, please contact support@quantumnous.com
 */
-import { Search } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
@@ -32,8 +31,13 @@ export function EmptyState(props: EmptyStateProps) {
   const hasSearch = Boolean(props.searchQuery?.trim())
 
   return (
-    <div className='flex min-h-[320px] flex-col items-center justify-center rounded-lg border border-dashed px-6 py-12 text-center'>
-      <Search className='text-muted-foreground/40 mb-3 size-10' />
+    <div className='pricing-empty-state flex min-h-[320px] flex-col items-center justify-center rounded-lg border border-dashed px-6 py-12 text-center'>
+      <img
+        aria-hidden
+        src='/product-brand/model-empty-route-accent.png'
+        alt=''
+        className='mb-3 size-24 object-contain select-none'
+      />
 
       <h3 className='text-foreground mb-1 text-base font-semibold'>
         {t('No models found')}

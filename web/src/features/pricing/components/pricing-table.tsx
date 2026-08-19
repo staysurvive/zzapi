@@ -26,6 +26,7 @@ import {
   DataTableView,
   useDataTable,
 } from '@/components/data-table'
+import { cn } from '@/lib/utils'
 
 import { DEFAULT_PRICING_PAGE_SIZE, DEFAULT_TOKEN_UNIT } from '../constants'
 import type { PricingModel, TokenUnit } from '../types'
@@ -87,11 +88,30 @@ export function PricingTable(props: PricingTableProps) {
     [onModelClick]
   )
 
+  const handleRowKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLTableRowElement>, model: PricingModel) => {
+      if (event.currentTarget !== event.target) {
+        return
+      }
+
+      if (event.key !== 'Enter' && event.key !== ' ') {
+        return
+      }
+
+      event.preventDefault()
+      handleRowClick(model)
+    },
+    [handleRowClick]
+  )
+
   return (
-    <div className='space-y-4'>
+    <div data-pricing-table='true' className='space-y-4'>
       <DataTableView
         table={table}
         isLoading={isLoading}
+        containerClassName='pricing-table-surface'
+        tableContainerClassName='overflow-x-auto'
+        tableClassName='min-w-[880px]'
         emptyTitle={t('No Models Found')}
         emptyDescription={t('No models match your current filters.')}
         skeletonKeyPrefix='pricing-skeleton'
@@ -103,8 +123,25 @@ export function PricingTable(props: PricingTableProps) {
           <DataTableRow
             key={row.id}
             row={row}
-            className='hover:bg-muted/30 cursor-pointer transition-colors'
-            onClick={() => handleRowClick(row.original)}
+            tabIndex={onModelClick ? 0 : undefined}
+            aria-label={
+              onModelClick
+                ? `${t('View details')}: ${row.original.model_name}`
+                : undefined
+            }
+            className={cn(
+              'transition-colors',
+              onModelClick &&
+                'hover:bg-muted/30 focus-visible:ring-ring/40 cursor-pointer focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-inset'
+            )}
+            onClick={
+              onModelClick ? () => handleRowClick(row.original) : undefined
+            }
+            onKeyDown={
+              onModelClick
+                ? (event) => handleRowKeyDown(event, row.original)
+                : undefined
+            }
           />
         )}
       />

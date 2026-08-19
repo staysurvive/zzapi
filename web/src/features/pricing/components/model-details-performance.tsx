@@ -36,7 +36,7 @@ import {
 import type { PerformanceGroup } from '@/features/performance-metrics/types'
 import { cn } from '@/lib/utils'
 
-import { type UptimeDayPoint } from '../lib/mock-stats'
+import type { UptimeDayPoint } from '../lib/mock-stats'
 import type { PricingModel } from '../types'
 import { LatencyTrendChart, UptimeTrendChart } from './model-details-charts'
 import { UptimeSparkline } from './model-details-uptime-sparkline'
@@ -97,7 +97,7 @@ function toLatencySeries(groups: PerformanceGroup[]) {
     }
   }
 
-  return Array.from(byTs.entries())
+  return [...byTs.entries()]
     .sort(([a], [b]) => a - b)
     .map(([ts, values]) => ({
       timestamp: new Date(ts * 1000).toISOString(),
@@ -121,7 +121,7 @@ function toUptimeSeries(groups: PerformanceGroup[]): UptimeDayPoint[] {
       byTs.set(point.ts, current)
     }
   }
-  return Array.from(byTs.entries())
+  return [...byTs.entries()]
     .sort(([a], [b]) => a - b)
     .map(([ts, value]) => {
       const uptime =
@@ -255,8 +255,8 @@ export function ModelDetailsPerformance(props: { model: PricingModel }) {
           description={t('Average latency, TTFT, TPS, and success rate')}
         />
         <StaticDataTable
-          className='rounded-lg'
-          tableClassName='text-sm'
+          className='overflow-x-auto rounded-lg'
+          tableClassName='min-w-[46rem] text-sm'
           headerRowClassName={tableStyles.compactHeaderRow}
           data={performances}
           getRowKey={(perf) => perf.group}

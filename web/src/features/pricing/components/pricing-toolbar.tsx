@@ -104,6 +104,7 @@ function SegmentedControl(props: {
     <div
       role='group'
       aria-label={props.ariaLabel}
+      data-pricing-segmented='true'
       className='bg-muted/60 inline-flex h-8 items-center rounded-lg border p-0.5'
     >
       {props.options.map((option) => {
@@ -114,6 +115,7 @@ function SegmentedControl(props: {
             key={option.value}
             type='button'
             onClick={() => props.onChange(option.value)}
+            aria-label={option.label || option.tooltip}
             aria-pressed={isActive}
             className={cn(
               'inline-flex h-full items-center justify-center rounded-md text-xs font-medium transition-all',
@@ -134,7 +136,7 @@ function SegmentedControl(props: {
 
         return (
           <Tooltip key={option.value}>
-            <TooltipTrigger render={button}></TooltipTrigger>
+            <TooltipTrigger render={button} />
             <TooltipContent side='bottom' className='text-xs'>
               {option.tooltip}
             </TooltipContent>
@@ -166,8 +168,8 @@ export function PricingToolbar(props: PricingToolbarProps) {
   )
 
   return (
-    <div className='rounded-xl border p-3'>
-      <div className='flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between'>
+    <div data-pricing-toolbar='true' className='rounded-lg border p-3 sm:p-3.5'>
+      <div className='pricing-toolbar-top flex flex-col gap-3 md:flex-row md:items-center md:justify-between'>
         <div className='flex items-center gap-2'>
           <Button
             type='button'
@@ -198,8 +200,8 @@ export function PricingToolbar(props: PricingToolbarProps) {
           </div>
         </div>
 
-        <div className='flex flex-wrap items-center gap-2'>
-          <div className='hidden items-center gap-2 sm:flex'>
+        <div className='pricing-toolbar-controls flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-end'>
+          <div className='pricing-toolbar-display flex w-full items-center justify-between gap-2 border-t pt-3 sm:w-auto sm:border-t-0 sm:pt-0'>
             <SegmentedControl
               options={[
                 { value: 'standard', label: t('Standard') },
@@ -220,63 +222,72 @@ export function PricingToolbar(props: PricingToolbarProps) {
             />
           </div>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              render={
-                <Button
-                  type='button'
-                  variant='outline'
-                  size='sm'
-                  className='h-8 gap-1.5 px-3 text-xs'
-                />
-              }
-            >
-              <ArrowUpDown className='size-3.5' />
-              <span>{sortLabels[props.sortBy as SortOption] || t('Sort')}</span>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align='end' className='w-44'>
-              {Object.entries(sortLabels).map(([value, label]) => (
-                <DropdownMenuItem
-                  key={value}
-                  onClick={() => props.onSortChange(value)}
-                  className='gap-2'
-                >
-                  <Check
-                    className={cn(
-                      'size-4 shrink-0',
-                      props.sortBy === value ? 'opacity-100' : 'opacity-0'
-                    )}
+          <div className='flex items-center justify-end gap-2'>
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                render={
+                  <Button
+                    type='button'
+                    variant='outline'
+                    size='sm'
+                    className='h-8 gap-1.5 px-3 text-xs'
                   />
-                  {label}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+                }
+              >
+                <ArrowUpDown className='size-3.5' />
+                <span>
+                  {sortLabels[props.sortBy as SortOption] || t('Sort')}
+                </span>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align='end' className='w-44'>
+                {Object.entries(sortLabels).map(([value, label]) => (
+                  <DropdownMenuItem
+                    key={value}
+                    onClick={() => props.onSortChange(value)}
+                    className='gap-2'
+                  >
+                    <Check
+                      className={cn(
+                        'size-4 shrink-0',
+                        props.sortBy === value ? 'opacity-100' : 'opacity-0'
+                      )}
+                    />
+                    {label}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
 
-          <SegmentedControl
-            options={[
-              {
-                value: VIEW_MODES.CARD,
-                icon: Grid2X2,
-                tooltip: t('Card view'),
-              },
-              {
-                value: VIEW_MODES.TABLE,
-                icon: Table2,
-                tooltip: t('Table view'),
-              },
-            ]}
-            value={props.viewMode}
-            onChange={handleViewModeChange}
-            ariaLabel={t('View mode')}
-          />
+            <SegmentedControl
+              options={[
+                {
+                  value: VIEW_MODES.CARD,
+                  icon: Grid2X2,
+                  tooltip: t('Card view'),
+                },
+                {
+                  value: VIEW_MODES.TABLE,
+                  icon: Table2,
+                  tooltip: t('Table view'),
+                },
+              ]}
+              value={props.viewMode}
+              onChange={handleViewModeChange}
+              ariaLabel={t('View mode')}
+            />
+          </div>
         </div>
       </div>
 
       <Sheet open={mobileFiltersOpen} onOpenChange={setMobileFiltersOpen}>
         <SheetContent
           side='right'
-          className={sideDrawerContentClassName('sm:max-w-md')}
+          closeLabel={t('Close')}
+          data-zzapi-product='true'
+          data-product-surface='public'
+          className={sideDrawerContentClassName(
+            'pricing-filter-sheet sm:max-w-md'
+          )}
         >
           <SheetHeader className={sideDrawerHeaderClassName()}>
             <SheetTitle>{t('Filter')}</SheetTitle>
