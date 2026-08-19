@@ -17,35 +17,72 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@quantumnous.com
 */
 import { useQuery } from '@tanstack/react-query'
-import { Construction } from 'lucide-react'
+import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { PublicLayout } from '@/components/layout'
+import { ErrorState } from '@/components/error-state'
+import {
+  ProductBrandLogo,
+  ProductShell,
+  PublicLayout,
+} from '@/components/layout'
 import { RichContent } from '@/components/rich-content'
 import { Skeleton } from '@/components/ui/skeleton'
 import { isHttpUrl, isLikelyHtml } from '@/lib/content-format'
 
 import { getAboutContent } from './api'
 
+function AboutPublicLayout(props: { children: ReactNode }) {
+  return (
+    <PublicLayout showMainContainer={false}>
+      <ProductShell surface='public' className='about-page-shell'>
+        <main id='main-content' tabIndex={-1}>
+          {props.children}
+        </main>
+      </ProductShell>
+    </PublicLayout>
+  )
+}
+
 function EmptyAboutState() {
   const { t } = useTranslation()
   const currentYear = new Date().getFullYear()
 
   return (
-    <div className='flex min-h-[60vh] items-center justify-center p-8'>
-      <div className='max-w-2xl space-y-6 text-center'>
-        <div className='flex justify-center'>
-          <Construction className='text-muted-foreground h-24 w-24' />
+    <div className='about-page relative flex min-h-[60vh] items-center justify-center overflow-hidden px-4 py-12 sm:px-8'>
+      <img
+        aria-hidden
+        src='/product-brand/about-route-accent.png'
+        alt=''
+        className='about-route-accent pointer-events-none absolute top-1/2 right-[-3rem] hidden size-[22rem] -translate-y-1/2 select-none lg:block'
+      />
+      <div className='max-w-3xl space-y-7 text-center'>
+        <div className='mx-auto size-24 sm:size-28'>
+          <ProductBrandLogo />
         </div>
-        <div className='space-y-2'>
-          <h2 className='text-2xl font-bold'>{t('No About Content Set')}</h2>
-          <p className='text-muted-foreground'>
+        <div className='space-y-3'>
+          <p className='text-primary text-xs font-semibold'>zzapi</p>
+          <h1 className='text-3xl leading-tight font-semibold sm:text-4xl'>
+            {t('One API for')}{' '}
+            <span className='text-primary'>{t('Every Model')}</span>
+          </h1>
+          <p className='text-muted-foreground mx-auto max-w-2xl text-base leading-relaxed'>
             {t(
-              'The administrator has not configured any about content yet. You can set it in the settings page, supporting HTML or URL.'
+              'Unified access, intelligent routing, and usage control for production AI.'
             )}
           </p>
+          <p className='text-muted-foreground/75 mx-auto max-w-xl text-sm leading-relaxed'>
+            <span className='text-foreground block font-medium'>
+              {t('No About Content Set')}
+            </span>
+            <span className='mt-1 block'>
+              {t(
+                'The administrator has not configured any about content yet. You can set it in the settings page, supporting HTML or URL.'
+              )}
+            </span>
+          </p>
         </div>
-        <div className='space-y-4 text-sm'>
+        <div className='space-y-4 border-t pt-6 text-sm'>
           <p>
             {t('New API Project Repository:')}{' '}
             <a
@@ -114,7 +151,7 @@ function EmptyAboutState() {
 
 export function About() {
   const { t } = useTranslation()
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['about-content'],
     queryFn: getAboutContent,
   })
@@ -126,60 +163,73 @@ export function About() {
 
   if (isLoading) {
     return (
-      <PublicLayout>
-        <div className='mx-auto flex max-w-4xl flex-col gap-4 py-12'>
+      <AboutPublicLayout>
+        <div className='about-page mx-auto flex max-w-4xl flex-col gap-4 px-4 py-12 sm:px-6'>
           <Skeleton className='h-8 w-[45%]' />
           <Skeleton className='h-4 w-full' />
           <Skeleton className='h-4 w-[90%]' />
           <Skeleton className='h-4 w-[80%]' />
         </div>
-      </PublicLayout>
+      </AboutPublicLayout>
+    )
+  }
+
+  if (error) {
+    return (
+      <AboutPublicLayout>
+        <div className='about-page mx-auto max-w-4xl px-4 py-12 sm:px-6'>
+          <ErrorState
+            description={error instanceof Error ? error.message : undefined}
+            onRetry={() => void refetch()}
+          />
+        </div>
+      </AboutPublicLayout>
     )
   }
 
   if (!hasContent) {
     return (
-      <PublicLayout>
+      <AboutPublicLayout>
         <EmptyAboutState />
-      </PublicLayout>
+      </AboutPublicLayout>
     )
   }
 
   if (isUrl) {
     return (
-      <PublicLayout showMainContainer={false}>
+      <AboutPublicLayout>
         <iframe
           src={rawContent}
           className='h-[calc(100vh-3.5rem)] w-full border-0'
           title={t('About')}
           sandbox='allow-forms allow-popups allow-popups-to-escape-sandbox allow-scripts'
         />
-      </PublicLayout>
+      </AboutPublicLayout>
     )
   }
 
   if (contentIsHtml) {
     return (
-      <PublicLayout showMainContainer={false}>
+      <AboutPublicLayout>
         <RichContent
           mode='html'
           htmlVariant='isolated'
           content={rawContent}
-          className='prose-neutral dark:prose-invert max-w-none'
+          className='about-page prose-neutral dark:prose-invert max-w-none'
         />
-      </PublicLayout>
+      </AboutPublicLayout>
     )
   }
 
   return (
-    <PublicLayout>
-      <div className='mx-auto max-w-6xl px-4 py-8'>
+    <AboutPublicLayout>
+      <div className='about-page mx-auto max-w-6xl px-4 py-8 sm:px-6'>
         <RichContent
           mode='markdown'
           content={rawContent}
           className='prose-neutral dark:prose-invert max-w-none'
         />
       </div>
-    </PublicLayout>
+    </AboutPublicLayout>
   )
 }
