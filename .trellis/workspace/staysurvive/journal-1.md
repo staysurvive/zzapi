@@ -186,3 +186,26 @@ Synchronized the completed zzapi homepage work and project progress records into
 ### Status
 
 [OK] **Completed**
+
+
+## Session 8: Complete Homepage V5 QA and Hardening
+
+**Date**: 2026-08-21
+**Task**: Complete Homepage V5 QA and Hardening
+**Branch**: `main`
+
+### Summary
+
+Completed homepage V5 below-fold QA, hardened locale fallback and performance group visibility, preserved user language settings, synchronized English/Simplified Chinese translations, verified responsive tabs and archived the Trellis task.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `13e69269` | (see git log) |
+| `67acaa9f` | (see git log) |
+| `771513aa` | (see git log) |
+
+### Status
+
+[OK] **Completed**
