@@ -164,6 +164,29 @@ The authenticated theme drawer's DOM and computed surface were verified, but the
 
 final result: passed
 
+## Homepage V5 Below-Fold QA
+
+### Source And Implementation
+
+- Source visual truth: `.trellis/tasks/08-19-zzapi-homepage-v5-below-fold/research/concepts/signal-corridor-with-value-tabs-final.png`.
+- Implementation evidence: `.trellis/tasks/08-19-zzapi-homepage-v5-below-fold/research/evidence/implementation/`.
+- Runtime: frontend development server at `http://localhost:3001/`.
+- Viewports checked: `1440 x 900`, `1280 x 800`, `1024 x 768`, `768 x 1024`, and `390 x 844`; light and default-dark themes.
+
+### Findings And Verification
+
+- The frozen opening/Hero paths remain unchanged; below-fold order is Identity, Request Corridor, Current Catalog, Developer Integration, Value Tabs, CTA, then the existing footer.
+- Value Tabs use one active panel, manual activation, stable outer height, and no scroll-position change during activation. A live browser check at `390px` reported `scrollWidth === clientWidth`, one visible panel, and unchanged `scrollY` after keyboard activation.
+- The desktop and mobile captures show the active tab as the single large information object; inactive tabs remain compact and readable. No P0, P1, or P2 overlap, clipping, or horizontal overflow finding remains.
+- Data and unavailable states stay truthful when the development proxy has no backend: the UI shows a neutral unavailable state instead of fabricated catalog or performance values.
+- Focused V5/data/CSS tests: 37 passed. Typecheck, changed-file lint, format, copyright, and i18n synchronization passed; English and Simplified Chinese report zero missing or extra keys.
+
+### Residual Environment Note
+
+The local visual run without the backend produced expected proxy `504` errors and corresponding unavailable-state toasts. These are environment availability signals, not frontend runtime exceptions; the layout and fallback state remained stable. The six existing lifecycle/accessibility suites use Node's `node:test` runner rather than Vitest; they pass through Bun (`36` tests), while the focused V5 suites pass through Vitest.
+
+final result: passed
+
 ## Dark Palette Comfort QA — Wave 3 (Correct Development Runtime)
 
 ### Source And Implementation
