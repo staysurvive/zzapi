@@ -140,7 +140,7 @@ html.dark body:not([data-theme-preset]) .home-below-fold[data-home-v5] {
   margin: 0;
   color: var(--home-v5-text);
   font-size: 3.5rem;
-  font-weight: 560;
+  font-weight: 500;
   line-height: 1.08;
 }
 
@@ -575,6 +575,7 @@ html.dark body:not([data-theme-preset]) .home-below-fold[data-home-v5] {
   gap: 16px;
   width: 100%;
   min-height: 620px;
+  overflow-anchor: none;
 }
 
 .home-v5-values__list {
@@ -589,6 +590,9 @@ html.dark body:not([data-theme-preset]) .home-below-fold[data-home-v5] {
   border: 0;
   border-radius: 0;
   background: transparent;
+  align-self: start;
+  align-content: start;
+  overflow-anchor: none;
 }
 
 .home-v5-values__trigger {
@@ -606,16 +610,25 @@ html.dark body:not([data-theme-preset]) .home-below-fold[data-home-v5] {
   text-align: left;
   white-space: normal;
   transition:
-    flex-grow 280ms ease,
     border-color 180ms ease,
     background-color 180ms ease;
+  overflow-anchor: none;
 }
 
 .home-v5-values__trigger[data-active] {
-  flex: 1 1 auto;
   min-height: 280px;
   border-color: var(--home-v5-blue);
-  background: var(--home-v5-blue-soft);
+  background: color-mix(in srgb, var(--home-v5-blue) 4%, var(--home-v5-canvas));
+}
+
+.home-v5-values__trigger::after {
+  display: none;
+}
+
+.home-v5-values__trigger:focus-visible {
+  outline: 2px solid var(--home-v5-blue);
+  outline-offset: 3px;
+  box-shadow: none;
 }
 
 .home-v5-values__number {
@@ -928,7 +941,7 @@ html.dark body:not([data-theme-preset]) .home-below-fold[data-home-v5] {
 }
 
 .home-v5-cta__primary {
-  color: #ffffff;
+  color: var(--primary-foreground, #ffffff);
   background: var(--home-v5-blue);
 }
 

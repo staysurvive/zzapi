@@ -220,7 +220,11 @@ export function RuntimeSignalsPanel(props: ValuePanelProps) {
   return (
     <div className='home-v5-value-panel' data-panel='runtime'>
       <div className='home-v5-value-panel__header'>
-        <p>{t('Observed requests · last 24h')}</p>
+        <p>
+          {props.state === 'last-known'
+            ? t('Last known observations')
+            : t('Observed requests · last 24h')}
+        </p>
         <h3>{props.model.modelName}</h3>
       </div>
       <dl className='home-v5-value-panel__metrics'>

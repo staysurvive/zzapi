@@ -134,6 +134,7 @@ describe('homepage v5 catalog projection', () => {
     expect(projected[0]).toEqual({
       modelName: 'Alpha-model',
       catalogVendor: 'Catalog vendor',
+      endpointType: 'openai',
       endpointMethod: 'POST',
       endpointPath: '/v1/models/Alpha-model/responses',
       pricingMode: 'usage-based',
@@ -176,6 +177,7 @@ describe('homepage v5 catalog projection', () => {
         'catalogVendor',
         'endpointMethod',
         'endpointPath',
+        'endpointType',
         'groupRuleReported',
         'inputPricingReported',
         'modelName',

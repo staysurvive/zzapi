@@ -26,6 +26,7 @@ import { HomepageValueTabs } from '../homepage-value-tabs'
 const model: HomepageModelSignal = {
   modelName: 'alpha-model',
   catalogVendor: 'Example catalog',
+  endpointType: 'openai',
   endpointMethod: 'POST',
   endpointPath: '/v1/chat/completions',
   pricingMode: 'usage-based',

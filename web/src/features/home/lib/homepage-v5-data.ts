@@ -57,6 +57,7 @@ export type HomepageObservedMetrics = {
 export type HomepageModelSignal = {
   modelName: string
   catalogVendor: string | null
+  endpointType: string | null
   endpointMethod: string | null
   endpointPath: string | null
   pricingMode: HomepagePricingMode
@@ -80,6 +81,7 @@ export type HomepageDataStateInput = {
 }
 
 type EndpointInfo = {
+  type: string
   path: string | null
   method: string | null
 }
@@ -116,10 +118,10 @@ function getCatalogVendor(
   return readNonEmptyString(vendors.get(model.vendor_id)?.name)
 }
 
-function parseEndpointInfo(value: unknown): EndpointInfo | null {
+function parseEndpointInfo(type: string, value: unknown): EndpointInfo | null {
   if (typeof value === 'string') {
     const path = readNonEmptyString(value)
-    return path ? { path, method: null } : null
+    return path ? { type, path, method: null } : null
   }
 
   if (!value || typeof value !== 'object') return null
@@ -128,7 +130,7 @@ function parseEndpointInfo(value: unknown): EndpointInfo | null {
   if (!path) return null
 
   const method = readNonEmptyString(record.method)?.toUpperCase() ?? null
-  return { path, method }
+  return { type, path, method }
 }
 
 function getModelEndpoint(
@@ -137,14 +139,23 @@ function getModelEndpoint(
 ): EndpointInfo | null {
   if (!Array.isArray(model.supported_endpoint_types)) return null
 
-  for (const endpointType of model.supported_endpoint_types) {
+  const endpointTypes = [...model.supported_endpoint_types].sort(
+    (left, right) => {
+      if (left === 'openai') return -1
+      if (right === 'openai') return 1
+      return 0
+    }
+  )
+
+  for (const endpointType of endpointTypes) {
     const key = readNonEmptyString(endpointType)
     if (!key) continue
 
-    const endpoint = parseEndpointInfo(endpointMap[key])
+    const endpoint = parseEndpointInfo(key, endpointMap[key])
     if (!endpoint) continue
 
     return {
+      type: endpoint.type,
       method: endpoint.method,
       path: endpoint.path
         ? replaceModelInPath(endpoint.path, model.model_name.trim())
@@ -176,6 +187,7 @@ function projectModel(
   return {
     modelName,
     catalogVendor: getCatalogVendor(model, vendors),
+    endpointType: endpoint?.type ?? null,
     endpointMethod: endpoint?.method ?? null,
     endpointPath: endpoint?.path ?? null,
     pricingMode: getPricingMode(model),

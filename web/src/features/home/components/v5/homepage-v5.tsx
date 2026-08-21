@@ -61,13 +61,14 @@ export function HomepageV5(props: HomepageV5Props) {
       }
     }
     const motionQuery = window.matchMedia?.('(prefers-reduced-motion: reduce)')
-    if (motionQuery?.matches || typeof IntersectionObserver === 'undefined') {
+    const IntersectionObserverCtor = window.IntersectionObserver
+    if (motionQuery?.matches || !IntersectionObserverCtor) {
       revealAll()
       return
     }
 
     for (const stage of stages) stage.dataset.revealPending = 'true'
-    const observer = new IntersectionObserver(
+    const observer = new IntersectionObserverCtor(
       (entries) => {
         for (const entry of entries) {
           if (!entry.isIntersecting) continue
@@ -117,6 +118,7 @@ export function HomepageV5(props: HomepageV5Props) {
       <DeveloperIntegrationStage
         baseUrl={props.baseUrl}
         model={props.selectedModel}
+        state={props.pricingState}
       />
       <HomepageValueTabs
         pricingState={props.pricingState}

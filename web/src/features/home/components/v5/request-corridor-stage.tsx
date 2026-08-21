@@ -52,7 +52,7 @@ export function RequestCorridorStage(props: RequestCorridorStageProps) {
     {
       id: 'policy',
       title: t('Policy route'),
-      description: t('Priority and weight rules choose an available route.'),
+      description: t('The gateway resolves the requested model and route.'),
       icon: Route,
     },
     {

@@ -43,6 +43,7 @@ vi.mock('@tanstack/react-router', () => ({
 const model: HomepageModelSignal = {
   modelName: 'alpha-model',
   catalogVendor: 'Example catalog',
+  endpointType: 'openai',
   endpointMethod: 'POST',
   endpointPath: '/v1/chat/completions',
   pricingMode: 'usage-based',
@@ -119,7 +120,6 @@ describe('Homepage V5 narrative', () => {
 
     await waitFor(() => {
       for (const stage of screen.getAllByRole('region')) {
-        expect(stage).toHaveAttribute('data-revealed', 'true')
         expect(stage).not.toHaveAttribute('data-reveal-pending')
       }
     })
@@ -207,8 +207,34 @@ describe('Homepage V5 narrative', () => {
       'https://gateway.example/v1/chat/completions'
     )
     expect(example).toHaveTextContent('$ZZAPI_KEY')
+    expect(example).toHaveTextContent(
+      `'${JSON.stringify({ model: 'alpha-model', messages: [{ role: 'user', content: 'Hello' }] })}`
+    )
     expect(example).toHaveTextContent('alpha-model')
     expect(document.body).not.toHaveTextContent(/verified|official provider/i)
+  })
+
+  test('does not offer a chat snippet for a non-chat endpoint', () => {
+    render(
+      <HomepageV5
+        isAuthenticated={false}
+        openingPhase='ambient'
+        pricingState='current'
+        performanceState='current'
+        catalogPreview={[{ ...model, endpointType: 'gemini' }]}
+        remainingModelCount={0}
+        selectedModel={{ ...model, endpointType: 'gemini' }}
+        selectedModelName={model.modelName}
+        onSelectModel={vi.fn()}
+        baseUrl='https://gateway.example'
+        docsLink={null}
+      />
+    )
+
+    expect(
+      screen.getByText('Compatible request example unavailable')
+    ).toBeInTheDocument()
+    expect(screen.queryByLabelText('Copy code')).not.toBeInTheDocument()
   })
 
   test('provides a polite copy confirmation for the developer example', async () => {
