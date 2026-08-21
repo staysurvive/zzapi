@@ -27,15 +27,22 @@ const (
 )
 
 func normalizeLocale(locale string) (string, bool) {
- l := strings.ToLower(strings.ReplaceAll(strings.TrimSpace(locale), "_", "-"))
- switch {
- case l == "en" || strings.HasPrefix(l, "en-"):
-  return "en", true
- case l == "zh" || strings.HasPrefix(l, "zh-"):
-  return "zh", true
- default:
-  return "", false
- }
+	l := strings.ToLower(strings.ReplaceAll(strings.TrimSpace(locale), "_", "-"))
+	switch {
+	case l == "en" || strings.HasPrefix(l, "en-"):
+		return "en", true
+	case l == "zh" || l == "zhcn" || l == "zhtw" || strings.HasPrefix(l, "zh-"):
+		return "zh", true
+	default:
+		return "", false
+	}
+}
+
+func normalizeSyncLocale(locale string) string {
+	if normalized, ok := normalizeLocale(locale); ok {
+		return normalized
+	}
+	return "en"
 }
 
 func getUpstreamBase() string {
@@ -44,11 +51,9 @@ func getUpstreamBase() string {
 
 func getUpstreamURLs(locale string) (modelsURL, vendorsURL string) {
 	base := strings.TrimRight(getUpstreamBase(), "/")
-	if l, ok := normalizeLocale(locale); ok && l != "" {
-		return fmt.Sprintf("%s/api/i18n/%s/newapi/models.json", base, l),
-			fmt.Sprintf("%s/api/i18n/%s/newapi/vendors.json", base, l)
-	}
-	return fmt.Sprintf("%s/api/newapi/models.json", base), fmt.Sprintf("%s/api/newapi/vendors.json", base)
+	l := normalizeSyncLocale(locale)
+	return fmt.Sprintf("%s/api/i18n/%s/newapi/models.json", base, l),
+		fmt.Sprintf("%s/api/i18n/%s/newapi/vendors.json", base, l)
 }
 
 type upstreamEnvelope[T any] struct {
@@ -271,6 +276,7 @@ func SyncUpstreamModels(c *gin.Context) {
 	var req syncRequest
 	// 允许空体
 	_ = c.ShouldBindJSON(&req)
+	req.Locale = normalizeSyncLocale(req.Locale)
 	// 1) 获取未配置模型列表
 	missing, err := model.GetMissingModels()
 	if err != nil {
@@ -504,7 +510,7 @@ func SyncUpstreamPreview(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), time.Duration(timeoutSec)*time.Second)
 	defer cancel()
 
-	locale := c.Query("locale")
+	locale := normalizeSyncLocale(c.Query("locale"))
 	modelsURL, vendorsURL := getUpstreamURLs(locale)
 
 	var vendorsEnv upstreamEnvelope[upstreamVendor]

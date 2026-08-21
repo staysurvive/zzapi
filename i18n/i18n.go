@@ -205,11 +205,17 @@ func normalizeLang(lang string) string {
 	return normalized
 }
 
+// NormalizeLanguage converts persisted UI language settings into the two
+// supported backend locales. Legacy interface codes remain compatible.
+func NormalizeLanguage(lang string) string {
+	return normalizeLang(lang)
+}
+
 func matchSupportedLanguage(lang string) (string, bool) {
 	lang = strings.ToLower(strings.ReplaceAll(strings.TrimSpace(lang), "_", "-"))
 
 	switch {
-	case lang == "zh" || strings.HasPrefix(lang, "zh-"):
+	case lang == "zh" || lang == "zhcn" || lang == "zhtw" || strings.HasPrefix(lang, "zh-"):
 		return LangZhCN, true
 	case lang == "en" || strings.HasPrefix(lang, "en-"):
 		return LangEn, true

@@ -19,6 +19,7 @@ func TestIsSupported(t *testing.T) {
 	}{
 		{name: "simplified Chinese", language: "zh-CN", supported: true},
 		{name: "bare Chinese", language: "zh", supported: true},
+		{name: "frontend Chinese code", language: "zhCN", supported: true},
 		{name: "legacy Taiwan Chinese", language: "zh-TW", supported: true},
 		{name: "legacy traditional Chinese", language: "zh-Hant", supported: true},
 		{name: "legacy Hong Kong Chinese", language: "zh-HK", supported: true},
@@ -36,6 +37,13 @@ func TestIsSupported(t *testing.T) {
 			assert.Equal(t, tt.supported, IsSupported(tt.language))
 		})
 	}
+}
+
+func TestNormalizeLanguageSupportsPersistedFrontendCodes(t *testing.T) {
+	assert.Equal(t, LangZhCN, NormalizeLanguage("zhCN"))
+	assert.Equal(t, LangZhCN, NormalizeLanguage("zhTW"))
+	assert.Equal(t, LangZhCN, NormalizeLanguage("zh-Hant"))
+	assert.Equal(t, LangEn, NormalizeLanguage("fr"))
 }
 
 func TestParseAcceptLanguage(t *testing.T) {
@@ -70,6 +78,7 @@ func TestTranslateUsesTwoLanguageFallback(t *testing.T) {
 	assert.Equal(t, "无效的参数", Translate(LangZhCN, MsgInvalidParams))
 	assert.Equal(t, "无效的参数", Translate("zh-TW", MsgInvalidParams))
 	assert.Equal(t, "无效的参数", Translate("zh-Hant", MsgInvalidParams))
+	assert.Equal(t, "无效的参数", Translate("zhCN", MsgInvalidParams))
 	assert.Equal(t, "Invalid parameters", Translate(LangEn, MsgInvalidParams))
 	assert.Equal(t, "Invalid parameters", Translate("fr-FR", MsgInvalidParams))
 	assert.Equal(t, "missing.translation.key", Translate(LangZhCN, "missing.translation.key"))

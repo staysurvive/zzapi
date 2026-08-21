@@ -48,3 +48,22 @@ func TestNormalizeLocaleKeepsOnlyChineseAndEnglish(t *testing.T) {
 		})
 	}
 }
+
+func TestNormalizeSyncLocaleFallsBackToEnglish(t *testing.T) {
+	assert.Equal(t, "en", normalizeSyncLocale("ja"))
+	assert.Equal(t, "en", normalizeSyncLocale("fr-FR"))
+	assert.Equal(t, "en", normalizeSyncLocale(""))
+	assert.Equal(t, "zh", normalizeSyncLocale("zhCN"))
+}
+
+func TestGetUpstreamURLsUsesCanonicalLocalePath(t *testing.T) {
+	t.Setenv("SYNC_UPSTREAM_BASE", "https://metadata.example/base/")
+
+	modelsURL, vendorsURL := getUpstreamURLs("fr")
+	assert.Equal(t, "https://metadata.example/base/api/i18n/en/newapi/models.json", modelsURL)
+	assert.Equal(t, "https://metadata.example/base/api/i18n/en/newapi/vendors.json", vendorsURL)
+
+	modelsURL, vendorsURL = getUpstreamURLs("zh-TW")
+	assert.Equal(t, "https://metadata.example/base/api/i18n/zh/newapi/models.json", modelsURL)
+	assert.Equal(t, "https://metadata.example/base/api/i18n/zh/newapi/vendors.json", vendorsURL)
+}

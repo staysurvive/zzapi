@@ -827,7 +827,7 @@ func UpdateSelf(c *gin.Context) {
 
 		// 更新language字段
 		if langStr, ok := language.(string); ok {
-			currentSetting.Language = langStr
+			currentSetting.Language = i18n.NormalizeLanguage(langStr)
 		}
 
 		if err := model.UpdateUserSetting(user.Id, currentSetting); err != nil {
@@ -1495,6 +1495,7 @@ func UpdateUserSetting(c *gin.Context) {
 
 	// 构建设置
 	settings := dto.UserSetting{
+		Language:                         existingSettings.Language,
 		NotifyType:                       req.QuotaWarningType,
 		QuotaWarningThreshold:            req.QuotaWarningThreshold,
 		UpstreamModelUpdateNotifyEnabled: upstreamModelUpdateNotifyEnabled,
