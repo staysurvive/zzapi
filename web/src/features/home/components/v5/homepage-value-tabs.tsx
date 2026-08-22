@@ -2,9 +2,9 @@
 Copyright (C) 2023-2026 QuantumNous
 
 This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -23,44 +23,34 @@ import { useTranslation } from 'react-i18next'
 
 import { TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
-import type {
-  HomepageDataState,
-  HomepageModelSignal,
-} from '../../lib/homepage-v5-data'
 import { SignalSpine } from './signal-spine'
 import {
-  RoutingControlPanel,
-  RuntimeSignalsPanel,
-  UsageClarityPanel,
+  FlexibleUsagePanel,
+  RefundAssurancePanel,
+  StableAccessPanel,
 } from './value-tab-panels'
 
-interface HomepageValueTabsProps {
-  pricingState: HomepageDataState
-  performanceState: HomepageDataState
-  model: HomepageModelSignal | null
-}
-
-export function HomepageValueTabs(props: HomepageValueTabsProps) {
+export function HomepageValueTabs() {
   const { t } = useTranslation()
   const [activeTab, setActiveTab] = useState('usage')
   const tabs = [
     {
       value: 'usage',
       number: '01',
-      title: t('Usage clarity'),
-      description: t('A readable ledger for configured pricing.'),
+      title: t('Flexible usage billing'),
+      description: t('Pay for real usage with a clear, inspectable ledger.'),
     },
     {
-      value: 'routing',
+      value: 'access',
       number: '02',
-      title: t('Routing control'),
-      description: t('Priority, weight, and policy stay explicit.'),
+      title: t('Stable direct access'),
+      description: t('One compatible route to the latest models worldwide.'),
     },
     {
-      value: 'runtime',
+      value: 'refund',
       number: '03',
-      title: t('Runtime signals'),
-      description: t('Recent observations appear when samples exist.'),
+      title: t('Refund assurance'),
+      description: t('Unused valid balance follows a visible refund path.'),
     },
   ]
 
@@ -72,10 +62,12 @@ export function HomepageValueTabs(props: HomepageValueTabsProps) {
     >
       <SignalSpine branch='right' node='active' />
       <div className='home-v5-stage__intro home-v5-values__intro'>
-        <p className='home-v5-stage__eyebrow'>{t('After connection')}</p>
-        <h2 id='home-v5-values-title'>{t('Control after connection')}</h2>
+        <p className='home-v5-stage__eyebrow'>{t('Why zzapi')}</p>
+        <h2 id='home-v5-values-title'>{t('Built for steady model access')}</h2>
         <p className='home-v5-stage__description'>
-          {t('Routing is only useful when its decisions remain legible.')}
+          {t(
+            'Clear billing, direct access, and a visible service guarantee in one gateway.'
+          )}
         </p>
       </div>
 
@@ -92,7 +84,7 @@ export function HomepageValueTabs(props: HomepageValueTabsProps) {
           variant='line'
           activateOnFocus={false}
           loopFocus
-          aria-label={t('Gateway value views')}
+          aria-label={t('zzapi value views')}
         >
           {tabs.map((tab) => (
             <TabsTrigger
@@ -118,16 +110,13 @@ export function HomepageValueTabs(props: HomepageValueTabsProps) {
 
         <div className='home-v5-values__panels'>
           <TabsContent value='usage' className='home-v5-values__content'>
-            <UsageClarityPanel model={props.model} state={props.pricingState} />
+            <FlexibleUsagePanel />
           </TabsContent>
-          <TabsContent value='routing' className='home-v5-values__content'>
-            <RoutingControlPanel />
+          <TabsContent value='access' className='home-v5-values__content'>
+            <StableAccessPanel />
           </TabsContent>
-          <TabsContent value='runtime' className='home-v5-values__content'>
-            <RuntimeSignalsPanel
-              model={props.model}
-              state={props.performanceState}
-            />
+          <TabsContent value='refund' className='home-v5-values__content'>
+            <RefundAssurancePanel />
           </TabsContent>
         </div>
       </TabsPrimitive.Root>
