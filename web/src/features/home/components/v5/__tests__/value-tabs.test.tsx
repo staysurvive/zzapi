@@ -20,43 +20,21 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, test } from 'vitest'
 
-import type { HomepageModelSignal } from '../../../lib/homepage-v5-data'
 import { HomepageValueTabs } from '../homepage-value-tabs'
-
-const model: HomepageModelSignal = {
-  modelName: 'alpha-model',
-  catalogVendor: 'Example catalog',
-  endpointType: 'openai',
-  endpointMethod: 'POST',
-  endpointPath: '/v1/chat/completions',
-  pricingMode: 'usage-based',
-  cachePricingReported: true,
-  groupRuleReported: false,
-  inputPricingReported: true,
-  outputPricingReported: true,
-  traffic: 'observed',
-  observedMetrics: {
-    avgLatencyMs: 241,
-    successRate: 98.75,
-    avgTps: 32.5,
-  },
-}
 
 describe('Homepage V5 value tabs', () => {
   test('uses vertical manual activation and keeps a single selected panel', async () => {
     const user = userEvent.setup()
-    render(
-      <HomepageValueTabs
-        pricingState='current'
-        performanceState='current'
-        model={model}
-      />
-    )
+    render(<HomepageValueTabs />)
 
-    const tablist = screen.getByRole('tablist', { name: 'Gateway value views' })
-    const usage = screen.getByRole('tab', { name: /Usage clarity/i })
-    const routing = screen.getByRole('tab', { name: /Routing control/i })
-    const runtime = screen.getByRole('tab', { name: /Runtime signals/i })
+    const tablist = screen.getByRole('tablist', {
+      name: 'zzapi value views',
+    })
+    const usage = screen.getByRole('tab', {
+      name: /Flexible usage billing/i,
+    })
+    const access = screen.getByRole('tab', { name: /Stable direct access/i })
+    const refund = screen.getByRole('tab', { name: /Refund assurance/i })
 
     expect(tablist).toHaveAttribute('aria-orientation', 'vertical')
     expect(usage).toHaveAttribute('aria-selected', 'true')
@@ -64,19 +42,19 @@ describe('Homepage V5 value tabs', () => {
 
     usage.focus()
     await user.keyboard('{ArrowDown}')
-    expect(routing).toHaveFocus()
+    expect(access).toHaveFocus()
     expect(usage).toHaveAttribute('aria-selected', 'true')
-    expect(routing).toHaveAttribute('aria-selected', 'false')
+    expect(access).toHaveAttribute('aria-selected', 'false')
 
     await user.keyboard('{Enter}')
-    expect(routing).toHaveAttribute('aria-selected', 'true')
-    expect(screen.getByText('Policy remains explicit')).toBeInTheDocument()
+    expect(access).toHaveAttribute('aria-selected', 'true')
+    expect(screen.getByText('Stable access path')).toBeInTheDocument()
 
     await user.keyboard('{End}')
-    expect(runtime).toHaveFocus()
-    expect(routing).toHaveAttribute('aria-selected', 'true')
+    expect(refund).toHaveFocus()
+    expect(access).toHaveAttribute('aria-selected', 'true')
     await user.keyboard(' ')
-    expect(runtime).toHaveAttribute('aria-selected', 'true')
+    expect(refund).toHaveAttribute('aria-selected', 'true')
     expect(screen.getAllByRole('tabpanel')).toHaveLength(1)
 
     await user.keyboard('{Home}')
@@ -85,40 +63,31 @@ describe('Homepage V5 value tabs', () => {
     expect(usage).toHaveAttribute('aria-selected', 'true')
   })
 
-  test('reports recent metrics as observations rather than an SLA', async () => {
-    const user = userEvent.setup()
-    render(
-      <HomepageValueTabs
-        pricingState='current'
-        performanceState='current'
-        model={model}
-      />
-    )
+  test('renders the fixed usage demonstration values', () => {
+    render(<HomepageValueTabs />)
 
-    await user.click(screen.getByRole('tab', { name: /Runtime signals/i }))
     const panel = screen.getByRole('tabpanel')
-    expect(panel).toHaveTextContent('Observed requests · last 24h')
-    expect(panel).toHaveTextContent('241 ms')
-    expect(panel).toHaveTextContent('98.75%')
-    expect(panel).toHaveTextContent(
-      'Recent observations are not an uptime or SLA statement.'
-    )
+    expect(panel).toHaveTextContent('¥ 3.47')
+    expect(panel).toHaveTextContent('482K')
+    expect(panel).toHaveTextContent('1.2M')
+    expect(panel).toHaveTextContent('86K')
+    expect(
+      screen.getByRole('img', { name: 'Usage demo chart' })
+    ).toBeInTheDocument()
   })
 
-  test('renders no-sample copy without zero-value stand-ins', async () => {
+  test('switches between the stable route and refund assurance demonstrations', async () => {
     const user = userEvent.setup()
-    render(
-      <HomepageValueTabs
-        pricingState='current'
-        performanceState='empty'
-        model={{ ...model, traffic: 'no-recent-sample', observedMetrics: null }}
-      />
-    )
+    render(<HomepageValueTabs />)
 
-    await user.click(screen.getByRole('tab', { name: /Runtime signals/i }))
-    const panel = screen.getByRole('tabpanel')
-    expect(panel).toHaveTextContent('No recent sample')
-    expect(panel).not.toHaveTextContent('0 ms')
-    expect(panel).not.toHaveTextContent('0%')
+    await user.click(screen.getByRole('tab', { name: /Stable direct access/i }))
+    expect(screen.getByRole('tabpanel')).toHaveTextContent('24ms')
+    expect(screen.getByRole('tabpanel')).toHaveTextContent('Latest models')
+
+    await user.click(screen.getByRole('tab', { name: /Refund assurance/i }))
+    const refundPanel = screen.getByRole('tabpanel')
+    expect(refundPanel).toHaveTextContent('Balance confirmed')
+    expect(refundPanel).toHaveTextContent('Original route returned')
+    expect(refundPanel).toHaveTextContent('Refund received')
   })
 })

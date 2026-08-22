@@ -16,9 +16,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 For commercial licensing, please contact support@quantumnous.com
 */
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { act, renderHook, waitFor } from '@testing-library/react'
-import { createElement, type ReactNode } from 'react'
+import { act, renderHook } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import type { PerfSummaryAllData } from '@/features/performance-metrics/types'
@@ -79,21 +77,6 @@ function makePerformanceData(
   models: PerfSummaryAllData['data']['models']
 ): PerfSummaryAllData {
   return { success: true, data: { models } }
-}
-
-function createQueryWrapper() {
-  const queryClient = new QueryClient({
-    defaultOptions: { queries: { retry: false } },
-  })
-  return {
-    queryClient,
-    wrapper: (props: { children: ReactNode }) =>
-      createElement(
-        QueryClientProvider,
-        { client: queryClient },
-        props.children
-      ),
-  }
 }
 
 describe('homepage v5 catalog projection', () => {
@@ -335,7 +318,7 @@ describe('homepage v5 public links', () => {
   })
 })
 
-describe('useHomepageV5Data request gates', () => {
+describe('useHomepageV5Data demo data', () => {
   beforeEach(() => {
     apiGetMock.mockReset()
     statusState.status = {
@@ -351,230 +334,51 @@ describe('useHomepageV5Data request gates', () => {
   })
 
   it('does not request live data before the opening becomes ambient', () => {
-    const { queryClient, wrapper } = createQueryWrapper()
-    const view = renderHook(
-      () =>
-        useHomepageV5Data({
-          isAuthenticated: false,
-          openingPhase: 'settle',
-        }),
-      { wrapper }
+    const view = renderHook(() =>
+      useHomepageV5Data({
+        isAuthenticated: false,
+        openingPhase: 'settle',
+      })
     )
 
     expect(view.result.current.pricingState).toBe('loading')
     expect(view.result.current.performanceState).toBe('loading')
     expect(view.result.current.models).toEqual([])
     expect(apiGetMock).not.toHaveBeenCalled()
-    queryClient.clear()
   })
 
-  it.each([
-    ['disabled', { enabled: false, requireAuth: false }, false, 'disabled'],
-    [
-      'authentication-required',
-      { enabled: true, requireAuth: true },
-      false,
-      'auth-required',
-    ],
-  ] as const)(
-    'does not request data when pricing is %s',
-    (_label, pricingAccess, isAuthenticated, expectedState) => {
-      statusState.status = {
-        HeaderNavModules: { pricing: pricingAccess },
-      }
-      const { queryClient, wrapper } = createQueryWrapper()
-      const view = renderHook(
-        () =>
-          useHomepageV5Data({
-            isAuthenticated,
-            openingPhase: 'ambient',
-          }),
-        { wrapper }
-      )
-
-      expect(view.result.current.pricingState).toBe(expectedState)
-      expect(view.result.current.performanceState).toBe(expectedState)
-      expect(view.result.current.models).toEqual([])
-      expect(apiGetMock).not.toHaveBeenCalled()
-      queryClient.clear()
-    }
-  )
-
-  it('loads pricing and performance silently and keeps their failures independent', async () => {
-    const pricing = makePricingData([
-      makeModel('zeta'),
-      makeModel('alpha'),
-      makeModel('beta'),
-      makeModel('delta'),
-    ])
-    apiGetMock.mockImplementation((url: string) => {
-      if (url === '/api/pricing') return Promise.resolve({ data: pricing })
-      return Promise.reject(new Error('Performance unavailable'))
-    })
-    const { queryClient, wrapper } = createQueryWrapper()
-    const view = renderHook(
-      () =>
-        useHomepageV5Data({
-          isAuthenticated: false,
-          openingPhase: 'ambient',
-        }),
-      { wrapper }
+  it('returns the fixed demo catalog without requesting backend data', () => {
+    const view = renderHook(() =>
+      useHomepageV5Data({
+        isAuthenticated: false,
+        openingPhase: 'ambient',
+      })
     )
 
-    await waitFor(() => {
-      expect(view.result.current.pricingState).toBe('current')
-      expect(view.result.current.performanceState).toBe('error')
-    })
-
+    expect(view.result.current.pricingState).toBe('demo')
+    expect(view.result.current.performanceState).toBe('demo')
     expect(view.result.current.models.map((model) => model.modelName)).toEqual([
-      'alpha',
-      'beta',
-      'delta',
-      'zeta',
+      'claude-fable-5',
+      'claude-opus-5',
+      'gpt-5.6-sol',
+      'gpt-5.6-terra',
+      'grok-4.6',
     ])
-    expect(view.result.current.catalogPreview).toHaveLength(3)
-    expect(view.result.current.remainingModelCount).toBe(1)
-    expect(view.result.current.selectedModelName).toBe('alpha')
-    expect(view.result.current.selectedModel?.traffic).toBe('unavailable')
+    expect(view.result.current.catalogPreview).toHaveLength(5)
+    expect(view.result.current.remainingModelCount).toBe(0)
+    expect(view.result.current.selectedModelName).toBe('claude-fable-5')
+    expect(view.result.current.selectedModel?.observedMetrics).toEqual({
+      avgLatencyMs: 184,
+      successRate: 99.2,
+      avgTps: 48.4,
+    })
     expect(view.result.current.baseUrl).toBe('https://api.example.com')
     expect(view.result.current.docsLink).toBe('/docs')
 
-    act(() => view.result.current.onSelectModel('delta'))
-    expect(view.result.current.selectedModelName).toBe('delta')
+    act(() => view.result.current.onSelectModel('grok-4.6'))
+    expect(view.result.current.selectedModelName).toBe('grok-4.6')
     act(() => view.result.current.onSelectModel('not-in-catalog'))
-    expect(view.result.current.selectedModelName).toBe('delta')
-
-    expect(apiGetMock).toHaveBeenCalledWith('/api/pricing', {
-      skipAuthRefresh: true,
-      skipBusinessError: true,
-      skipErrorHandler: true,
-    })
-    expect(apiGetMock).toHaveBeenCalledWith('/api/perf-metrics/summary', {
-      skipAuthRefresh: true,
-      skipBusinessError: true,
-      skipErrorHandler: true,
-      params: { hours: 24 },
-    })
-    queryClient.clear()
-  })
-
-  it('allows an authenticated visitor through an auth-required module gate', async () => {
-    statusState.status = {
-      HeaderNavModules: {
-        pricing: { enabled: true, requireAuth: true },
-      },
-    }
-    apiGetMock.mockImplementation((url: string) =>
-      Promise.resolve({
-        data:
-          url === '/api/pricing'
-            ? makePricingData([makeModel('authenticated-model')])
-            : makePerformanceData([]),
-      })
-    )
-    const { queryClient, wrapper } = createQueryWrapper()
-    const view = renderHook(
-      () =>
-        useHomepageV5Data({
-          isAuthenticated: true,
-          openingPhase: 'ambient',
-        }),
-      { wrapper }
-    )
-
-    await waitFor(() => {
-      expect(view.result.current.pricingState).toBe('current')
-      expect(view.result.current.performanceState).toBe('empty')
-    })
-    expect(view.result.current.selectedModel).toMatchObject({
-      modelName: 'authenticated-model',
-      traffic: 'no-recent-sample',
-    })
-    expect(apiGetMock).toHaveBeenCalledTimes(2)
-    queryClient.clear()
-  })
-
-  it('retains a last-known catalog when a background refresh fails', async () => {
-    let pricingAttempt = 0
-    apiGetMock.mockImplementation((url: string) => {
-      if (url === '/api/pricing') {
-        pricingAttempt += 1
-        if (pricingAttempt > 1) {
-          return Promise.reject(new Error('Catalog refresh unavailable'))
-        }
-        return Promise.resolve({
-          data: makePricingData([makeModel('cached-model')]),
-        })
-      }
-      return Promise.resolve({ data: makePerformanceData([]) })
-    })
-    const { queryClient, wrapper } = createQueryWrapper()
-    const view = renderHook(
-      () =>
-        useHomepageV5Data({
-          isAuthenticated: false,
-          openingPhase: 'ambient',
-        }),
-      { wrapper }
-    )
-
-    await waitFor(() =>
-      expect(view.result.current.pricingState).toBe('current')
-    )
-    await act(async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ['homepage-v5', 'pricing'],
-      })
-    })
-
-    await waitFor(() =>
-      expect(view.result.current.pricingState).toBe('last-known')
-    )
-    expect(view.result.current.selectedModelName).toBe('cached-model')
-    queryClient.clear()
-  })
-
-  it('exposes current observations only after both queries resolve', async () => {
-    apiGetMock.mockImplementation((url: string) => {
-      if (url === '/api/pricing') {
-        return Promise.resolve({
-          data: makePricingData([makeModel('observed-model')]),
-        })
-      }
-      return Promise.resolve({
-        data: makePerformanceData([
-          {
-            model_name: 'observed-model',
-            avg_latency_ms: 410,
-            success_rate: 98.5,
-            avg_tps: 36,
-            request_count: 900,
-          },
-        ]),
-      })
-    })
-    const { queryClient, wrapper } = createQueryWrapper()
-    const view = renderHook(
-      () =>
-        useHomepageV5Data({
-          isAuthenticated: false,
-          openingPhase: 'ambient',
-        }),
-      { wrapper }
-    )
-
-    await waitFor(() => {
-      expect(view.result.current.performanceState).toBe('current')
-      expect(view.result.current.selectedModel?.traffic).toBe('observed')
-    })
-    expect(view.result.current.selectedModel?.observedMetrics).toEqual({
-      avgLatencyMs: 410,
-      successRate: 98.5,
-      avgTps: 36,
-    })
-    expect(JSON.stringify(view.result.current.models)).not.toContain(
-      'request_count'
-    )
-    queryClient.clear()
+    expect(view.result.current.selectedModelName).toBe('grok-4.6')
+    expect(apiGetMock).not.toHaveBeenCalled()
   })
 })

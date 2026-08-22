@@ -68,7 +68,7 @@ const alternateModel: HomepageModelSignal = {
 }
 
 describe('Homepage V5 narrative', () => {
-  test('keeps the six product stages in the selected narrative order', () => {
+  test('keeps the five product stages in the selected narrative order', () => {
     render(
       <HomepageV5
         isAuthenticated={false}
@@ -89,16 +89,47 @@ describe('Homepage V5 narrative', () => {
       .getAllByRole('region')
       .map((stage) => stage.getAttribute('data-home-v5-stage'))
     expect(stages).toEqual([
-      'identity',
       'request-corridor',
       'catalog',
-      'developer-integration',
       'value-tabs',
+      'developer-integration',
       'cta',
     ])
     expect(
       document.querySelector('[data-motion-ready="true"]')
     ).toBeInTheDocument()
+  })
+
+  test('keeps the catalog on one local connector instead of layering global branches', () => {
+    render(
+      <HomepageV5
+        isAuthenticated={false}
+        openingPhase='ambient'
+        pricingState='current'
+        performanceState='current'
+        catalogPreview={[model, alternateModel]}
+        remainingModelCount={0}
+        selectedModel={model}
+        selectedModelName={model.modelName}
+        onSelectModel={vi.fn()}
+        baseUrl='<YOUR_BASE_URL>'
+        docsLink={null}
+      />
+    )
+
+    const catalog = document.querySelector('[data-home-v5-stage="catalog"]')
+    const spine = catalog?.querySelector('.home-v5-signal-spine')
+    expect(spine).toHaveAttribute('data-branch', 'none')
+    expect(spine).toHaveAttribute('data-node', 'quiet')
+    const catalogModels = catalog?.querySelectorAll<HTMLElement>(
+      '.home-v5-catalog__model'
+    )
+    const origins = catalog?.querySelectorAll<HTMLElement>(
+      '.home-v5-catalog__origin'
+    )
+    expect(origins).toHaveLength(1)
+    expect(catalogModels?.[0]).toContainElement(origins?.[0] ?? null)
+    expect(catalog?.querySelectorAll('.home-v5-catalog__route')).toHaveLength(2)
   })
 
   test('keeps every stage visible when IntersectionObserver is unavailable', async () => {
@@ -185,6 +216,29 @@ describe('Homepage V5 narrative', () => {
     expect(onSelectModel).toHaveBeenCalledWith('beta-model')
   })
 
+  test('labels fixed model data as a demonstration', async () => {
+    const user = userEvent.setup()
+    render(
+      <HomepageV5
+        isAuthenticated={false}
+        openingPhase='ambient'
+        pricingState='demo'
+        performanceState='demo'
+        catalogPreview={[model]}
+        remainingModelCount={0}
+        selectedModel={model}
+        selectedModelName={model.modelName}
+        onSelectModel={vi.fn()}
+        baseUrl='https://gateway.example'
+        docsLink={null}
+      />
+    )
+
+    expect(screen.getByText('Demo catalog')).toBeInTheDocument()
+    await user.click(screen.getByRole('tab', { name: /Stable direct access/i }))
+    expect(screen.getByText('Stable access path')).toBeInTheDocument()
+  })
+
   test('builds the developer example from the real endpoint and placeholders', () => {
     render(
       <HomepageV5
@@ -202,7 +256,7 @@ describe('Homepage V5 narrative', () => {
       />
     )
 
-    const example = screen.getByLabelText('OpenAI-compatible cURL example')
+    const example = screen.getByLabelText('cURL example')
     expect(example).toHaveTextContent(
       'https://gateway.example/v1/chat/completions'
     )
@@ -211,7 +265,74 @@ describe('Homepage V5 narrative', () => {
       `'${JSON.stringify({ model: 'alpha-model', messages: [{ role: 'user', content: 'Hello' }] })}`
     )
     expect(example).toHaveTextContent('alpha-model')
+    expect(screen.getByRole('tab', { name: 'cURL' })).toHaveAttribute(
+      'aria-selected',
+      'true'
+    )
     expect(document.body).not.toHaveTextContent(/verified|official provider/i)
+  })
+
+  test('switches the developer example without changing its request contract', async () => {
+    const user = userEvent.setup()
+    render(
+      <HomepageV5
+        isAuthenticated={false}
+        openingPhase='ambient'
+        pricingState='current'
+        performanceState='current'
+        catalogPreview={[model]}
+        remainingModelCount={0}
+        selectedModel={model}
+        selectedModelName={model.modelName}
+        onSelectModel={vi.fn()}
+        baseUrl='https://gateway.example'
+        docsLink={null}
+      />
+    )
+
+    await user.click(screen.getByRole('tab', { name: 'Python' }))
+    const pythonExample = screen.getByLabelText('Python example')
+    expect(pythonExample).toHaveTextContent('os.environ["ZZAPI_KEY"]')
+    expect(pythonExample).toHaveTextContent('requests.post')
+    expect(pythonExample).toHaveTextContent('alpha-model')
+
+    await user.click(screen.getByRole('tab', { name: 'Node.js' }))
+    const nodeExample = screen.getByLabelText('Node.js example')
+    expect(nodeExample).toHaveTextContent('fetch')
+    expect(nodeExample).toHaveTextContent('/v1/chat/completions')
+  })
+
+  test('supports arrow and boundary keyboard navigation between code languages', async () => {
+    const user = userEvent.setup()
+    render(
+      <HomepageV5
+        isAuthenticated={false}
+        openingPhase='ambient'
+        pricingState='current'
+        performanceState='current'
+        catalogPreview={[model]}
+        remainingModelCount={0}
+        selectedModel={model}
+        selectedModelName={model.modelName}
+        onSelectModel={vi.fn()}
+        baseUrl='https://gateway.example'
+        docsLink={null}
+      />
+    )
+
+    const curlTab = screen.getByRole('tab', { name: 'cURL' })
+    const nodeTab = screen.getByRole('tab', { name: 'Node.js' })
+    curlTab.focus()
+    await user.keyboard('{ArrowLeft}')
+    expect(nodeTab).toHaveFocus()
+    expect(nodeTab).toHaveAttribute('aria-selected', 'true')
+
+    await user.keyboard('{Home}')
+    expect(curlTab).toHaveFocus()
+    expect(screen.getByRole('tabpanel', { name: 'cURL' })).toHaveAttribute(
+      'aria-labelledby',
+      curlTab.id
+    )
   })
 
   test('does not offer a chat snippet for a non-chat endpoint', () => {
@@ -291,11 +412,11 @@ describe('Homepage V5 narrative', () => {
       />
     )
 
-    expect(
-      screen.getAllByText('Catalog not currently published').length
-    ).toBeGreaterThanOrEqual(2)
-    await user.click(screen.getByRole('tab', { name: /Runtime signals/i }))
-    expect(screen.getByText('No recent sample')).toBeInTheDocument()
-    expect(document.body).not.toHaveTextContent(/99\.99|100%|million/i)
+    expect(screen.getAllByText('Catalog not currently published')).toHaveLength(
+      2
+    )
+    await user.click(screen.getByRole('tab', { name: /Refund assurance/i }))
+    expect(screen.getByText('Refund received')).toBeInTheDocument()
+    expect(document.body).not.toHaveTextContent(/99\.99|100%/i)
   })
 })
