@@ -41,6 +41,8 @@ export function ModelCatalogStage(props: ModelCatalogStageProps) {
     catalogStateLabel = t('Last known catalog')
   } else if (props.state === 'current') {
     catalogStateLabel = t('Current catalog')
+  } else if (props.state === 'demo') {
+    catalogStateLabel = t('Demo catalog')
   }
 
   return (
@@ -51,7 +53,7 @@ export function ModelCatalogStage(props: ModelCatalogStageProps) {
       aria-labelledby='home-v5-catalog-title'
       aria-busy={props.state === 'loading'}
     >
-      <SignalSpine branch='right' node='active' />
+      <SignalSpine branch='none' node='quiet' />
       <div className='home-v5-stage__intro'>
         <p className='home-v5-stage__eyebrow'>
           {t('Capability infrastructure')}
@@ -59,55 +61,57 @@ export function ModelCatalogStage(props: ModelCatalogStageProps) {
         <span className='home-v5-stage__state' data-state={props.state}>
           {catalogStateLabel}
         </span>
-        <h2 id='home-v5-catalog-title'>{t('Current model catalog')}</h2>
+        <h2 id='home-v5-catalog-title'>{t('Models, connected and ready')}</h2>
         <p className='home-v5-stage__description'>
-          {t('Choose a published model without changing the integration path.')}
+          {t(
+            'Stable access to the latest models worldwide, through one compatible route.'
+          )}
         </p>
       </div>
 
       <div className='home-v5-catalog__network'>
         {props.models.length > 0 ? (
-          <>
-            <span aria-hidden='true' className='home-v5-catalog__origin' />
-            <div className='home-v5-catalog__models'>
-              {props.models.map((model) => {
-                const selected = model.modelName === props.selectedModelName
-                return (
-                  <button
-                    key={model.modelName}
-                    type='button'
-                    className='home-v5-catalog__model'
-                    aria-pressed={selected}
-                    data-selected={selected ? 'true' : 'false'}
-                    onClick={() => props.onSelectModel(model.modelName)}
-                  >
+          <div className='home-v5-catalog__models'>
+            {props.models.map((model, modelIndex) => {
+              const selected = model.modelName === props.selectedModelName
+              return (
+                <button
+                  key={model.modelName}
+                  type='button'
+                  className='home-v5-catalog__model'
+                  aria-pressed={selected}
+                  data-selected={selected ? 'true' : 'false'}
+                  onClick={() => props.onSelectModel(model.modelName)}
+                >
+                  {modelIndex === 0 ? (
                     <span
                       aria-hidden='true'
-                      className='home-v5-catalog__route'
+                      className='home-v5-catalog__origin'
                     />
-                    <Box aria-hidden='true' />
-                    <span className='home-v5-catalog__model-copy'>
-                      <strong>{model.modelName}</strong>
-                      <span>
-                        {model.catalogVendor
-                          ? t('Catalog metadata: {{vendor}}', {
-                              vendor: model.catalogVendor,
-                            })
-                          : t('Catalog metadata not reported')}
-                      </span>
+                  ) : null}
+                  <span aria-hidden='true' className='home-v5-catalog__route' />
+                  <Box aria-hidden='true' />
+                  <span className='home-v5-catalog__model-copy'>
+                    <strong>{model.modelName}</strong>
+                    <span>
+                      {model.catalogVendor
+                        ? t('Catalog metadata: {{vendor}}', {
+                            vendor: model.catalogVendor,
+                          })
+                        : t('Catalog metadata not reported')}
                     </span>
-                  </button>
-                )
-              })}
-              {props.remainingModelCount > 0 ? (
-                <p className='home-v5-catalog__remaining'>
-                  {t('+{{count}} current models', {
-                    count: props.remainingModelCount,
-                  })}
-                </p>
-              ) : null}
-            </div>
-          </>
+                  </span>
+                </button>
+              )
+            })}
+            {props.remainingModelCount > 0 ? (
+              <p className='home-v5-catalog__remaining'>
+                {t('+{{count}} current models', {
+                  count: props.remainingModelCount,
+                })}
+              </p>
+            ) : null}
+          </div>
         ) : (
           <StageState state={props.state} />
         )}

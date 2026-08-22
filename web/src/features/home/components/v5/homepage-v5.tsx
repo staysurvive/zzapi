@@ -27,7 +27,6 @@ import { DeveloperIntegrationStage } from './developer-integration-stage'
 import { HomepageV5Cta } from './homepage-v5-cta'
 import { HomepageValueTabs } from './homepage-value-tabs'
 import { ModelCatalogStage } from './model-catalog-stage'
-import { ModelIdentityStage } from './model-identity-stage'
 import { RequestCorridorStage } from './request-corridor-stage'
 
 export interface HomepageV5Props {
@@ -103,10 +102,6 @@ export function HomepageV5(props: HomepageV5Props) {
       data-opening-phase={props.openingPhase}
       data-motion-ready={props.openingPhase === 'ambient' ? 'true' : 'false'}
     >
-      <ModelIdentityStage
-        state={props.pricingState}
-        model={props.selectedModel}
-      />
       <RequestCorridorStage model={props.selectedModel} />
       <ModelCatalogStage
         state={props.pricingState}
@@ -115,15 +110,11 @@ export function HomepageV5(props: HomepageV5Props) {
         selectedModelName={props.selectedModelName}
         onSelectModel={props.onSelectModel}
       />
+      <HomepageValueTabs />
       <DeveloperIntegrationStage
         baseUrl={props.baseUrl}
         model={props.selectedModel}
         state={props.pricingState}
-      />
-      <HomepageValueTabs
-        pricingState={props.pricingState}
-        performanceState={props.performanceState}
-        model={props.selectedModel}
       />
       <HomepageV5Cta
         isAuthenticated={props.isAuthenticated}

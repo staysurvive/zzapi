@@ -27,6 +27,7 @@ import { isHttpUrl, isSafeInternalUrl } from '@/lib/content-format'
 
 export type HomepageDataState =
   | 'loading'
+  | 'demo'
   | 'current'
   | 'last-known'
   | 'empty'
@@ -68,6 +69,104 @@ export type HomepageModelSignal = {
   traffic: HomepageTrafficState
   observedMetrics: HomepageObservedMetrics | null
 }
+
+/**
+ * The below-fold narrative is a product demonstration, not a live catalog.
+ * Keep the sample stable so the public homepage remains useful without an
+ * authenticated backend or configured model data.
+ */
+export const HOMEPAGE_DEMO_MODELS: HomepageModelSignal[] = [
+  {
+    modelName: 'claude-fable-5',
+    catalogVendor: 'Anthropic',
+    endpointType: 'openai',
+    endpointMethod: 'POST',
+    endpointPath: '/v1/chat/completions',
+    pricingMode: 'usage-based',
+    cachePricingReported: true,
+    groupRuleReported: true,
+    inputPricingReported: true,
+    outputPricingReported: true,
+    traffic: 'observed',
+    observedMetrics: {
+      avgLatencyMs: 184,
+      successRate: 99.2,
+      avgTps: 48.4,
+    },
+  },
+  {
+    modelName: 'claude-opus-5',
+    catalogVendor: 'Anthropic',
+    endpointType: 'openai',
+    endpointMethod: 'POST',
+    endpointPath: '/v1/chat/completions',
+    pricingMode: 'usage-based',
+    cachePricingReported: true,
+    groupRuleReported: true,
+    inputPricingReported: true,
+    outputPricingReported: true,
+    traffic: 'observed',
+    observedMetrics: {
+      avgLatencyMs: 212,
+      successRate: 99.1,
+      avgTps: 36.8,
+    },
+  },
+  {
+    modelName: 'gpt-5.6-sol',
+    catalogVendor: 'OpenAI',
+    endpointType: 'openai',
+    endpointMethod: 'POST',
+    endpointPath: '/v1/chat/completions',
+    pricingMode: 'usage-based',
+    cachePricingReported: true,
+    groupRuleReported: true,
+    inputPricingReported: true,
+    outputPricingReported: true,
+    traffic: 'observed',
+    observedMetrics: {
+      avgLatencyMs: 326,
+      successRate: 98.6,
+      avgTps: 22.8,
+    },
+  },
+  {
+    modelName: 'gpt-5.6-terra',
+    catalogVendor: 'OpenAI',
+    endpointType: 'openai',
+    endpointMethod: 'POST',
+    endpointPath: '/v1/chat/completions',
+    pricingMode: 'usage-based',
+    cachePricingReported: true,
+    groupRuleReported: true,
+    inputPricingReported: true,
+    outputPricingReported: true,
+    traffic: 'observed',
+    observedMetrics: {
+      avgLatencyMs: 268,
+      successRate: 99,
+      avgTps: 31.6,
+    },
+  },
+  {
+    modelName: 'grok-4.6',
+    catalogVendor: 'xAI',
+    endpointType: 'openai',
+    endpointMethod: 'POST',
+    endpointPath: '/v1/chat/completions',
+    pricingMode: 'usage-based',
+    cachePricingReported: true,
+    groupRuleReported: true,
+    inputPricingReported: true,
+    outputPricingReported: true,
+    traffic: 'observed',
+    observedMetrics: {
+      avgLatencyMs: 176,
+      successRate: 98.9,
+      avgTps: 42.2,
+    },
+  },
+]
 
 export type HomepageDataStateInput = {
   moduleEnabled: boolean
