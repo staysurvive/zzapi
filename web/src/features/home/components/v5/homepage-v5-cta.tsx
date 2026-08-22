@@ -40,7 +40,7 @@ export function HomepageV5Cta(props: HomepageV5CtaProps) {
     props.docsLink &&
     (isHttpUrl(props.docsLink) || isSafeInternalUrl(props.docsLink))
       ? props.docsLink
-      : 'https://docs.newapi.pro'
+      : null
 
   return (
     <section
@@ -62,21 +62,27 @@ export function HomepageV5Cta(props: HomepageV5CtaProps) {
           {primaryLabel}
           <ArrowRight aria-hidden='true' />
         </Button>
-        <Button
-          size='lg'
-          variant='outline'
-          className='home-v5-cta__secondary'
-          render={
-            isHttpUrl(docsTarget) ? (
-              <a href={docsTarget} target='_blank' rel='noopener noreferrer' />
-            ) : (
-              <Link to={docsTarget} />
-            )
-          }
-        >
-          <BookOpen aria-hidden='true' />
-          {t('Read Docs')}
-        </Button>
+        {docsTarget ? (
+          <Button
+            size='lg'
+            variant='outline'
+            className='home-v5-cta__secondary'
+            render={
+              isHttpUrl(docsTarget) ? (
+                <a
+                  href={docsTarget}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                />
+              ) : (
+                <Link to={docsTarget} />
+              )
+            }
+          >
+            <BookOpen aria-hidden='true' />
+            {t('Read Docs')}
+          </Button>
+        ) : null}
       </div>
     </section>
   )

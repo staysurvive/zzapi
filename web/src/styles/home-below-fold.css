@@ -1637,6 +1637,17 @@ html.dark body:not([data-theme-preset]) .home-below-fold[data-home-v5] {
   white-space: nowrap;
 }
 
+.home-v5-demo-panel__demo-label {
+  align-self: flex-start;
+  padding: 5px 8px;
+  border: 1px solid var(--home-v5-line);
+  color: var(--home-v5-muted);
+  font-size: 0.66rem;
+  letter-spacing: 0.07em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
 .home-v5-demo-panel__chart {
   position: relative;
   display: flex;

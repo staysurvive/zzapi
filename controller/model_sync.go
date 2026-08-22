@@ -9,6 +9,7 @@ import (
 	"math/rand"
 	"net"
 	"net/http"
+	"os"
 	"strings"
 	"sync"
 	"time"
@@ -50,7 +51,11 @@ func getUpstreamBase() string {
 }
 
 func getUpstreamURLs(locale string) (modelsURL, vendorsURL string) {
-	base := strings.TrimRight(getUpstreamBase(), "/")
+	base := strings.TrimRight(strings.TrimSpace(getUpstreamBase()), "/")
+	if configuredBase, configured := os.LookupEnv("SYNC_UPSTREAM_BASE"); configured && strings.TrimSpace(configuredBase) != "" {
+		return fmt.Sprintf("%s/api/newapi/models.json", base),
+			fmt.Sprintf("%s/api/newapi/vendors.json", base)
+	}
 	l := normalizeSyncLocale(locale)
 	return fmt.Sprintf("%s/api/i18n/%s/newapi/models.json", base, l),
 		fmt.Sprintf("%s/api/i18n/%s/newapi/vendors.json", base, l)

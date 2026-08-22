@@ -71,6 +71,7 @@ describe('Homepage V5 value tabs', () => {
     expect(panel).toHaveTextContent('482K')
     expect(panel).toHaveTextContent('1.2M')
     expect(panel).toHaveTextContent('86K')
+    expect(screen.getByText('Fixed demonstration data')).toBeInTheDocument()
     expect(
       screen.getByRole('img', { name: 'Usage demo chart' })
     ).toBeInTheDocument()
@@ -81,13 +82,16 @@ describe('Homepage V5 value tabs', () => {
     render(<HomepageValueTabs />)
 
     await user.click(screen.getByRole('tab', { name: /Stable direct access/i }))
-    expect(screen.getByRole('tabpanel')).toHaveTextContent('24ms')
-    expect(screen.getByRole('tabpanel')).toHaveTextContent('Latest models')
+    const accessPanel = screen.getByRole('tabpanel')
+    expect(accessPanel).toHaveTextContent('24ms')
+    expect(accessPanel).toHaveTextContent('Latest models')
+    expect(accessPanel).toHaveTextContent('Fixed demonstration data')
 
     await user.click(screen.getByRole('tab', { name: /Refund assurance/i }))
     const refundPanel = screen.getByRole('tabpanel')
     expect(refundPanel).toHaveTextContent('Balance confirmed')
     expect(refundPanel).toHaveTextContent('Original route returned')
     expect(refundPanel).toHaveTextContent('Refund received')
+    expect(refundPanel).toHaveTextContent('Fixed demonstration data')
   })
 })

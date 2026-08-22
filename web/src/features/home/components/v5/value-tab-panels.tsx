@@ -99,6 +99,9 @@ export function StableAccessPanel() {
         <span>{t('Stable access path')}</span>
         <strong>24ms</strong>
       </div>
+      <span className='home-v5-demo-panel__demo-label'>
+        {t('Fixed demonstration data')}
+      </span>
       <div className='home-v5-route-demo'>
         <div className='home-v5-route-demo__endpoint'>
           <span>{t('Your app')}</span>
@@ -153,6 +156,9 @@ export function RefundAssurancePanel() {
         <span>{t('Refund assurance')}</span>
         <strong>{t('Visible process')}</strong>
       </div>
+      <span className='home-v5-demo-panel__demo-label'>
+        {t('Fixed demonstration data')}
+      </span>
       <div className='home-v5-refund-demo'>
         <div className='home-v5-refund-demo__shield'>
           <ShieldCheck aria-hidden='true' />

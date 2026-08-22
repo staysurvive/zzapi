@@ -239,6 +239,28 @@ describe('Homepage V5 narrative', () => {
     expect(screen.getByText('Stable access path')).toBeInTheDocument()
   })
 
+  test('does not invent a docs destination when no docs link is configured', () => {
+    render(
+      <HomepageV5
+        isAuthenticated={false}
+        openingPhase='ambient'
+        pricingState='current'
+        performanceState='current'
+        catalogPreview={[model]}
+        remainingModelCount={0}
+        selectedModel={model}
+        selectedModelName={model.modelName}
+        onSelectModel={vi.fn()}
+        baseUrl='https://gateway.example'
+        docsLink={null}
+      />
+    )
+
+    expect(
+      screen.queryByRole('link', { name: /Read Docs/i })
+    ).not.toBeInTheDocument()
+  })
+
   test('builds the developer example from the real endpoint and placeholders', () => {
     render(
       <HomepageV5

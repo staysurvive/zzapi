@@ -244,8 +244,9 @@ async function main() {
 
   const baseLocale = parsedByLocale.en ? 'en' : undefined
 
-  if (!baseLocale)
+  if (!baseLocale) {
     throw new Error('Required base locale en.json was not found.')
+  }
 
   const baseFile = `${baseLocale}.json`
   const baseJson = parsedByLocale[baseLocale]
